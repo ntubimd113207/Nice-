@@ -1,4 +1,4 @@
-const e = require("cors");
+// const e = require("cors");
 
 let currentRow = null;
 let selectedIconType = null;
@@ -212,4 +212,19 @@ document.getElementById('savedelete').addEventListener('click', function() {
 
 document.getElementById('closedelete').addEventListener('click', function() {
     document.getElementById('delete').close();
+});
+
+// 關鍵字查詢
+document.getElementById('searchInput').addEventListener('input', function() {
+  var searchText = this.value.toLowerCase();
+  var rows = document.querySelectorAll('table tr[data-id]');
+
+  rows.forEach(function(row) {
+      var goalText = row.querySelector('.goal-cell').textContent.toLowerCase();
+      if (goalText.includes(searchText)) {
+          row.style.display = '';
+      } else {
+          row.style.display = 'none';
+      }
+  });
 });
