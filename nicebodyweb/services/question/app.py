@@ -10,8 +10,6 @@ from openai import OpenAI
 from datetime import datetime
 from utils import db
 
-from utils import db
-
 # 產生問題服務藍圖
 question_bp = Blueprint('question_bp', __name__)
 
