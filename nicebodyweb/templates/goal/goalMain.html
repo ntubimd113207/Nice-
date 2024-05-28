@@ -116,8 +116,8 @@
 
       <div class="input">
         請輸入今日體重(kg) :&ensp;
-        <input type="text">&ensp;
-        <button><i class="fa-solid fa-check"></i></button>
+        <input type="text" id="weightInput">&ensp;
+        <button id="submitButton"><i class="fa-regular fa-paper-plane"></i></button>
       </div>
 
       <canvas id="myChart"></canvas>
@@ -192,9 +192,53 @@
     let weight_data= "{{ weight }}";
     let weight_list = JSON.parse(weight_data);
 
+    document.getElementById('submitButton').addEventListener('click', function() {
+      let input = document.getElementById('weightInput');
+      let value = input.value.trim();
+
+      if (value === "") {
+        alert("請輸入數字或浮點數");
+        input.value = "";
+      } else if (isNaN(value)) {
+        alert("請輸入數字或浮點數");
+        input.value = "";
+      } else {
+        input.style.backgroundColor = "#CCC5B9";
+        input.disabled = true;
+        this.innerHTML = '<i class="fa-solid fa-check"></i>';
+        localStorage.setItem('inputState', 'disabled');
+      }
+    });
+
+    function resetInputAndButton() {
+      let input = document.getElementById('weightInput');
+      let button = document.getElementById('submitButton');
+      input.disabled = false;
+      input.style.backgroundColor = "#FFF";
+      input.value = "";
+      button.innerHTML = '<i class="fa-regular fa-paper-plane"></i>';
+      localStorage.removeItem('inputState');
+    }
+
+    setInterval(function() {
+      let now = new Date();
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        resetInputAndButton();
+      }
+    }, 60000);
+
     window.onload = function() {
       renderNav();
       renderFooter();
+
+      let inputState = localStorage.getItem('inputState');
+      if (inputState === 'disabled') {
+        let input = document.getElementById('weightInput');
+        let button = document.getElementById('submitButton');
+        input.style.backgroundColor = "#CCC5B9";
+        input.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-check"></i>';
+      }
     };
 
     // 體重變化表
@@ -229,8 +273,6 @@
       type: 'line',
       data: chartData,
     });
-
-
 
     // 前後對照圖
     let isEditing = {
@@ -320,10 +362,10 @@
     })
 
     // icon變換顏色
-    var lastClickedElement = null;
+    let lastClickedElement = null;
 
     function changeColor(element) {
-      var iconName = element.classList[1].replace("iconbtn-", "");
+      let iconName = element.classList[1].replace("iconbtn-", "");
       element.style.backgroundColor = getColor(iconName);
       element.querySelector("i").style.color = "#ffffff";
 
@@ -336,7 +378,7 @@
     }
 
     function resetColor(element) {
-      var iconName = element.classList[1].replace("iconbtn-", "");
+      let iconName = element.classList[1].replace("iconbtn-", "");
       element.style.backgroundColor = '';
       element.querySelector("i").style.color = '';
     }
@@ -357,7 +399,6 @@
           return "#ffffff";
       }
     }
-
   </script>
 </body>
 </html>
