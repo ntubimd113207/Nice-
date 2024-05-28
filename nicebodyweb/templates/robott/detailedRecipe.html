@@ -14,10 +14,14 @@
 		<link rel="stylesheet" href="/static/css/layout/navbar.css">
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
+    <link rel="stylesheet" href="/static/css/fancybox/jquery.fancybox.css"/>
+    <link rel="stylesheet" href="/static/css/fancybox/my.jquery.fancybox.css"/>
 		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
   	<script src="/static/components/layout/footer.js" defer></script>
+    <script src="/static/js/jquery.fancybox.js"></script> 
+    
 		<title>食譜</title>
 	</head>
 
@@ -29,7 +33,9 @@
 
 		<article>
 			<div class="banner">
-				<img src="{{ Recipes_image_path }}/{{ data[7] }}" alt="">
+        <a data-fancybox="gallery" href="{{ Recipes_image_path }}/{{ data[7] }}">
+          <img src="{{ Recipes_image_path }}/{{ data[7] }}" alt="">
+        </a>
 			</div>
 			
 			<section class="receipe">
