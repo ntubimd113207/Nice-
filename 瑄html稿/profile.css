@@ -75,7 +75,6 @@ article {
 .settings {
     display: flex;
     flex-direction: column;
-    height: 100%;
     flex: 2;
 }
 
@@ -123,12 +122,18 @@ article {
     background-color: #F47E93;
     border-radius: 5px;
   }
-
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
 
 .out2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 5%;
 }
 
 .out2 .title{
@@ -155,16 +160,17 @@ p{
 
 .gbt{
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5%;
 }
 
 /* 性別按鈕 */
-.gender button[id="maleButton"]{
-    margin-right: 5px;
+.gender button {
+    flex: 1;
+    padding: 10px 10px;
     border-radius: 15px;
-    width: 30%;
-    height: 40px;
     border:none;
-    background-color:#84C1FF;
     color: #495057;
     text-align: center;
     font-size: 1em;
@@ -175,20 +181,22 @@ p{
     transition: background-color 0.3s;/*按按鈕時的漸變*/
 }
 
+.gender button[id="maleButton"]{
+    background-color:#84C1FF;
+    border: #84C1FF 2px solid;
+}
+
 .gender button[id="femaleButton"]{
-    border-radius: 15px;
-    width: 30%;
-    height: 40px;
-    border:#FF4D6D;
     background-color:#FF95CA;
-    color: #495057;
-    text-align: center;
-    font-size: 1em;
-    cursor: pointer; /* 指標樣式 */
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    transition: background-color 0.3s;/*按按鈕時的漸變*/
+    border: #FF95CA 2px solid;
+}
+
+.gender button[id="maleButton"]:hover {
+    border: #297bcd 2px solid;
+}
+
+.gender button[id="femaleButton"]:hover {
+    border: #c22574 2px solid;
 }
 
 /*設定按鈕漸變
@@ -200,15 +208,21 @@ p{
 
 .settings input {
     border: #495057 2px solid;
-    width: 150px;
-    height: 30px;
+    width: 100%;
     border-radius: 15px;
-    padding: 0 20px; /* 添加内边距 */
+    padding: 10px 10px;
+    box-sizing: border-box;
+}
+
+.closesetting {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 5%;
 }
 
 .closesetting button {
     border-radius: 5px;
-    width: 7%;
     height: 40px;
     border: none;
     background-color: #495057;
@@ -220,16 +234,13 @@ p{
     justify-content: center; 
     align-items: center; 
     transition: background-color 0.3s;
-    position: absolute ;
-    bottom: 20px;
-    right: 20px;
-    margin-bottom: 220px; 
-    margin-right: 280px; 
+    padding: 10px 10px;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    border: #495057 1px solid;
 }
 
-
-/*設定按鈕漸變
 .closesetting button:hover {
-    background-color:  #d4a373;
-    color: white;
-}*/
+    background-color:  #FFF;
+    color:  #495057;
+}
