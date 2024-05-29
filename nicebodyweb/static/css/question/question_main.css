@@ -401,6 +401,10 @@ section .tag-list-class .select{
     border: 3px solid #6E3D0D;
 }
 
+section .diet-tag .select{
+    border: 3px solid #6E3D0D;
+}
+
 section .tag-list-class .type .wrap {
     width: 75%;
     height: 100%;
