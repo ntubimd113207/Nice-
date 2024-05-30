@@ -14,14 +14,13 @@
 		<link rel="stylesheet" href="/static/css/layout/navbar.css">
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
-		<link rel="stylesheet" href="/static/css/fancybox/jquery.fancybox.css"/>
-    	<link rel="stylesheet" href="/static/css/fancybox/my.jquery.fancybox.css"/>
+		<link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
+    <link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
 		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
-  		<script src="/static/components/layout/footer.js" defer></script>
+  	<script src="/static/components/layout/footer.js" defer></script>
 		<script src="/static/js/jquery.fancybox.js"></script> 
-
 		<title>分享食譜</title>
 	</head>
 
@@ -44,7 +43,7 @@
 						<div class="left">
 							<h1>{{data[0]}}</h1>
 							<div class="like">
-								<i class="fa-solid fa-thumbs-up"></i>
+								<i class="fa-regular fa-thumbs-up"></i>
 								<span>{{likecount[0]}}&ensp;</span>
 							</div>
 						</div>
@@ -158,8 +157,8 @@
 		let messageText = "chiaoyu";
 
 		window.onload = function() {
-		renderNav();
-		renderFooter();
+			renderNav();
+			renderFooter();
 		};
 
 		// 彈跳視窗 飲食法簡介

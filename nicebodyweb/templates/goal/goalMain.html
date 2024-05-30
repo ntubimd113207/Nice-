@@ -192,6 +192,7 @@
     let weight_data= "{{ weight }}";
     let weight_list = JSON.parse(weight_data);
 
+    // 體重變化表輸入設定
     document.getElementById('submitButton').addEventListener('click', function() {
       let input = document.getElementById('weightInput');
       let value = input.value.trim();
@@ -257,15 +258,15 @@
     }
 
     let originalData = weight_list;
-    let data = originalData.map(value => value !== 0 ? value : null); // 将0替换为null
+    let data = originalData.map(value => value !== 0 ? value : null);
 
     let chartData = {
       labels: labels,
       datasets: [{
         label: 'weight',
         data: data,
-        pointRadius: data.map(value => value !== null ? 3 : 0), // 设置没有数据的点半径为0
-        pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), // 设置没有数据的点颜色为透明
+        pointRadius: data.map(value => value !== null ? 3 : 0), 
+        pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), 
       }]
     };
 

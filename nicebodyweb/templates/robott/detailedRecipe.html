@@ -14,14 +14,13 @@
 		<link rel="stylesheet" href="/static/css/layout/navbar.css">
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
-    <link rel="stylesheet" href="/static/css/fancybox/jquery.fancybox.css"/>
-    <link rel="stylesheet" href="/static/css/fancybox/my.jquery.fancybox.css"/>
+    <link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
+    <link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
 		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
   	<script src="/static/components/layout/footer.js" defer></script>
     <script src="/static/js/jquery.fancybox.js"></script> 
-    
 		<title>食譜</title>
 	</head>
 
@@ -111,13 +110,21 @@
 
 					<div class="button">
 						{% if data[8] == '0' %}
-							<button>發佈食譜</button>
+							<button id="openrelease">發佈食譜</button>
 						{% else %}
 							<button>已發佈</button>
 						{% endif %}
 					</div>
 				</div>
 		</article>
+
+		<dialog id="release">
+			<h1>確定發佈食譜?</h1>
+			<div class="contentsave">
+				<button id="closerelease" class="closebtn">cancel</button>
+				<button id="saverelease" class="savebtn">confirm</button>
+			</div>
+		</dialog>
 
 		<footer id="footer-container"></footer>
 
@@ -138,6 +145,17 @@
 			})
 			closeinfor.addEventListener("click", function(){
 				infor.close();
+			})
+
+			// 彈跳視窗 確認發佈
+			let openrelease=document.getElementById('openrelease');
+			let release=document.getElementById('release');
+			let closerelease=document.getElementById('closerelease');
+			openrelease.addEventListener("click", function(){
+				release.showModal();
+			})
+			closerelease.addEventListener("click", function(){
+				release.close();
 			})
 		</script>
 	</body>
