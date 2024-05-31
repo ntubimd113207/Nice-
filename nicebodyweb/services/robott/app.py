@@ -82,7 +82,7 @@ def robott_share():
     likecount = request.args.get('likecount')
     messagecount = request.args.get('messagecount')
 
-    cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\'), summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney" FROM body."cookbook" where "Cookid" =%s', (recipe_id,))
+    cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\'), summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet FROM body."cookbook" where "Cookid" =%s', (recipe_id,))
 
     data = cursor.fetchone()
 

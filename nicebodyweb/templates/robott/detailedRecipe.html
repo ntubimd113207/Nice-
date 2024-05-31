@@ -20,15 +20,15 @@
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
   	<script src="/static/components/layout/footer.js" defer></script>
-    <script src="/static/js/jquery.fancybox.js"></script> 
+    <script src="/static/components/jquery.fancybox.js"></script> 
 		<title>食譜</title>
 	</head>
 
 	<body>
 		<div id="myCursor"></div>
-  <div id="circle"></div>
+  	<div id="circle"></div>
 
-  <nav id="nav-container"></nav>
+  	<nav id="nav-container"></nav>
 
 		<article>
 			<div class="banner">
@@ -80,10 +80,7 @@
 					<div class="summary">
 						<p>{{data[1]}}</p>
 						<h2>摘要</h2>
-						<p>
-							{{data[2]}}
-						</p>
-						
+						<p>{{data[2]}}</p>
 					</div>
 						
 					<div class="content">
@@ -116,6 +113,7 @@
 						{% endif %}
 					</div>
 				</div>
+			</section>
 		</article>
 
 		<dialog id="release">
