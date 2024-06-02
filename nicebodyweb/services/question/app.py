@@ -252,7 +252,8 @@ def question5_selfList():
 #                 image_future = executor.submit(generate_image, imagedescribe)
 #                 image_name = image_future.result()
 
-#             current_date = datetime.now()
+#             current_date = datetime.now().strftime("%Y-%m-%d")
+            
 
 #             # DB
 #             def db_insert():
@@ -315,8 +316,9 @@ def resultRecipe_selfList():
             #     conn.close()
             
             # threading.Thread(target=db_insert).start()
+            current_date = datetime.now().strftime("%Y-%m-%d")
 
-            return render_template('/question/resultRecipe.html', data=json_data, data2=json_data2, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time='2024-05-17')
+            return render_template('/question/resultRecipe.html', data=json_data, data2=json_data2, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date)
         except Exception as e:
             # 印出錯誤原因
             print('-'*30)
