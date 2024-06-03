@@ -19,8 +19,9 @@ article .title {
   margin-bottom: 5%;
 }
 
-.title i,
+.fa-bookmark,
 .collecttitle i {
+  color: #BC6C25;
   margin-right: 2%;
 }
 
