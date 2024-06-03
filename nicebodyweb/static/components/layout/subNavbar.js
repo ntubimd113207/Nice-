@@ -1,5 +1,5 @@
-let renderNav = function() {
-  let navStr = `
+let renderSubnav = function() {
+  let subnavStr = `
   <nav>
     <div class="area">
       <a href="/" class="logo">
@@ -35,6 +35,22 @@ let renderNav = function() {
     </div>
   </nav>
 
+  <div class="comunitynav" id="comunitynav">
+    <div class="category">
+      <h6>All</h6>
+      <h6>Following</h6>
+      <h6>My</h6>
+    </div>
+    <select>
+      <option value="">all hashtag</option>
+      <option value="">小知識</option>
+    </select>
+    <div class="search">
+      <input type="search" placeholder="關鍵字查詢">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+  </div>
+
   <div class="sideBar" id="sideBar">
     <div class="nav">
       <a href="/" class="nav-link">Home</a>
@@ -43,10 +59,23 @@ let renderNav = function() {
       <a href="/task/taskPage" class="nav-link">Task</a>
       <a href="/community/communityMain" class="nav-link">Community</a>
     </div>
+    <div class="sideBarcomunitynav">
+      <h6>All</h6>
+      <h6>Following</h6>
+      <h6>My</h6>
+      <select>
+        <option value="">all hashtag</option>
+        <option value="">小知識</option>
+      </select>
+      <div class="search">
+        <input type="search" placeholder="關鍵字查詢">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+    </div>
   </div>
   `;
 
-  document.getElementById("nav-container").innerHTML = navStr;
+  document.getElementById("subnav-container").innerHTML = subnavStr;
 
   let navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
@@ -85,11 +114,4 @@ let renderNav = function() {
     closeIcon.style.display = 'none';
     menuIcon.style.display = 'block';
   });
-
-  const currentURL = window.location.pathname;
-  const communitynav = document.getElementById('communitynav');
-
-  if (currentURL === '/community/communityMain') {
-    communitynav.style.display = 'flex';
-  }
 }

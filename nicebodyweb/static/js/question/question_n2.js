@@ -3,11 +3,6 @@ window.onload = function() {
     // Navbar
     renderNav();
 
-    // 變數
-    const buttons = document.querySelectorAll('.type');
-
-    const darkGreenColor = '#92ae9e';
-
     const continueBtn = document.getElementById('continue-btn');
 
     const inputField = document.getElementById('tag-ip');
@@ -15,19 +10,6 @@ window.onload = function() {
     const savedValue = sessionStorage.getItem('tagInputValue2');
 
     const savedSelectedTag1Count = sessionStorage.getItem('selectedTag1Count');
-
-    // 鼠標經過按鈕時改變背景顏色
-    buttons.forEach(button => {
-        button.addEventListener('mouseover', () => {
-            button.style.transition = 'background-color 0.5s ease'; // 添加過渡效果
-            button.style.backgroundColor = darkGreenColor;
-        });
-    
-        button.addEventListener('mouseout', () => {
-            button.style.transition = 'background-color 0.5s ease'; // 添加過渡效果
-            button.style.backgroundColor = '';
-        });
-    });
 
     // 检查输入框中是否有文本，并根据情况更新按钮状态和样式
     function checkInput() {

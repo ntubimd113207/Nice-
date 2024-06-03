@@ -18,7 +18,8 @@ article .title {
   font-weight: bold;
 }
 
-.title i {
+.fa-user-plus {
+  color: #BC6C25;
   margin-right: 2%;
 }
 

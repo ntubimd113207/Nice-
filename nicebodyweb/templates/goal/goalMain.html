@@ -259,12 +259,13 @@
 
     let originalData = weight_list;
     let data = originalData.map(value => value !== 0 ? value : null);
+    console.log(data)
 
     let chartData = {
       labels: labels,
       datasets: [{
         label: 'weight',
-        data: data,
+        data: [45,46,45,42.1,43,42,47],
         pointRadius: data.map(value => value !== null ? 3 : 0), 
         pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), 
       }]
