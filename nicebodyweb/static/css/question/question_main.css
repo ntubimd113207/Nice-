@@ -282,7 +282,6 @@ section  .tag-list-title{
     font-weight: 400;
     letter-spacing: 8px;
     align-items: center;
-    margin-left: 1%;
 }
 
 section .tag-list-sub .list-item{
@@ -291,11 +290,9 @@ section .tag-list-sub .list-item{
     margin-top: 1%;
 }
 
-section .tag-list-title img {
-    width: 30px;
-    height: auto; 
-    margin-right: 2%;
-    align-items: center;
+section .tag-list-title i {
+    margin: 0 1%;
+    color: #495057;
 }
 
 section .tag-list-sub .list-item > * {

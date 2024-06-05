@@ -14,11 +14,17 @@ article {
   align-items: center;
   gap: 20px;
   cursor: pointer;
-  text-decoration: none;
 }
 
 .photostickers {
   flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+}
+
+.photostickers img {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .po .say {
@@ -108,13 +114,13 @@ section {
 
 .pocontent > .middle > .imgcontent > img {
   width: auto;
-  height: 100%;
+  height: 300px;
+  border-radius: 15px;
 }
 
 .pocontent > .middle > .textcontent {
   width: 100%;
   overflow: hidden;
-  text-decoration: none;
 }
 
 .pocontent > .middle > .textcontent > p {

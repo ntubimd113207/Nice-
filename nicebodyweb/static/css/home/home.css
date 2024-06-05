@@ -95,7 +95,6 @@ article {
 .image.featured {
   margin: 0;
   padding: 0;
-  text-decoration: none;
   overflow: hidden;
   border-radius: 10px;
 }
@@ -194,6 +193,16 @@ article {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.infro .user img {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 100%;
+  max-height: 100%;
+  width: 50px;
+  height: 50px;
 }
 
 .infro > .user > h1 {

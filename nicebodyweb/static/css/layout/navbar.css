@@ -26,7 +26,6 @@ nav .area .logo {
   flex: 1;
   margin-left: 5%;
   cursor: pointer;
-  text-decoration: none;
 }
 
 nav .area .logo h1 {
@@ -61,7 +60,6 @@ nav .middle .wrap {
 
 nav .middle .wrap a,
 .logSign a {
-  text-decoration: none;
   color: #6E3D0D;
   border-bottom: none;
   transition: color 0.3s ease;
@@ -99,7 +97,6 @@ nav .alreadyLogin {
 }
 
 .alreadyLogin a {
-  text-decoration: none;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -156,7 +153,6 @@ nav .alreadyLogin {
 }
 
 .sideBar .nav a {
-  text-decoration: none;
   cursor: pointer;
   color: #6E3D0D;
   transition: color 0.3s ease;
@@ -180,7 +176,6 @@ nav .area .logo h1:hover,
 .sideBarcomunitynav h6 {
   display: flex;
   flex-direction: column;
-  text-decoration: none;
   padding: 10px 0;
   cursor: pointer;
   color: #6E3D0D;
@@ -233,6 +228,7 @@ nav .area .logo h1:hover,
   align-items: center;
   gap: 50px;
   font-size: 1em;
+  color: #6E3D0D;
 }
 
 .comunitynav .category {
@@ -250,6 +246,7 @@ nav .area .logo h1:hover,
   padding: 10px 2px;
   flex: 1;
   font-size: 1em;
+  color: #6E3D0D;
 }
 
 .comunitynav .search {
