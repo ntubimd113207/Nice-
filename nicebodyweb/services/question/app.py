@@ -5,7 +5,7 @@ import threading
 import time
 import json
 import urllib.request
-from flask import render_template
+from flask import logging, render_template
 from flask import Blueprint
 from flask import request
 from openai import OpenAI
@@ -274,7 +274,10 @@ def resultRecipe_selfList():
             print(e)
             print('-'*30)
             # 渲染失敗畫面
-            return render_template('/question/resultRecipe.html', data='王小明')
+            logging.error("Error occurred", exc_info=True)
+            logging.basicConfig(filename='../error.log', level=logging.ERROR)
+            # 渲染錯誤畫面並返回錯誤信息
+            return render_template('/question/error.html', error_message=str(e))
 
     return render_template('/question/resultRecipe.html', data='王小明')
 
