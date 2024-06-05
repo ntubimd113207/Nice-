@@ -236,6 +236,13 @@ progress::-webkit-progress-value {
   gap: 15px;
 }
 
+.eachsay .left img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 35px;
+  height: 35px;
+}
+
 .eachsay .left h6 {
   font-size: 1.2em;
   font-weight: bold;

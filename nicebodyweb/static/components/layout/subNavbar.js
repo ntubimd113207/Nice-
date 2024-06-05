@@ -25,7 +25,7 @@ let renderSubnav = function() {
       </div>
       <div class="alreadyLogin">
         <a href="/profile/profilePage" class="toprofile">
-          <img src="/static/images/user1.png" alt="">
+          <img src="/static/images/userImage/Joey1.png" alt="">
           <h3>${messageText}</h3>
         </a>
         <a href="/login/loginPage">

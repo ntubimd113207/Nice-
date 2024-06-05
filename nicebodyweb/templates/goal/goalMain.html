@@ -187,7 +187,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    let messageText = "chiaoyu";
+    let messageText = "烤焦羊";
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+    };
 
     let weight_data= "{{ weight }}";
     let weight_list = JSON.parse(weight_data);
@@ -221,26 +226,21 @@
       localStorage.removeItem('inputState');
     }
 
-    setInterval(function() {
-      let now = new Date();
-      if (now.getHours() === 0 && now.getMinutes() === 0) {
-        resetInputAndButton();
-      }
-    }, 60000);
+    // setInterval(function() {
+    //   let now = new Date();
+    //   if (now.getHours() === 0 && now.getMinutes() === 0) {
+    //     resetInputAndButton();
+    //   }
+    // }, 60000);
 
-    window.onload = function() {
-      renderNav();
-      renderFooter();
-
-      let inputState = localStorage.getItem('inputState');
-      if (inputState === 'disabled') {
-        let input = document.getElementById('weightInput');
-        let button = document.getElementById('submitButton');
-        input.style.backgroundColor = "#CCC5B9";
-        input.disabled = true;
-        button.innerHTML = '<i class="fa-solid fa-check"></i>';
-      }
-    };
+    // let inputState = localStorage.getItem('inputState');
+    // if (inputState === 'disabled') {
+    //   let input = document.getElementById('weightInput');
+    //   let button = document.getElementById('submitButton');
+    //   input.style.backgroundColor = "#CCC5B9";
+    //   input.disabled = true;
+    //   button.innerHTML = '<i class="fa-solid fa-check"></i>';
+    // }
 
     // 體重變化表
     let chartElement = document.getElementById('myChart');
