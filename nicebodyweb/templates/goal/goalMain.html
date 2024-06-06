@@ -209,6 +209,22 @@
         alert("請輸入數字或浮點數");
         input.value = "";
       } else {
+        // $.ajax({
+        //   type: "POST",
+        //   url: "/goal/saveTodayWeight",
+        //   data: {
+        //     weight: value
+        //   },
+        //   success: function(response) {
+        //     if (response === "success") {
+        //       alert("新增成功");
+        //       resetInputAndButton();
+        //     } else {
+        //       alert("新增失敗");
+        //     }
+        //   }
+        // });
+        
         input.style.backgroundColor = "#CCC5B9";
         input.disabled = true;
         this.innerHTML = '<i class="fa-solid fa-check"></i>';
@@ -265,7 +281,7 @@
       labels: labels,
       datasets: [{
         label: 'weight',
-        data: [45,46,45,42.1,43,42,47],
+        data: [45,46,45,42.1,43,42,],
         pointRadius: data.map(value => value !== null ? 3 : 0), 
         pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), 
       }]

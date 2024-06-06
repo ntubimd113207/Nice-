@@ -162,3 +162,24 @@ def weight_list():
     data = cursor.fetchall()
     connection.close() 
     return render_template('/goal/weightList.html', data=data)
+
+#新增 - 今日體重
+@goal_bp.route('/saveTodayWeight', methods=['POST'])
+def save_todayWeight():
+    if request.method == 'POST':
+        try:
+            weight = request.form.get('weight')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body.weight(weight, "Uid", create_time, update_time) VALUES(%s, 1, now(), now())', (weight,))
+            response = {'message': f'saveTodayWeight inserted successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500

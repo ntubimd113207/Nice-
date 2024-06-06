@@ -6,7 +6,7 @@ window.onload = function() {
     // 變數
     let tags = [];
 
-    const defaultTags = ["素食", "無乳製品", "牛奶", "無需求"];
+    const defaultTags = ["素食", "蛋", "牛奶", "無需求"];
 
     const tagListContainer1 = document.querySelector('.tag-list-item');
 

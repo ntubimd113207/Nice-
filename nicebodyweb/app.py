@@ -26,10 +26,10 @@ from services.login.app import login_bp
 #-------------------------
 app = Flask(__name__)
 
-Recipes_image_path = ""
-user_image_path = ""
-# Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
-# user_image_path = "http://127.0.0.1:5000/static/images/userImage"
+# Recipes_image_path = ""
+# user_image_path = ""
+Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
+user_image_path = "http://127.0.0.1:5000/static/images/userImage"
 
 #主畫面
 @app.route('/')

@@ -19,9 +19,9 @@ question_bp = Blueprint('question_bp', __name__)
 # 在問題服務藍圖加入路由
 #--------------------------
 
-Recipes_image_path = ""
-# client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
-# Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
+# Recipes_image_path = ""
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
+Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
 
 #問題一
 @question_bp.route('/question_n1')

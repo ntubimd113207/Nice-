@@ -34,7 +34,6 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 1%;
 }
 
 .green-one {
@@ -247,6 +246,7 @@ section .tag-list-item4{
 
 .item,
 .item-select {
+    /* padding: 0.5% 1%; */
     padding: 1% 2%;
     height: fit-content;
     background:#fff;
@@ -286,8 +286,7 @@ section  .tag-list-title{
 
 section .tag-list-sub .list-item{
     width: 100%;
-    align-content: flex-start; 
-    margin-top: 1%;
+    align-content: flex-start;
 }
 
 section .tag-list-title i {
@@ -297,7 +296,7 @@ section .tag-list-title i {
 
 section .tag-list-sub .list-item > * {
     margin-right: 10px;
-    margin-bottom: 1%;
+    margin-top: 1%;
 }
 
 /* tag-list-4 */
@@ -351,7 +350,7 @@ section .tag-list-4 .metric-description{
 }
 
 section .tag-list-4 .score-input{
-    width: 6%;
+    width: 10%;
     border: none;
     border-radius: 10px;
     align-self: stretch;
@@ -482,7 +481,6 @@ section .diet-tag .select {
         height: 83vh;
         padding: 2%;
     }
-
 }
 
 /* Large 1200px */
@@ -517,12 +515,24 @@ section .diet-tag .select {
         font-weight: bold;
         font-size: 18px;
     }
+    
+    section .diet-tag a {
+        font-size: 25px;
+        gap: 30px;
+    }
+
+    section .diet-tag a i {
+        font-size: 50px;
+    }
+
+    section .tag-list-class .type i {
+        font-size: 2em;
+    }
 }
 
 /* Middle 1024px */
 
 @media screen and (max-width:1024px) {
-
     section {
         width: 90vw;
         height: 80vh;
@@ -533,7 +543,9 @@ section .diet-tag .select {
         width: 15%;
     }
 
- 
+    section .diet-tag a i {
+        font-size: 40px;
+    }
 }
 
 /* Small 768px */
@@ -609,6 +621,14 @@ section .diet-tag .select {
         width: 20%;
     }
 
+    section .diet-tag a {
+        font-size: 20px;
+        gap: 20px;
+    }
+
+    section .diet-tag a i {
+        font-size: 40px;
+    }
 }
 
 /* X-Small 480px */
@@ -629,7 +649,6 @@ section .diet-tag .select {
         font-size: 30px;
     }
     
-
     section .tag-list{
         height: 60%;
         margin-top: 5%;
@@ -644,7 +663,6 @@ section .diet-tag .select {
         margin-top: 4%;
     }
     
-
     .btn {
         margin-top: 4%;
     }
@@ -696,5 +714,9 @@ section .diet-tag .select {
     .item,
     .item-select {
         padding: 2% 4%;
+    }
+
+    section .diet-tag a {
+        gap: 10px;
     }
 }
