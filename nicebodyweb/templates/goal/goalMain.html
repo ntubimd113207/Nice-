@@ -134,7 +134,7 @@
           生成前後對比照
         </button>
       </div>
-
+    
       <div class="photo">
         <div class="before">
           <div class="container">
@@ -156,9 +156,9 @@
             </div>
           </div>
         </div>
-      
+    
         <i class="fa-solid fa-angles-right"></i>
-      
+    
         <div class="after">
           <div class="container">
             <span class="text">after</span>
@@ -308,16 +308,16 @@
 
     function enableEditing(type) {
       isEditing[type] = true;
-      toggleEdit(type);
-
       const fileInput = document.getElementById(`${type}fileInput`);
-      fileInput.click();
+      fileInput.click(); // Trigger the file input click event
     }
 
     function clearImage(type) {
       const previewImage = document.getElementById(`${type}previewImage`);
       previewImage.src = "";
       previewImage.style.display = 'none';
+      const fileInput = document.getElementById(`${type}fileInput`);
+      fileInput.value = "";  // Reset the file input value
       const inputLabel = document.querySelector(`.${type} .custom-input`);
       inputLabel.style.pointerEvents = 'auto';
       const editDiv = document.querySelector(`.${type} .edit`);
@@ -336,7 +336,9 @@
           previewImage.src = e.target.result;
           previewImage.style.display = 'block';
           document.querySelector('.before .icon').style.display = 'none';
-          enableEditing('before');
+          isEditing['before'] = true;
+          const editDiv = document.querySelector('.before .edit');
+          editDiv.style.display = 'flex';
         }
         reader.readAsDataURL(file);
       }
@@ -351,7 +353,9 @@
           previewImage.src = e.target.result;
           previewImage.style.display = 'block';
           document.querySelector('.after .icon').style.display = 'none';
-          enableEditing('after');
+          isEditing['after'] = true;
+          const editDiv = document.querySelector('.after .edit');
+          editDiv.style.display = 'flex';
         }
         reader.readAsDataURL(file);
       }
