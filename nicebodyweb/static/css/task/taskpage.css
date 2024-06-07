@@ -246,6 +246,12 @@ progress::-webkit-progress-value {
 .eachsay .left h6 {
   font-size: 1.2em;
   font-weight: bold;
+  white-space: nowrap;
+}
+
+.eachsay .left p {
+  line-height: 25px;
+  flex-grow: 1;
 }
 
 .eachsay .left > h6 > span,

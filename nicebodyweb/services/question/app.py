@@ -274,8 +274,8 @@ def resultRecipe_selfList():
             print(e)
             print('-'*30)
             # 渲染失敗畫面
-            logging.error("Error occurred", exc_info=True)
-            logging.basicConfig(filename='../error.log', level=logging.ERROR)
+            # logging.error("Error occurred", exc_info=True)
+            # logging.basicConfig(filename='../error.log', level=logging.ERROR)
             # 渲染錯誤畫面並返回錯誤信息
             return render_template('/question/error.html', error_message=str(e))
 
