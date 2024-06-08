@@ -149,7 +149,7 @@
             <img id="beforepreviewImage" src="" alt="">
           </label>
           <div class="edit">
-            <div class="right">2024.04.05</div>
+            <div class="right" id="currentDate1"></div>
             <div class="left">
               <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
@@ -172,7 +172,7 @@
             <img id="afterpreviewImage" src="" alt="">
           </label>
           <div class="edit">
-            <div class="right">2024.04.05</div>
+            <div class="right" id="currentDate2"></div>
             <div class="left">
               <button onclick="enableEditing('after')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
@@ -360,6 +360,14 @@
         reader.readAsDataURL(file);
       }
     }
+
+    // 上傳對比照日期
+    var currentDate = new Date();
+
+    var formattedDate = currentDate.getFullYear() + '.' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '.' + currentDate.getDate().toString().padStart(2, '0');
+
+    document.getElementById('currentDate1').innerHTML = formattedDate;
+    document.getElementById('currentDate2').innerHTML = formattedDate;
 
     // 彈跳視窗 新增打卡目標
     let opencheck=document.getElementById('opencheck');
