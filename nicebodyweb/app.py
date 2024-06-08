@@ -42,7 +42,7 @@ def index():
     knowledge_data = cursor.fetchone()
 
     # 獲取前 7 個最喜歡的食譜
-    cursor.execute('SELECT "cookImage", title FROM body."v_recipeWorld" ORDER BY likecount DESC LIMIT 7;')
+    cursor.execute('SELECT "cookImage", title, "Cookid", likecount, messagecount FROM body."v_recipeWorld" ORDER BY likecount DESC LIMIT 7;')
     recipe_data = cursor.fetchall()
 
     connection.close()
