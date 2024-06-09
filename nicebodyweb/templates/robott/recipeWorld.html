@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="/static/css/base/reset.css">
   <link rel="stylesheet" href="/static/css/base/global.css">
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
-	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/robott/recipeWorld.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
-	<script src="/static/components/layout/navbar.js" defer></script>
-  <script src="/static/components/layout/sidebar.js" defer></script>
+  <script src="/static/components/layout/navbar.js" defer></script>
+  <!-- <script src="/static/components/layout/sidebar.js" defer></script> -->
   <script src="/static/components/layout/footer.js" defer></script>
   <title>食譜天地</title>
 </head>
@@ -39,10 +39,10 @@
                 <input type="text" id="budgetRange" placeholder="食材預算">
                 <select name="" id="dietFilter">
                     <option value="">所有飲食法</option>
-                    <option value="1">地中海飲食法</option>
-                    <option value="2">得舒飲食法</option>
+                    <option value="1">地中海</option>
+                    <option value="2">得舒</option>
                     <option value="3">彈性素食</option>
-                    <option value="4">234飲食法</option>
+                    <option value="4">234</option>
                 </select>
             </div>
             <label class="keyword-query">
@@ -89,21 +89,24 @@
                         <span class="dietname none">無</span>
                     {% endif %}
                 </div>
+                
+                <input type="hidden" name="c" value="{{ d[9] }}">
+                <input type="hidden" name="p" value="{{ d[10] }}">
                 <form action="/robott/shareResults" method="get">
                     <div class="more">
                         <input type="hidden" name="recipe_id" value="{{ d[8] }}">
-                        <input type="hidden" name="cookTime" value="{{ d[9] }}">
-                        <input type="hidden" name="prepareMoney" value="{{ d[10] }}">
                         <button type="submit">了解更多</button>
                         <div class="icon">
                             <div class="like">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                <input type="hidden" name="likecount" value="{{ d[4] }}">
+                                {% if d[12] == 1 %}
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                {% endif %}
                                 <span>{{d[4]}}&ensp;</span>
                             </div>
                             <div class="share">
                                 <i class="fa-solid fa-comment"></i>
-                                <input type="hidden" name="messagecount" value="{{ d[5] }}">
                                 <span>{{d[5]}}</span>
                             </div>
                         </div>
@@ -125,19 +128,19 @@
       renderFooter();
     };
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const menuIcon = document.getElementById('menuIcon');
-      const closeIcon = document.getElementById('closeIcon');
-      const sideBar = document.querySelector('.sideBar');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   const menuIcon = document.getElementById('menuIcon');
+    //   const closeIcon = document.getElementById('closeIcon');
+    //   const sideBar = document.querySelector('.sideBar');
 
-      menuIcon.addEventListener('click', function () {
-        sideBar.classList.add('active');
-      });
+    //   menuIcon.addEventListener('click', function () {
+    //     sideBar.classList.add('active');
+    //   });
 
-      closeIcon.addEventListener('click', function () {
-        sideBar.classList.remove('active');
-      });
-    });
+    //   closeIcon.addEventListener('click', function () {
+    //     sideBar.classList.remove('active');
+    //   });
+    // });
 
     // 關鍵字查詢
     document.addEventListener('DOMContentLoaded', function() {
@@ -152,18 +155,30 @@
       const cookTimeBeforeValue = parseInt(cookTimeBefore.value) || 0;
       const cookTimeAfterValue = parseInt(cookTimeAfter.value) || Infinity;
       const budgetRangeValue = parseInt(budgetRange.value) || Infinity;
-      const dietFilterValue = dietFilter.value;
+      let dietFilterValue = dietFilter.value;
       const keywordQueryValue = keywordQuery.value.toLowerCase();
+      
+      if (dietFilter.value === '1') {
+            dietFilterValue = '地中海';
+        }else if (dietFilter.value === '2') {
+            dietFilterValue = "得舒";
+        }else if (dietFilter.value === '3') {
+            dietFilterValue = "彈性素食";
+        }else if (dietFilter.value === '4') {
+            dietFilterValue = "234";
+        }
+
+        console.log(dietFilterValue);
 
       const items = Array.from(content.children);
       items.forEach(item => {
-        const cookTime = parseInt(item.querySelector('input[name="cookTime"]').value);
-        const prepareMoney = parseInt(item.querySelector('input[name="prepareMoney"]').value);
+        const cookTIme = parseInt(item.querySelector('input[name="c"]').value);
+        const prepareMoney = parseInt(item.querySelector('input[name="p"]').value);
         const diet = item.querySelector('.diet').textContent;
         const title = item.querySelector('.title h3').textContent.toLowerCase();
         const description = item.querySelector('p:nth-of-type(2)').textContent.toLowerCase();
 
-        const matchesCookTime = cookTime >= cookTimeBeforeValue && cookTime <= cookTimeAfterValue;
+        const matchesCookTime = cookTIme >= cookTimeBeforeValue && cookTIme <= cookTimeAfterValue;
         const matchesBudget = prepareMoney <= budgetRangeValue;
         const matchesDiet = !dietFilterValue || diet.includes(dietFilterValue);
         const matchesKeyword = title.includes(keywordQueryValue) || description.includes(keywordQueryValue);

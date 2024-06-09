@@ -15,12 +15,13 @@
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
 		<link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
-    <link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
+    	<link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
 		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
-  	<script src="/static/components/layout/footer.js" defer></script>
+  		<script src="/static/components/layout/footer.js" defer></script>
 		<script src="/static/components/jquery.fancybox.js"></script> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<title>分享食譜</title>
 	</head>
 
@@ -42,9 +43,13 @@
 					<div class="title">
 						<div class="left">
 							<h1>{{data[0]}}</h1>
-							<div class="like">
-								<i class="fa-regular fa-thumbs-up"></i>
-								<span>{{likecount[0]}}&ensp;</span>
+							<div class="like" id="like-button">
+								{% if data[12] == 1 %}
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                {% endif %}
+								<span>{{data[13]}}&ensp;</span>
 							</div>
 						</div>
 						<div class="diet" id="openinfor">
@@ -120,7 +125,7 @@
 							<h1>大家一起做</h1>
 							<div class="share">
 								<i class="fa-solid fa-comments"></i>
-								<span>{{messagecount}}</span>
+								<span>{{data[14]}}</span>
 							</div>
 						</div>
 					</div>
@@ -172,45 +177,57 @@
 				infor.close();
 			})
 
-			// 改變按讚icon、數字
-			// $(document).ready(function() {
-			// 	const likeButton = $(".like i");
-			// 	const likeCount = $(".like span");
+			// 按讚
+			document.addEventListener('DOMContentLoaded', function() {
+				const likeButton = document.getElementById('like-button');
+				const likeIcon = likeButton.querySelector('i');
+				const likeCountSpan = likeButton.querySelector('span');
+				let likeCount = parseInt(likeCountSpan.textContent);
 
-			// 	let currentLikeCount = parseInt(likeCount.text());
+				likeButton.addEventListener('click', function() {
+					if (likeIcon.classList.contains('fa-regular')) {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeAdd",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
 
-			// 	const isLiked = likeButton.hasClass("fa-solid");
+						likeIcon.classList.remove('fa-regular');
+						likeIcon.classList.add('fa-solid', 'liked');
+						likeCount++;
+					} else {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeSub",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
 
-			// 	likeButton.on("click", function() {
-			// 		likeButton.toggleClass("fa-regular fa-solid");
+						likeIcon.classList.remove('fa-solid', 'liked');
+						likeIcon.classList.add('fa-regular');
+						likeCount--;
+					}
+					likeCountSpan.textContent = likeCount;
+				});
+			});
 
-			// 		if (isLiked) {
-			// 			currentLikeCount--;
-			// 		} else {
-			// 			currentLikeCount++;
-			// 		}
-
-			// 		likeCount.text(currentLikeCount + " ");
-
-			// 		$.ajax({
-			// 			method: "POST",
-			// 			data: {
-			// 				recipe_id: recipe_id,
-			// 				likeCount: currentLikeCount,
-			// 			},
-			// 			async: true,
-			// 			success: function(response) {
-			// 				console.log("Like count updated successfully:", response);
-			// 				if (response.message === "Like count updated successfully") {
-			// 					likeCount.text(response.data.likeCount + " ");
-			// 				}
-			// 			},
-			// 			error: function(error) {
-			// 				console.error("Error updating like count:", error);
-			// 			},
-			// 		});
-			// 	});
-			// });
 		</script>
 	</body>
 </html>

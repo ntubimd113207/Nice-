@@ -68,8 +68,6 @@
 					<div class="food">
 						<form action="/robott/shareResults" method="get">
 							<input type="hidden" name="recipe_id" value="{{ d[2] }}">
-							<input type="hidden" name="likecount" value="{{ d[3] }}">
-							<input type="hidden" name="messagecount" value="{{ d[4] }}">
 							<button type="submit" class="image featured" style="border: none; background: none; padding: 0;">
 								<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
 								<h3>{{ d[1] }}</h3>
