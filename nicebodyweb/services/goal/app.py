@@ -174,8 +174,8 @@ def save_todayWeight():
             cursor = connection.cursor()
 
             cursor.execute('INSERT INTO body.weight(weight, "Uid", create_time, update_time) VALUES(%s, 1, now(), now())', (weight,))
-            response = {'message': f'saveTodayWeight inserted successfully.'}
-
+            response = {'message': f'deleteCheckbox successfully.'}
+            
             connection.commit()
             connection.close()
 

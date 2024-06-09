@@ -138,6 +138,15 @@
     font-size: 1.125em;
 }
 
+/* like */
+.like i {
+  transition: transform 0.3s ease;
+}
+
+.like i.liked {
+  transform: scale(1.2);
+}
+
 .button  .published {
   background-color: #86BAA1;
 }
