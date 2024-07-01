@@ -25,6 +25,7 @@ from services.login.app import login_bp
 # 產生主程式, 加入主畫面
 #-------------------------
 app = Flask(__name__)
+app.secret_key = os.environ.get("APP_SECRET")
 
 # Recipes_image_path = ""
 # user_image_path = ""
