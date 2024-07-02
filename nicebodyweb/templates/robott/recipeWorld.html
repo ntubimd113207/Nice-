@@ -106,8 +106,16 @@
                                 <span>{{d[4]}}&ensp;</span>
                             </div>
                             <div class="share">
-                                <i class="fa-solid fa-comment"></i>
-                                <span>{{d[5]}}</span>
+                                {% if d[12] == 1 %}
+                                    <i class="fa-solid fa-comment"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-comment"></i>
+                                {% endif %}
+                                <span>{{d[5]}}&ensp;</span>
+                            </div>
+                            <div class="rate">
+                                <i class="fa-solid fa-star"></i>
+                                <span>3.5</span>
                             </div>
                         </div>
                     </div>
