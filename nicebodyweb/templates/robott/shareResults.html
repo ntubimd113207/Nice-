@@ -45,11 +45,19 @@
 							<h1>{{data[0]}}</h1>
 							<div class="like" id="like-button">
 								{% if data[12] == 1 %}
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                {% else %}
-                                    <i class="fa-regular fa-thumbs-up"></i>
-                                {% endif %}
+									<i class="fa-solid fa-thumbs-up"></i>
+								{% else %}
+									<i class="fa-regular fa-thumbs-up"></i>
+								{% endif %}
 								<span>{{data[13]}}&ensp;</span>
+							</div>
+							<div class="receiperate">
+								{% if data[12] == 1 %}
+									<i class="fa-solid fa-star"></i>
+								{% else %}
+									<i class="fa-regular fa-star"></i>
+								{% endif %}
+								<span>3.5</span>
 							</div>
 						</div>
 						<div class="diet" id="openinfor">
@@ -89,9 +97,7 @@
 					<div class="summary">
 						<p>{{data[1]}}</p>
 						<h2>摘要</h2>
-						<p>
-							{{data[2]}}
-						</p>
+						<p>{{data[2]}}</p>
 					</div>
 						
 					<div class="content">
@@ -131,7 +137,26 @@
 					</div>
 
 					<div class="message">
-						<input type="text" placeholder="說點什麼吧！">
+						<div class="left">
+							<div class="evaluaterate">
+								<h3>食譜品質</h3>
+								<i class="fa-solid fa-star"></i>
+								<select name="" id="">
+									<option value="">0</option>
+									<option value="">0.5</option>
+									<option value="">1</option>
+									<option value="">1.5</option>
+									<option value="">2</option>
+									<option value="">2.5</option>
+									<option value="">3</option>
+									<option value="">3.5</option>
+									<option value="">4</option>
+									<option value="">4.5</option>
+									<option value="">5</option>
+								</select>
+							</div>
+							<input type="text" placeholder="說點什麼吧！">
+						</div>
 						<i class="fa-solid fa-paper-plane"></i>
 					</div>
 
@@ -141,6 +166,10 @@
 								<div class="like">
 									<i class="fa-solid fa-heart"></i>
 									<span>{{d[5]}}</span>
+								</div>
+								<div class="receiperate">
+									<i class="fa-solid fa-star"></i>
+									<span>3.5</span>
 								</div>
 								<p>{{d[4]}}</p>
 							</div>
