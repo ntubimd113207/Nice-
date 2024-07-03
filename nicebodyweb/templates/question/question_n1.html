@@ -106,11 +106,26 @@
       </div>
     </dialog>
     
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
+
     <script>
+      let messageText = "{{name}}";
+      let userImage = "{{userImage}}"
+
       // 彈跳視窗 飲食法簡介
       let openinfor=document.getElementById('openinfor');
       let infor=document.getElementById('infor');
       let closeinfor=document.getElementById('closeinfor');
+
+      function showModal() {
+        document.getElementById("loginModal").style.display = "flex";
+      }
+
       openinfor.addEventListener("click", function(){
         infor.showModal();
       })

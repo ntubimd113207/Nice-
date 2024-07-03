@@ -19,13 +19,13 @@ let renderSubnav = function() {
           <i class="fa-solid fa-xmark" id="closeIcon"></i>
         </div>
       </div>
-      <div class="logSign">
+      <div class="logSign" id="logSign" style="display: none;">
         <a href="">Log in</a>
         <a href="">Sign up</a>
       </div>
-      <div class="alreadyLogin">
+      <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">
-          <img src="/static/images/userImage/Joey1.png" alt="">
+          <img src="/static/images/userImage/${userImage}" alt="">
           <h3>${messageText}</h3>
         </a>
         <a href="/login/loginPage">
@@ -114,4 +114,10 @@ let renderSubnav = function() {
     closeIcon.style.display = 'none';
     menuIcon.style.display = 'block';
   });
+
+  if (messageText !== '0') {
+    document.getElementById('alreadyLogin').style.display = 'flex';
+  } else {
+    document.getElementById('logSign').style.display = 'flex';
+  }
 }

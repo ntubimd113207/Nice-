@@ -72,7 +72,6 @@ nav .middle .icon {
 /* logSign */
 
 nav .logSign {
-  display: none;
   justify-content: flex-end;
   align-items: center;
   flex: 1;

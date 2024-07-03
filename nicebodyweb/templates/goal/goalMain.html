@@ -181,13 +181,21 @@
         </div>
       </div>
     </section>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
   </article>
 
   <footer id="footer-container"></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    let messageText = "烤焦羊";
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
     let weight_data= "{{ weight }}";
     let weight_list = JSON.parse(weight_data);
 
@@ -201,9 +209,15 @@
         document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
         document.getElementById('submitButton').disabled = true;
       }
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
 
-    
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
 
     // 體重變化表輸入設定
     document.getElementById('submitButton').addEventListener('click', function() {

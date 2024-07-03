@@ -8,10 +8,7 @@ from pip._vendor import cachecontrol
 import google.auth.transport.requests
 from utils import db
 from dotenv import load_dotenv
-import logging
 
-# 設置日誌
-logging.basicConfig(level=logging.DEBUG)
 
 # 配置 Google OAuth 2.0 憑證
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -42,9 +39,9 @@ def login_is_required(function):
 @login_bp.route('/loginPage')
 def login_page(): 
     if "google_id" in session:
-        return render_template('/home/login.html', data=session['name'], logged_in=True)
+        return render_template('/home/login.html', name=session['name'], userImage=session['user_image'], logged_in=True)
     else: 
-        return render_template('/home/login.html', data='王小明', logged_in=False)
+        return render_template('/home/login.html', name='0', logged_in=False)
 
 # Google 登入
 @login_bp.route('/googlelogin')
@@ -94,6 +91,20 @@ def callback():
                 """,
                 (id_info.get("name"), id_info.get("email"), id_info.get("sub"))
             )
+
+            cursor.execute(
+                """
+                    INSERT INTO body."checkCategory" ("checkName", "Uid", "Iconid", create_time, update_time)
+                    VALUES
+                    ('吃蔬菜', %s, '2', now(), now()),
+                    ('沒有吃零食', %s, '4', now(), now()),
+                    ('喝水1公升', %s, '1', now(), now()),
+                    ('沒有吃消夜', %s, '4', now(), now()),
+                    ('吃2種水果', %s, '5', now(), now()),
+                    ('有氧運動15分鐘', %s, '2', now(), now());
+                """,
+                (id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"))
+            )
         else:
             # googleId存在，更新last_login_time
             cursor.execute(
@@ -104,6 +115,16 @@ def callback():
                 """,
                 (id_info.get("sub"),)
             )
+        
+        cursor.execute(
+            """
+            SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
+            """,
+            (id_info.get("sub"),)
+        )
+        result = cursor.fetchone()
+        uid = result[0]
+        user_image = result[1]
 
         connection.commit()
         connection.close()
@@ -112,6 +133,8 @@ def callback():
         session["google_id"] = id_info.get("sub")
         session["name"] = id_info.get("name")
         session["email"] = id_info.get("email")
+        session["uid"] = uid
+        session["user_image"] = user_image
 
         return redirect('/login/loginPage')
     else:

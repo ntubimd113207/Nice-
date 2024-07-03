@@ -5,7 +5,7 @@ import os
 import time
 import urllib.request
 import json
-from flask import Flask, render_template 
+from flask import Flask, render_template, session
 from openai import OpenAI
 from datetime import datetime
 from utils import db
@@ -32,9 +32,17 @@ app.secret_key = os.environ.get("APP_SECRET")
 Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
 user_image_path = "http://127.0.0.1:5000/static/images/userImage"
 
+
 #主畫面
 @app.route('/')
 def index():
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
     connection = db.get_connection()
     cursor = connection.cursor()
 
@@ -48,7 +56,7 @@ def index():
 
     connection.close()
 
-    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path)
+    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage)
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "openai-api-key"))
 

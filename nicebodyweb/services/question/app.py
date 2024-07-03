@@ -5,9 +5,7 @@ import threading
 import time
 import json
 import urllib.request
-from flask import logging, render_template
-from flask import Blueprint
-from flask import request
+from flask import logging, render_template, Blueprint, request, session
 from openai import OpenAI
 from datetime import date, datetime
 from utils import db
@@ -19,39 +17,80 @@ question_bp = Blueprint('question_bp', __name__)
 # 在問題服務藍圖加入路由
 #--------------------------
 
-# Recipes_image_path = ""
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
 Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
 
 #問題一
 @question_bp.route('/question_n1')
 def question1_selfList(): 
-    return render_template('/question/question_n1.html', data='王小明')
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/question/question_n1.html', name=name, userImage=userImage)
 
 #問題二
 @question_bp.route('/question_n2')
 def question2_selfList(): 
-    return render_template('/question/question_n2.html', data='王小明')
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+    
+    return render_template('/question/question_n2.html', name=name, userImage=userImage)
 
 #問題三-一
 @question_bp.route('/question_n2_1')
 def question2_1_selfList(): 
-    return render_template('/question/question_n2_1.html', data='王小明')
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/question/question_n2_1.html', name=name, userImage=userImage)
 
 #問題三
 @question_bp.route('/question_n3')
 def question3_selfList(): 
-    return render_template('/question/question_n3.html', data='王小明')
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/question/question_n3.html', name=name, userImage=userImage)
 
 #問題四
 @question_bp.route('/question_n4')
 def question4_selfList(): 
-    return render_template('/question/question_n4.html', data='王小明')
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/question/question_n4.html', name=name, userImage=userImage)
 
 #問題五
 @question_bp.route('/question_n5')
-def question5_selfList():
-    return render_template('/question/question_n5.html', data='王小明')
+def question5_selfList(): 
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/question/question_n5.html', name=name, userImage=userImage)
 
 # #結果(money)
 # @question_bp.route('/resultRecipe', methods=['GET', 'POST'])
@@ -151,8 +190,8 @@ def question5_selfList():
 #              # DB
 #             conn = db.get_connection()
 #             cursor = conn.cursor()
-#             cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (1,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, %s, %s)",
-#                                 (title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5, current_time, current_time))
+#             cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, %s, %s)",
+#                                 (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5, current_time, current_time))
 #             conn.commit()
 #             conn.close()
             
@@ -163,11 +202,15 @@ def question5_selfList():
 #             print(e)
 #             print('-'*30)        
 #             # 渲染失敗畫面
-#             return render_template('/question/resultRecipe.html', data='王小明')
-#     return render_template('/question/resultRecipe.html', data='王小明')
+#             return render_template('/question/resultRecipe.html', name=name)
+#     return render_template('/question/resultRecipe.html', name=name)
 
 @question_bp.route('/resultRecipe', methods=['GET', 'POST'])
 def resultRecipe_selfList(): 
+    name=session['name']
+    uid=session['uid']
+    userImage=session['user_image']
+        
     if request.method == 'POST':
         try:
             tagInputValue1 = request.form.get('tagInputValue1')
@@ -259,14 +302,14 @@ def resultRecipe_selfList():
             def db_insert():
                 conn = db.get_connection()
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (1,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
-                    (title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5))
+                cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
+                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5))
                 conn.commit()
                 conn.close()
 
             threading.Thread(target=db_insert).start()
 
-            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date)
+            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage)
 
         except Exception as e:
             # 印出錯誤原因
@@ -279,7 +322,7 @@ def resultRecipe_selfList():
             # 渲染錯誤畫面並返回錯誤信息
             return render_template('/question/error.html', error_message=str(e))
 
-    return render_template('/question/resultRecipe.html', data='王小明')
+    return render_template('/question/resultRecipe.html', name=name, userImage=userImage)
 
 
 # #結果測試(free)
@@ -328,5 +371,5 @@ def resultRecipe_selfList():
 #             print(e)
 #             print('-'*30)        
 #             # 渲染失敗畫面
-#             return render_template('/question/resultRecipe.html', data='王小明')
-#     return render_template('/question/resultRecipe.html', data='王小明')
+#             return render_template('/question/resultRecipe.html', name=name)
+#     return render_template('/question/resultRecipe.html', name=name)

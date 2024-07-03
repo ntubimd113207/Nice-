@@ -19,16 +19,16 @@ let renderNav = function() {
           <i class="fa-solid fa-xmark" id="closeIcon"></i>
         </div>
       </div>
-      <div class="logSign">
-        <a href="">Log in</a>
-        <a href="">Sign up</a>
+      <div class="logSign" id="logSign" style="display: none;">
+        <a href="/login/loginPage">Log in</a>
+        <a href="/login/loginPage">Sign up</a>
       </div>
-      <div class="alreadyLogin">
+      <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">
-          <img src="/static/images/userImage/Joey1.png" alt="">
+          <img src="/static/images/userImage/${userImage}" alt="">
           <h3>${messageText}</h3>
         </a>
-        <a href="/login/loginPage">
+        <a href="/login/logout">
           <i class="fa-solid fa-right-from-bracket"></i>
         </a>
       </div>
@@ -48,16 +48,19 @@ let renderNav = function() {
 
   document.getElementById("nav-container").innerHTML = navStr;
 
+  if (messageText !== '0') {
+    document.getElementById('alreadyLogin').style.display = 'flex';
+  } else {
+    document.getElementById('logSign').style.display = 'flex';
+  }
+
   let navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     link.addEventListener('click', function() {
-
       navLinks.forEach(link => {
         link.style.color = '#6E3D0D';
       });
-
       link.style.color = '#FFCF56';
-
       localStorage.setItem('activeLinkId', link.getAttribute('href'));
     });
   });
@@ -85,11 +88,4 @@ let renderNav = function() {
     closeIcon.style.display = 'none';
     menuIcon.style.display = 'block';
   });
-
-  const currentURL = window.location.pathname;
-  const communitynav = document.getElementById('communitynav');
-
-  if (currentURL === '/community/communityMain') {
-    communitynav.style.display = 'flex';
-  }
 }

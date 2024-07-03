@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/robott/recipeWorld.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
   <script src="/static/components/layout/navbar.js" defer></script>
@@ -124,12 +125,20 @@
             {% endfor %}
           </div>
       </section>
+
+      <dialog id="loginDialog">
+        <h1>請先登入</h1>
+        <div class="contentsave">
+          <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+        </div>
+      </dialog>
   </article>
 
   <footer id="footer-container"></footer>
 
   <script>
-    let messageText = "烤焦羊";
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
 
     window.onload = function() {
       renderNav();
