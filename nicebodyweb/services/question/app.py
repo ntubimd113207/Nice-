@@ -283,6 +283,7 @@ def resultRecipe_selfList():
 
                 prepare_str = ', '.join(prepare)
                 cookStep_str = ', '.join(cookStep)
+                nutrition_str = ', '.join(nutrition)
                 diet_str = ', '.join(diet)
 
                 pricing_future = executor.submit(pricing_assistant, prepare_str)
@@ -303,7 +304,7 @@ def resultRecipe_selfList():
                 conn = db.get_connection()
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
-                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5))
+                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5))
                 conn.commit()
                 conn.close()
 
