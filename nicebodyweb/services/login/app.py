@@ -46,7 +46,7 @@ def login_page():
 # Google 登入
 @login_bp.route('/googlelogin')
 def google_login():
-    authorization_url, state = flow.authorization_url()
+    authorization_url, state = flow.authorization_url(prompt='select_account')
     session["state"] = state
     return redirect(authorization_url)
 
@@ -94,6 +94,17 @@ def callback():
 
             cursor.execute(
                 """
+                SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
+                """,
+                (id_info.get("sub"),)
+            )
+
+            result = cursor.fetchone()
+            uid = result[0]
+            user_image = result[1]
+
+            cursor.execute(
+                """
                     INSERT INTO body."checkCategory" ("checkName", "Uid", "Iconid", create_time, update_time)
                     VALUES
                     ('吃蔬菜', %s, '2', now(), now()),
@@ -103,7 +114,7 @@ def callback():
                     ('吃2種水果', %s, '5', now(), now()),
                     ('有氧運動15分鐘', %s, '2', now(), now());
                 """,
-                (id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"),id_info.get("name"))
+                (uid, uid, uid, uid, uid, uid)
             )
         else:
             # googleId存在，更新last_login_time
@@ -116,15 +127,17 @@ def callback():
                 (id_info.get("sub"),)
             )
         
-        cursor.execute(
-            """
-            SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
-            """,
-            (id_info.get("sub"),)
-        )
-        result = cursor.fetchone()
-        uid = result[0]
-        user_image = result[1]
+            cursor.execute(
+                """
+                SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
+                """,
+                (id_info.get("sub"),)
+            )
+
+            result = cursor.fetchone()
+            uid = result[0]
+            user_image = result[1]
+        
 
         connection.commit()
         connection.close()
@@ -136,9 +149,9 @@ def callback():
         session["uid"] = uid
         session["user_image"] = user_image
 
-        return redirect('/login/loginPage')
+        return redirect('/')
     else:
-        return redirect('/login/loginPage')
+        return redirect('/')
 
 
 # 登出
