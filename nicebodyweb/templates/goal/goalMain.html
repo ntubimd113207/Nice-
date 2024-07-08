@@ -151,7 +151,7 @@
           <div class="edit">
             <div class="right" id="currentDate1"></div>
             <div class="left">
-              <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="enableEditing('before')"><i class="fa-solid fa-upload"></i></button>
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
@@ -322,9 +322,14 @@
     }
 
     function enableEditing(type) {
-      isEditing[type] = true;
-      const fileInput = document.getElementById(`${type}fileInput`);
-      fileInput.click(); // Trigger the file input click event
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (icon.classList.contains('fa-upload')) {
+        uploadImage(type);
+      } else {
+        isEditing[type] = true;
+        const fileInput = document.getElementById(`${type}fileInput`);
+        fileInput.click(); // Trigger the file input click event
+      }
     }
 
     function clearImage(type) {
@@ -342,38 +347,55 @@
       isEditing[type] = false;
     }
 
-    function beforepreviewImage(event) {
+    function previewImage(event, type) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const previewImage = document.getElementById('beforepreviewImage');
+          const previewImage = document.getElementById(`${type}previewImage`);
           previewImage.src = e.target.result;
           previewImage.style.display = 'block';
-          document.querySelector('.before .icon').style.display = 'none';
-          isEditing['before'] = true;
-          const editDiv = document.querySelector('.before .edit');
+          document.querySelector(`.${type} .icon`).style.display = 'none';
+          isEditing[type] = true;
+          const editDiv = document.querySelector(`.${type} .edit`);
           editDiv.style.display = 'flex';
+          toggleUploadIcon(type, true);
         }
         reader.readAsDataURL(file);
       }
     }
 
-    function afterpreviewImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const previewImage = document.getElementById('afterpreviewImage');
-          previewImage.src = e.target.result;
-          previewImage.style.display = 'block';
-          document.querySelector('.after .icon').style.display = 'none';
-          isEditing['after'] = true;
-          const editDiv = document.querySelector('.after .edit');
-          editDiv.style.display = 'flex';
-        }
-        reader.readAsDataURL(file);
+    function toggleUploadIcon(type, isUpload) {
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (isUpload) {
+        icon.classList.remove('fa-pen');
+        icon.classList.add('fa-upload');
+      } else {
+        icon.classList.remove('fa-upload');
+        icon.classList.add('fa-pen');
       }
+    }
+
+    function uploadImage(type) {
+      const previewImage = document.getElementById(`${type}previewImage`);
+      if (previewImage.src) {
+        // Your logic to upload the image to the database
+        console.log(`Uploading ${type} image to the database`);
+        
+        // Simulating upload completion
+        setTimeout(() => {
+          console.log(`${type} image uploaded`);
+          toggleUploadIcon(type, false);
+        }, 1000); // Simulate 1 second upload time
+      }
+    }
+
+    function beforepreviewImage(event) {
+      previewImage(event, 'before');
+    }
+
+    function afterpreviewImage(event) {
+      previewImage(event, 'after');
     }
 
     // 上傳對比照日期

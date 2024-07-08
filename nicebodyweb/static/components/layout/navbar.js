@@ -21,7 +21,6 @@ let renderNav = function() {
       </div>
       <div class="logSign" id="logSign" style="display: none;">
         <a href="/login/loginPage">Log in</a>
-        <a href="/login/loginPage">Sign up</a>
       </div>
       <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">

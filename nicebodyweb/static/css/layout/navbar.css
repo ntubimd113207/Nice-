@@ -78,7 +78,7 @@ nav .logSign {
   margin-right: 5%;
 }
 
-nav .logSign :last-child {
+nav .logSign a {
   padding: 3%;
   border: #6E3D0D 1px solid;
   border-radius: 10px;
