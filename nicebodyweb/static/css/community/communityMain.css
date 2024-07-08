@@ -1,10 +1,34 @@
 article {
   background-color: #F0EAD2;
-  padding: 13% 20% 5%;
+  padding: 8% 20% 5%;
   color: #495057;
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.keyword-query {
+  position:relative;
+  display:inline-block;
+  width: 100%;
+  margin-bottom: 20PX;
+}
+
+.keyword-query input {
+  background-color: #FCFAF1;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.keyword-query i {
+  color: #BE9771;
+  cursor: pointer;
+  position: absolute; 
+  right: 10px;
+  top: calc(50% - 0.5em);
 }
 
 .po {
@@ -134,16 +158,69 @@ section {
   color: #495057;
 }
 
-.pocontent > .middle > .hashtag {
-  color: #BC6C25;
-  font-weight: bold;
-}
-
 .pocontent > .line {
   width: 100%;
   height: 1px;
   background-color: #CCC5B9;
   margin-bottom: 2%;
+}
+
+.each {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFF;
+  padding: 2%; 
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.each > .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.optimal {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.optimal i {
+  font-size: 2em;
+}
+
+.each > .top > .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left:3%;
+}
+
+.each > .top > .right > p {
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.each > .bottom {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 25px;
+}
+
+.photostickers {
+  width: 35px;
+  height: 35px;
+}
+
+.photostickers img{
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .pocontent > .bottom {
@@ -165,20 +242,12 @@ section {
   color: #CCC5B9;
 }
 
-.pocontent > .bottom > .right {
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
 .pocontent > .bottom i {
   font-size: 1.2em;
   cursor: pointer;
 }
 
-.pocontent > .bottom > .right > button {
+.pocontent > .bottom > button {
   background-color: #FFCF56;
   border: none;
   height: 100%;

@@ -232,10 +232,11 @@ canvas {
   cursor: pointer;
 }
 
-.edit > .left > button:nth-of-type(2) {
+.edit > .left > button:last-child {
   background-color: #BC4749;
 }
 
+.fa-upload,
 .fa-pen,
 .fa-trash-can {
   color: #FFF;
