@@ -1,97 +1,64 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const lockIcons = document.querySelectorAll('.lock-icon');
-  const inputs = document.querySelectorAll('input');
-  const saveButton = document.querySelector('.closesetting .button');
-  const maleButton = document.getElementById('maleButton');
-  const femaleButton = document.getElementById('femaleButton');
-  let genderSelection = null; // 用於儲存選擇的性別
+document.addEventListener("DOMContentLoaded", function () {
+  //彈跳視窗 申請營養師身分
+  let openapplynutritionist = document.getElementById('openapplynutritionist');
+  let applynutritionist = document.getElementById('applynutritionist');
+  let closeapplynutritionist = document.getElementById('closeapplynutritionist');
 
-  // 初始化鎖定所有輸入框和按鈕
-  lockAllInputs(true);
-  setGenderButtonsDisabled(true);
+  openapplynutritionist.addEventListener("click", () => applynutritionist.showModal());
+  closeapplynutritionist.addEventListener("click", () => applynutritionist.close());
 
-  // 鎖圖標點擊事件
-  lockIcons.forEach(icon => {
-    icon.addEventListener('click', function() {
-      toggleAllLocks(false); // 解鎖全部
-    });
-  });
+  //編輯個資
+  let changeButton = document.querySelector(".closesetting button:last-child");
+  let inputs = [
+    document.getElementById("name"),
+    document.getElementById("email"),
+    document.getElementById("password"),
+    document.getElementById("birthday")
+  ];
+  let maleButton = document.getElementById("maleButton");
+  let femaleButton = document.getElementById("femaleButton");
+  let lockIcons = document.querySelectorAll(".fa-lock");
 
-  // 性別按鈕點擊事件
-  maleButton.addEventListener('click', function() {
-    if (!maleButton.disabled) {
-      selectGender('male');
-    }
-  });
-
-  femaleButton.addEventListener('click', function() {
-    if (!femaleButton.disabled) {
-      selectGender('female');
-    }
-  });
-
-  // 點擊 "變更個資" 按鈕後的行為
-  saveButton.addEventListener('click', function() {
-    toggleAllLocks(true); // 回復鎖定狀態
-    lockAllInputs(true);
-    setGenderButtonsDisabled(true);
-    // 在這裡添加保存輸入數據的邏輯，例如通過AJAX發送到服務器
-    console.log("資料已儲存");
-  });
-
-  function toggleInputLock(icon, lock) {
-    const input = icon.closest('.title').nextElementSibling;
-    if (lock) {
-      icon.classList.remove('fa-unlock');
-      icon.classList.add('fa-lock');
-      if (input) {
-        input.disabled = true; // 禁用輸入框
-      }
-    } else {
-      icon.classList.remove('fa-lock');
-      icon.classList.add('fa-unlock');
-      if (input) {
-        input.disabled = false; // 啟用輸入框
-      }
-    }
-  }
-
-  function toggleAllLocks(lock) {
-    lockIcons.forEach(icon => {
-      toggleInputLock(icon, lock);
-    });
-    inputs.forEach(input => input.disabled = lock);
-    setGenderButtonsDisabled(lock);
-  }
-
-  function setGenderButtonsDisabled(disabled) {
-    maleButton.disabled = disabled;
-    femaleButton.disabled = disabled;
-  }
-
-  function selectGender(gender) {
-    genderSelection = gender;
-    if (gender === 'male') {
-      maleButton.style.border = "2px solid #297bcd";
-      femaleButton.style.border = "none";
-    } else {
-      femaleButton.style.border = "2px solid #c22574";
-      maleButton.style.border = "none";
-    }
-  }
-
-  function lockAllInputs(lock) {
+  function toggleEditMode(editMode) {
     inputs.forEach(input => {
-      input.disabled = lock;
+      input.readOnly = !editMode;
+      input.classList.toggle("disablededit", !editMode);
     });
+
+    maleButton.classList.toggle("disablededit", !editMode);
+    femaleButton.classList.toggle("disablededit", !editMode);
+
     lockIcons.forEach(icon => {
-      if (lock) {
-        icon.classList.remove('fa-unlock');
-        icon.classList.add('fa-lock');
-      } else {
-        icon.classList.remove('fa-lock');
-        icon.classList.add('fa-unlock');
-      }
+      icon.classList.toggle("fa-lock-open", editMode);
+      icon.classList.toggle("fa-lock", !editMode);
     });
   }
+
+  function updateButtonStyles(selectedButton) {
+    if (selectedButton === maleButton) {
+      selectedButton.style.border = "2px solid #297bcd";
+      femaleButton.style.border = "#FF95CA 2px solid";
+    } else {
+      selectedButton.style.border = "2px solid #c22574";
+      maleButton.style.border = "#84C1FF 2px solid";
+    }
+  }
+
+  changeButton.addEventListener("click", function () {
+    let inEditMode = changeButton.textContent === "變更個資";
+    changeButton.textContent = inEditMode ? "儲存變更" : "變更個資";
+    toggleEditMode(inEditMode);
+  });
+
+  toggleEditMode(false);
+
+  maleButton.addEventListener("click", function () {
+    if (changeButton.textContent === "變更個資") return;
+    updateButtonStyles(maleButton);
+  });
+
+  femaleButton.addEventListener("click", function () {
+    if (changeButton.textContent === "變更個資") return;
+    updateButtonStyles(femaleButton);
+  });
 });

@@ -5,7 +5,7 @@ article {
 }
 
 .sectionwrap {
-  height: 90vh;
+  height: 85vh;
   padding: 10% 5% 5%;
   display: flex; 
   justify-content: space-between;
@@ -17,14 +17,15 @@ article {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  gap: 30px;
 }
 
 .profile-picture {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   cursor: pointer; 
   transition: opacity 0.3s;
@@ -37,8 +38,8 @@ article {
 .profile .title {
   display: flex;
   align-items: center;
-  margin: 0px 10px 30px 10px; 
   justify-content: center;
+  gap: 20px;
 }
 
 .profile input {
@@ -54,16 +55,22 @@ article {
   outline: none;
 }
 
-.profile a {
-  text-decoration: none;
-  width: 50%;
+.profile .lists {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
 }
 
-.profile button {
-  width: 100%;
+.lists a {
+  width: 50%;
+  text-decoration: none;
+  box-sizing: border-box;
   height: 50px;
   padding: 10px 10px;
-  margin: 10px 10px;
   border: none;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
@@ -78,7 +85,7 @@ article {
   transition: background-color 0.3s;
 }
 
-.profile button:hover {
+.lists a:hover {
   background-color:  #d4a373;
   color: white;
 }
@@ -181,21 +188,6 @@ p{
   flex: 1;
   padding: 10px 10px;
   border-radius: 15px;
-  border:none;
-  color: #495057;
-  text-align: center;
-  font-size: 1em;
-  cursor: pointer;
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  transition: background-color 0.3s;
-}
-
-.gender button {
-  flex: 1;
-  padding: 10px 10px;
-  border-radius: 15px;
   border: none;
   color: #495057;
   text-align: center;
@@ -207,21 +199,21 @@ p{
   transition: background-color 0.3s;
 }
 
-.gender button[id="maleButton"] {
+#maleButton {
   background-color: #84C1FF;
   border: #84C1FF 2px solid;
 }
 
-.gender button[id="femaleButton"] {
+#femaleButton {
   background-color: #FF95CA;
   border: #FF95CA 2px solid;
 }
 
-.gender button[id="maleButton"]:hover {
+.maleButtonactive {
   border: #297bcd 2px solid;
 }
 
-.gender button[id="femaleButton"]:hover {
+.femaleButtonactive {
   border: #c22574 2px solid;
 }
 
@@ -237,13 +229,11 @@ p{
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 5%;
+  gap: 20px;
 }
 
 .closesetting button {
-  border-radius: 5px;
-  height: 40px;
-  border: none;
+  border-radius: 10px;
   background-color: #495057;
   color: #FFF;
   text-align: center;
@@ -253,13 +243,31 @@ p{
   justify-content: center; 
   align-items: center; 
   transition: background-color 0.3s;
-  padding: 10px 10px;
-  margin-right: 5%;
-  margin-bottom: 5%;
+  padding: 10px 15px;
+}
+
+.closesetting button:first-child {
+  background-color: #86BAA1;
+  border: #86BAA1 1px solid;
+}
+
+.closesetting button:last-child {
+  background-color: #495057;
   border: #495057 1px solid;
 }
 
-.closesetting button:hover {
+.closesetting button:first-child:hover {
+  background-color:  #FFF;
+  color:  #86BAA1;
+}
+
+.closesetting button:last-child:hover {
   background-color:  #FFF;
   color:  #495057;
+}
+
+.disablededit {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
 }
