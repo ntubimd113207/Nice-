@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/static/css/base/reset.css">
   <link rel="stylesheet" href="/static/css/base/global.css">
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/profile/profilepage.css">
@@ -33,14 +34,12 @@
         <input type="file" id="upload-picture" accept="image/*" style="display: none;">
         <div class="title">
           <input type="text" id="name">
-          <i class="fa-solid fa-lock lock-icon"></i>
+          <i class="fa-solid fa-lock"></i>
         </div>
-        <a href="/profile/followList">
-          <button class="button">關注列表</button>
-        </a>
-        <a href="/profile/collectionList">
-          <button class="button">收藏列表</button>
-        </a>
+        <div class="lists">
+          <a href="/profile/followList">關注列表</a>
+          <a href="/profile/collectionList">收藏列表</a>
+        </div>
       </section>
   
       <section class="settings">
@@ -59,18 +58,18 @@
               <div class="mail">
                 <div class="title">
                   <p>電子郵件</p>
-                  <i class="fa-solid fa-lock lock-icon"></i>
+                  <i class="fa-solid fa-lock"></i>
                 </div>
                 <input type="text" id="email">
               </div>
               <div class="gender">
                 <div class="title">
                   <p>性別</p>
-                  <i class="fa-solid fa-lock lock-icon"></i>
+                  <i class="fa-solid fa-lock"></i>
                 </div>    
                 <div class="gbt">
-                  <button type="button" id="maleButton" class="gender-button" onclick="selectGender('male')">男性</button>
-                  <button type="button" id="femaleButton" class="gender-button" onclick="selectGender('female')">女性</button>
+                  <button type="button" id="maleButton">男性</button>
+                  <button type="button" id="femaleButton">女性</button>
                 </div>
               </div>
             </div>
@@ -79,25 +78,45 @@
               <div class="password">
                 <div class="title">
                   <p>密碼</p>
-                  <i class="fa-solid fa-lock lock-icon"></i>
+                  <i class="fa-solid fa-lock"></i>
                 </div>
                 <input type="password" id="password">
               </div>
               <div class="birthday">
                 <div class="title">
                   <p>生日</p>
-                  <i class="fa-solid fa-lock lock-icon"></i>
+                  <i class="fa-solid fa-lock"></i>
                 </div>   
-                <div>
-                  <input type="date" id="birthday">
-                </div>
+                <input type="date" id="birthday">
               </div>
             </div>
           </div>
 
           <div class="closesetting">
-            <button class="button">變更個資</button>
+            <button id="openapplynutritionist">申請營養師身分</button>
+            <button>變更個資</button>
           </div>
+
+          <dialog id="applynutritionist">
+            <h1>申請營養師身分</h1>
+            <div class="content">
+              <h2>所屬工會</h2>
+              <select name="" id="">
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+              </select>
+              <h2>上傳證照</h2>
+              <div class="a-upload" id="fileNames">
+                <input type="file" name="file" id="file1">
+                <i class="fa-solid fa-folder"></i>
+              </div>
+            </div>
+            <div class="save">
+              <button id="closeapplynutritionist" class="closebtn">cancel</button>
+              <button id="saveapplynutritionist" class="savebtn">confirm</button>
+            </div>
+          </dialog>
         </div>
       </section>
     </section>
@@ -113,6 +132,35 @@
       renderNav();
       renderFooter();
     };
+
+    document.getElementById('file1').addEventListener('change', function() {
+      var fileInput = this;
+      var files = fileInput.files;
+      var fileNames = document.getElementById('fileNames');
+      fileNames.innerHTML = ""; // 清空之前的文件名
+
+      for (var i = 0; i < files.length; i++) {
+        var fileName = files[i].name;
+        var div = document.createElement('div');
+        div.textContent = "文件名：" + fileName;
+        fileNames.appendChild(div);
+      }
+    });
+
+    $("body").on("change", ".a-upload input[type='file']", function(){
+      var filePath = $(this).val();
+      var $pen = $(this).closest(".pen");
+      if (filePath.indexOf("jpg") != -1 || filePath.indexOf("png") != -1) {
+        $pen.find(".fileerrorTip").html("").hide();
+        var arr = filePath.split('\\');
+        var fileName = arr[arr.length-1];
+        $pen.find(".showFileName").html("文件名：" + fileName);
+      } else {
+        $pen.find(".showFileName").html("");
+        $pen.find(".fileerrorTip").html("非jpg,png格式：您未上傳文件，或者您上傳文件類型有誤！").show();
+        return false;
+      }
+    });
   </script>
 </body>
 </html>
