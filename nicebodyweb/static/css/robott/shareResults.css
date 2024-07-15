@@ -245,12 +245,19 @@
   color: #464646;
 }
 
-.comment .message > i {
+.comment .submitButton {
+  background-color: #FFF;
+  border: none;
+}
+
+.comment .message > button > i {
   font-size: 20px;
   color: #6E3D0D;
   margin-left: 3%;
   transition: color 0.3s;
   cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
 
 .comment .message > i:hover {

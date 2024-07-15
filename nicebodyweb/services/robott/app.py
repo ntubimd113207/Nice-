@@ -58,7 +58,7 @@ def robott_everyList():
     connection = db.get_connection() 
 
     cursor = connection.cursor()     
-    cursor.execute('select title, a.update_time, summary, "cookImage", likecount, messagecount, "userImage", diet, a."Cookid", "cookTime", "prepareMoney", a."Uid", COALESCE(b."Uid", 0) as cookbookLike from body."v_recipeWorld" as a left join (SELECT * FROM body."cookbookLike" where "Uid"=%s) as b on a."Cookid" = b."Cookid" and a."Uid" = b."Uid" order by a.update_time desc, a."Cookid" desc;', (uid,))
+    cursor.execute('select title, a.update_time, summary, "cookImage", likecount, messagecount, "userImage", diet, a."Cookid", "cookTime", "prepareMoney", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, cookbookStar from body."v_recipeWorld" as a left join (SELECT * FROM body."cookbookLike" where "Uid"=%s) as b on a."Cookid" = b."Cookid" and a."Uid" = b."Uid" order by a.update_time desc, a."Cookid" desc;', (uid,))
 
     data = cursor.fetchall()
 
@@ -124,7 +124,7 @@ def robott_share():
 
     recipe_id = request.args.get('recipe_id')
 
-    cursor.execute('select title, a.create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", a."Cookid", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, likecount, messagecount from (SELECT title, create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", "Cookid", "Uid", likecount, messagecount FROM body."v_recipeWorld" where "Cookid" = %s) as a left join (SELECT * FROM body."cookbookLike" where "Uid" = %s) as b on a."Cookid" = b."Cookid" and a."Uid" = b."Uid";', (recipe_id, uid))
+    cursor.execute('select title, a.create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", a."Cookid", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, likecount, messagecount, cookbookStar from (SELECT title, create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", "Cookid", "Uid", likecount, messagecount, cookbookStar FROM body."v_recipeWorld" where "Cookid" = %s) as a left join (SELECT * FROM body."cookbookLike" where "Uid" = %s) as b on a."Cookid" = b."Cookid" and a."Uid" = b."Uid";', (recipe_id, uid))
 
     data = cursor.fetchone()
 
@@ -177,5 +177,30 @@ def robott_likeSub():
             connection.close()
 
             return jsonify(response)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+#發佈食譜 - 食譜品質
+@robott_bp.route('/comment', methods=['POST'])
+def robott_comment():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            recipe_id = request.form.get('recipe_id')
+            message = request.form.get('message')
+            star = request.form.get('star')
+
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body."cookbookMessage" ("Cookid", "Uid", "message", star, create_time, update_time) VALUES (%s, %s, %s, %s, now(), now());', (recipe_id, uid, message, star))
+            response = {'message': f'comment successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(1)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
