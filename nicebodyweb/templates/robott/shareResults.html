@@ -59,7 +59,7 @@
 								{% else %}
 									<i class="fa-regular fa-star"></i>
 								{% endif %}
-								<span>3.5</span>
+								<span>{{data[15]}}</span>
 							</div>
 						</div>
 						<div class="diet" id="openinfor">
@@ -148,35 +148,31 @@
 							<div class="evaluaterate">
 								<h3>食譜品質</h3>
 								<i class="fa-solid fa-star"></i>
-								<select name="" id="">
-									<option value="">0</option>
-									<option value="">0.5</option>
-									<option value="">1</option>
-									<option value="">1.5</option>
-									<option value="">2</option>
-									<option value="">2.5</option>
-									<option value="">3</option>
-									<option value="">3.5</option>
-									<option value="">4</option>
-									<option value="">4.5</option>
-									<option value="">5</option>
+								<select name="" id="star">
+									<option value="0">0</option>
+									<option value="0.5">0.5</option>
+									<option value="1">1</option>
+									<option value="1.5">1.5</option>
+									<option value="2">2</option>
+									<option value="2.5">2.5</option>
+									<option value="3">3</option>
+									<option value="3.5">3.5</option>
+									<option value="4">4</option>
+									<option value="4.5">4.5</option>
+									<option value="5">5</option>
 								</select>
 							</div>
-							<input type="text" placeholder="說點什麼吧！">
+							<input type="text" id="messageInput" placeholder="說點什麼吧！">
 						</div>
-						<i class="fa-solid fa-paper-plane"></i>
+						<button id="submitButton" class="submitButton"><i class="fa-solid fa-paper-plane"></i></button>
 					</div>
 
 					{% for d in data2%}
 						<a class="each">
 							<div class="left">
-								<div class="like">
-									<i class="fa-solid fa-heart"></i>
-									<span>{{d[5]}}</span>
-								</div>
 								<div class="receiperate">
 									<i class="fa-solid fa-star"></i>
-									<span>3.5</span>
+									<span>{{d[5]}}</span>
 								</div>
 								<p>{{d[4]}}</p>
 							</div>
@@ -340,6 +336,73 @@
 				});
 			});
 
+			// 留言
+			document.addEventListener('DOMContentLoaded', function() {
+				const messageInput = document.getElementById('messageInput');
+				const submitButton = document.getElementById('submitButton');
+				const star = document.getElementById('star');
+
+				submitButton.addEventListener('click', function() {
+					const message = messageInput.value;
+					if (message === '') {
+						alert('請輸入留言');
+						return;
+					}
+
+					$.ajax({
+						type: "POST",
+						url: "/robott/comment",
+						data: {
+							recipe_id: "{{ data[10] }}",
+							message: message,
+							star: star.value
+						},
+						success: function(response) {
+							console.log(response);
+						},
+						error: function(xhr, status, error) {
+							console.error(error);
+							alert(error, '出現錯誤，請稍後再試！');
+						}
+					});
+
+					// 清空 messageInput 並將 star 設為 0
+					messageInput.value = '';
+					star.value = 0;
+
+					// 取得現在的日期
+					const today = new Date();
+        			const formattedDate = ('0' + (today.getMonth() + 1)).slice(-2) + '.' + 
+                              ('0' + today.getDate()).slice(-2) + '.' + 
+                              today.getFullYear();
+
+
+					// 新增留言到 .each 元素中
+					const newMessage = document.createElement('a');
+					newMessage.classList.add('each');
+					newMessage.innerHTML = `
+						<div class="left">
+							<div class="receiperate">
+								<i class="fa-solid fa-star"></i>
+								<span>${star.value}</span>
+							</div>
+							<p>${message}</p>
+						</div>
+						<div class="right">
+							<p>${formattedDate}</p>
+							<div class="photostickers">
+								<img src="/static/images/userImage/${userImage}" alt="">
+							</div>
+						</div>
+					`;
+					const firstEach = document.querySelector('.each');
+					if (firstEach) {
+						firstEach.parentNode.insertBefore(newMessage, firstEach);
+					} else {
+						document.querySelector('.comment .wrap').appendChild(newMessage);
+					}
+				});
+			});
 		</script>
 	</body>
 </html>
