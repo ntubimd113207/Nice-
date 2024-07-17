@@ -79,6 +79,9 @@ def goal_main():
             contrast = cursor.fetchone()
 
             connection.close()
+
+            if contrast is None:
+                contrast = (None, None)
             return render_template('/goal/goalMain.html', data=data, weight=weight, contrast=contrast, contrast_image_path=contrast_image_path, name=name, userImage=userImage)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
@@ -239,7 +242,7 @@ def upload_before_image():
                 unique_filename = f'{timestamp}_{uid}_{str(uuid.uuid4())[:8]}_{image_name}'
 
                 # 確定文件保存的路徑
-                image_path = os.path.join(contrast_image_path, unique_filename)
+                image_path = os.path.join('static/images/contrast', unique_filename)
                 image.save(image_path)
 
                 connection = db.get_connection() 
