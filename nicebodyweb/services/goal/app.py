@@ -1,7 +1,11 @@
 # 匯入Blueprint模組
 import re
+import os
+import uuid
 from flask import jsonify, render_template, session, request, jsonify, Blueprint
 from utils import db
+from werkzeug.utils import secure_filename
+from datetime import datetime
 
 # 產生目標服務藍圖
 goal_bp = Blueprint('goal_bp', __name__)
@@ -9,6 +13,8 @@ goal_bp = Blueprint('goal_bp', __name__)
 #--------------------------
 # 在目標服務藍圖加入路由
 #--------------------------
+
+contrast_image_path = "/static/images/contrast"
 
 @goal_bp.route('/goalMain', methods=['GET', 'POST'])
 def goal_main(): 
@@ -69,8 +75,11 @@ def goal_main():
             weight = [float(w) for w in weight]
             print(weight)
 
+            cursor.execute('SELECT before_image, after_image FROM body.contrast WHERE "Uid" = %s', (uid,))
+            contrast = cursor.fetchone()
+
             connection.close()
-            return render_template('/goal/goalMain.html', data=data, weight=weight, name=name, userImage=userImage)
+            return render_template('/goal/goalMain.html', data=data, weight=weight, contrast=contrast, contrast_image_path=contrast_image_path, name=name, userImage=userImage)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
@@ -212,3 +221,121 @@ def save_todayWeight():
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
+
+# uploadBeforeImage
+@goal_bp.route('/uploadBeforeImage', methods=['POST'])
+def upload_before_image():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            image = request.files.get('image')
+            if image:
+                # 使用 secure_filename 確保文件名安全
+                image_name = secure_filename(image.filename)
+
+                # 生成唯一的文件名，包含時間戳和使用者 ID
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                unique_filename = f'{timestamp}_{uid}_{str(uuid.uuid4())[:8]}_{image_name}'
+
+                # 確定文件保存的路徑
+                image_path = os.path.join(contrast_image_path, unique_filename)
+                image.save(image_path)
+
+                connection = db.get_connection() 
+                cursor = connection.cursor()
+
+                cursor.execute('SELECT "Uid" FROM body.contrast WHERE "Uid" = %s', (uid,))
+                existing_uid = cursor.fetchone()
+
+                if existing_uid:
+                    cursor.execute('UPDATE body.contrast SET before_image = %s, update_time = now() WHERE "Uid" = %s',
+                                   (unique_filename, uid))
+                    message = 'Updated existing record.'
+                else:
+                    print(uid, unique_filename)
+                    cursor.execute('INSERT INTO body.contrast("Uid", before_image, create_time, update_time) VALUES(%s, %s, now(), now())',
+                                   (uid, unique_filename))
+                    message = 'Inserted new record.'
+
+                connection.commit()
+                connection.close()
+
+                return jsonify({'message': 'uploadBeforeImage successfully', 'image_url': f'/static/images/contrast/{unique_filename}'})
+            else:
+                return jsonify({'error': 'No image uploaded'}), 400
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# uploadAfterImage
+@goal_bp.route('/uploadAfterImage', methods=['POST'])
+def upload_after_image():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            image = request.files.get('image')
+            if image:
+                # 使用 secure_filename 確保文件名安全
+                image_name = secure_filename(image.filename)
+
+                # 生成唯一的文件名，包含時間戳和使用者 ID
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                unique_filename = f'{timestamp}_{uid}_{str(uuid.uuid4())[:8]}_{image_name}'
+
+                # 確定文件保存的路徑
+                image_path = os.path.join('static/images/contrast', unique_filename)
+                image.save(image_path)
+
+                connection = db.get_connection() 
+                cursor = connection.cursor()
+
+                cursor.execute('SELECT "Uid" FROM body.contrast WHERE "Uid" = %s', (uid,))
+                existing_uid = cursor.fetchone()
+
+                if existing_uid:
+                    cursor.execute('UPDATE body.contrast SET after_image = %s, update_time = now() WHERE "Uid" = %s',
+                                   (unique_filename, uid))
+                    message = 'Updated existing record.'
+                else:
+                    print(uid, unique_filename)
+                    cursor.execute('INSERT INTO body.contrast("Uid", after_image, create_time, update_time) VALUES(%s, %s, now(), now())',
+                                   (uid, unique_filename))
+                    message = 'Inserted new record.'
+
+                connection.commit()
+                connection.close()
+
+                return jsonify({'message': 'uploadAfterImage successfully', 'image_url': f'/static/images/contrast/{unique_filename}'})
+            else:
+                return jsonify({'error': 'No image uploaded'}), 400
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# clearImage
+@goal_bp.route('/clearImage', methods=['POST'])
+def delete_contrast_image():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            image_type = request.form.get('type')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            if image_type == 'before':
+                cursor.execute('UPDATE body.contrast SET before_image = NULL, update_time = now() WHERE "Uid" = %s', (uid,))
+            elif image_type == 'after':
+                cursor.execute('UPDATE body.contrast SET after_image = NULL, update_time = now() WHERE "Uid" = %s', (uid,))
+
+            connection.commit()
+            connection.close()
+
+            return jsonify({'message': 'deletecontrastImage successfully'})
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
