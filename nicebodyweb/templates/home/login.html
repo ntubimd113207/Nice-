@@ -28,9 +28,8 @@
   <article>
     <section>
       <h1>Log in</h1>
-      <div class="loginbtn" onclick="redirectToGoogle()">
+      <div class="loginbtn" id="register_btn">
         <img src="/static/images/proflie/gicon.png" alt="">
-        <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
         <span>Continue with Google</span>
       </div>
     </section>
@@ -44,24 +43,15 @@
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script>
-		let messageText = "{{data}}";
+		let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
 
     window.onload = function() {
       renderNav();
       renderFooter();
     };
 
-    function redirectToGoogle() {
-      window.location.href = 'URL_TO_GOOGLE_LOGIN_PAGE';
-    }
-
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId());
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail());
-    }
+    document.getElementById('register_btn').onclick = () => location.href = "/login/googlelogin"
   </script>
 </body>
 </html>

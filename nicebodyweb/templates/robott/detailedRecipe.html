@@ -23,6 +23,7 @@
 		<script src="/static/components/layout/footer.js" defer></script>
 		<script src="/static/components/jquery.fancybox.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<title>食譜</title>
 	</head>
 
@@ -104,7 +105,13 @@
 						</ol>
 
 						<h2>營養配比</h2>
-						<p>{{data[6]}}</p>
+						<div class="chart-container">
+							<p>{{data[6]}}</p>
+							{% if data[11] > 134 %}
+								<canvas id="nutritionChart" width="400" height="400"></canvas>
+							{% endif %}
+						</div>
+						
 					</div>
 
 					<div class="button">
@@ -134,12 +141,75 @@
 		<footer id="footer-container"></footer>
 
 		<script>
-			let messageText = "烤焦羊";
+			let messageText = "{{name}}";
+			let userImage = "{{userImage}}"
 			
 			window.onload = function() {
 				renderNav();
 				renderFooter();
+				renderChart();
 			};
+
+			function renderChart() {
+				var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
+					var parts = item.match(/(\D+)(\d+)%/);
+					return {
+						label: parts[1],
+						value: parseInt(parts[2])
+					};
+				});
+
+				var labels = nutritionData.map(function(item) {
+					return item.label;
+				});
+
+				var data = nutritionData.map(function(item) {
+					return item.value;
+				});
+
+				var ctx = document.getElementById('nutritionChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: '營養配比',
+							data: data,
+							backgroundColor: [
+								'#a3a380', 
+								'#d6ce93', 
+								'#efebce', 
+								'#d8a48f', 
+								'#bb8588'
+							],
+							borderColor: [
+								'#a3a380', 
+								'#d6ce93', 
+								'#efebce', 
+								'#d8a48f', 
+								'#bb8588'
+							],
+							borderWidth: 1
+						}]
+					},
+					options: {
+						responsive: false,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'top',
+							},
+							title: {
+								display: false,
+								text: '營養配比'
+							}
+						}
+					}
+				});
+			}
+
+
+
 
 			// 彈跳視窗 飲食法簡介
 			let openinfor=document.getElementById('openinfor');

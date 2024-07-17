@@ -14,9 +14,10 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/community/communityMain.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
-	<script src="/static/components/layout/subNavbar.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
   <title>社群</title>
 </head>
@@ -24,14 +25,19 @@
   <div id="myCursor"></div>
   <div id="circle"></div>
 
-  <nav id="subnav-container"></nav>
+  <nav id="nav-container"></nav>
 
   <article>
+    <label class="keyword-query">
+      <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </label>
+
     <a class="po" href="">
       <div class="photostickers">
         <img src="/static/images/userImage/Joey1.png" alt="">
       </div>
-      <div class="say">說點甚麼吧!</div>
+      <div class="say">我有疑問...</div>
     </a>
 
     <section>
@@ -52,26 +58,21 @@
               </a>
             </div>
           </div>
-          <div class="middle">
-            <h1>健康是力量！！！</h1>
-            <a class="textcontent">
-              <p>我超喜歡</p>
-            </a>
-            <a class="imgcontent" href="/community/detailedPost">
+          <a class="middle" href="/community/detailedPost">
+            <h1>我的實作合理嗎?</h1>
+            <div class="textcontent">
+              <p>我在實作時加入了其他菜，請問這樣還符合得舒飲食嗎?</p>
+            </div>
+            <div class="imgcontent">
               <img src="/static/images/food/food1.jpg" alt="">
               <img src="/static/images/food/food2.jpg" alt="">
               <img src="/static/images/food/food3.jpg" alt="">
-            </a>
-            <div class="hashtag">#<span>小知識</span></div>
-          </div>
+            </div>
+          </a>
           <div class="line"></div>
           <div class="bottom">
-            <input type="text" placeholder="說點什麼吧！">
-            <div class="right">
-              <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
-              <span>132</span>
-              <i class="fa-regular fa-heart"></i>
-            </div>
+            <input type="text" placeholder="我來解說吧!">
+            <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
           </div>
         </div>
       </div>
@@ -94,26 +95,33 @@
               <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
             </div>
           </div>
-          <div class="middle">
+          <a class="middle" href="/community/detailedPost">
             <h1>理想減重速度？</h1>
-            <a class="textcontent" href="/community/detailedPost">
-              <p>
-                減重目標設定最好是每週減0.5~1.0 公斤，以此速率減重，則每月期望能夠減重的目標為2~4 公斤，2 至3 個月的理想減重目標為8 公斤或減掉初始體重的10%（如90 公斤的人約減9公斤），此種減重速率也較不會引起身體負擔。
-                <br>資料來源:衛生福利部國民健康署
-                減重目標設定最好是每週減0.5~1.0 公斤，以此速率減重，則每月期望能夠減重的目標為2~4 公斤，2 至3 個月的理想減重目標為8 公斤或減掉初始體重的10%（如90 公斤的人約減9公斤），此種減重速率也較不會引起身體負擔。
-                <br>資料來源:衛生福利部國民健康署
-              </p>
-            </a>
-            <div class="hashtag">#<span>小知識</span></div>
-          </div>
-          <div class="line"></div>
-          <div class="bottom">
-            <input type="text" placeholder="說點什麼吧！">
-            <div class="right">
-              <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
-              <span>132</span>
-              <i class="fa-regular fa-heart"></i>
+            <div class="textcontent" >
+              <p>有人可以告訴我100公斤要減到50公斤要花多久時間才合理嗎?</p>
             </div>
+          </a>
+          <div class="line"></div>
+          <div class="each">
+            <div class="top">
+              <div class="optimal">
+                <i class="fa-solid fa-crown"></i>最佳解
+              </div>
+              <div class="right">
+                <p>2024.3.2</p>
+                <div class="photostickers">
+                  <img src="/static/images/userImage/woman1.png" alt="">
+                </div>
+              </div>
+            </div>
+            <div class="bottom">
+              減重目標設定最好是每週減0.5~1.0 公斤，以此速率減重，則每月期望能夠減重的目標為2~4 公斤，2 至3 個月的理想減重目標為8 公斤或減掉初始體重的10%（如90 公斤的人約減9公斤），此種減重速率也較不會引起身體負擔。
+              資料來源:衛生福利部國民健康署
+            </div>
+          </div>
+          <div class="bottom">
+            <input type="text" placeholder="我來解說吧!">
+            <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
           </div>
         </div>
       </div>
@@ -208,15 +216,31 @@
     </div>
   </dialog>
 
+  <dialog id="loginDialog">
+    <h1>請先登入</h1>
+    <div class="contentsave">
+      <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+    </div>
+  </dialog>
+
   <footer id="footer-container"></footer>
 
   <script>
-		let messageText = "烤焦羊";
+		let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
 
     window.onload = function() {
-      renderSubnav();
+      renderNav();
       renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
+
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
 
     // 彈跳視窗
     function setupModal(openBtnId, modalId, closeBtnId, saveBtnId, onSaved) {
@@ -267,19 +291,6 @@
         }
       }
     }
-
-    // 改變按讚icon、數字
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.fa-regular.fa-heart').forEach(function(element) {
-        element.addEventListener('click', function() {
-          let isRegular = this.classList.contains('fa-regular');
-          let countElement = this.closest('section').querySelector('.right span');
-          this.classList.toggle('fa-regular', !isRegular);
-          this.classList.toggle('fa-solid', isRegular);
-          countElement.textContent = parseInt(countElement.textContent) + (isRegular ? 1 : -1);
-        });
-      });
-    });
 
     // 改變關注icon樣式
     document.addEventListener('DOMContentLoaded', function() {

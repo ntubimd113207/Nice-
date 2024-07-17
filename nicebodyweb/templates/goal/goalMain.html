@@ -149,9 +149,9 @@
             <img id="beforepreviewImage" src="" alt="">
           </label>
           <div class="edit">
-            <div class="right">2024.04.05</div>
+            <div class="right" id="currentDate1"></div>
             <div class="left">
-              <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="enableEditing('before')"><i class="fa-solid fa-upload"></i></button>
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
@@ -172,7 +172,7 @@
             <img id="afterpreviewImage" src="" alt="">
           </label>
           <div class="edit">
-            <div class="right">2024.04.05</div>
+            <div class="right" id="currentDate2"></div>
             <div class="left">
               <button onclick="enableEditing('after')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
@@ -181,21 +181,43 @@
         </div>
       </div>
     </section>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
   </article>
 
   <footer id="footer-container"></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    let messageText = "烤焦羊";
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let weight_data= "{{ weight }}";
+    let weight_list = JSON.parse(weight_data);
 
     window.onload = function() {
       renderNav();
       renderFooter();
+
+      if (weight_list[6]>0) {
+        document.getElementById('weightInput').style.backgroundColor = "#CCC5B9";
+        document.getElementById('weightInput').disabled = true;
+        document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
+        document.getElementById('submitButton').disabled = true;
+      }
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
 
-    let weight_data= "{{ weight }}";
-    let weight_list = JSON.parse(weight_data);
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
 
     // 體重變化表輸入設定
     document.getElementById('submitButton').addEventListener('click', function() {
@@ -209,26 +231,38 @@
         alert("請輸入數字或浮點數");
         input.value = "";
       } else {
-        // $.ajax({
-        //   type: "POST",
-        //   url: "/goal/saveTodayWeight",
-        //   data: {
-        //     weight: value
-        //   },
-        //   success: function(response) {
-        //     if (response === "success") {
-        //       alert("新增成功");
-        //       resetInputAndButton();
-        //     } else {
-        //       alert("新增失敗");
-        //     }
-        //   }
-        // });
+        $.ajax({
+          type: "POST",
+          url: "/goal/saveTodayWeight",
+          data: {
+            weight: value
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+              console.error(error);
+              alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        // 將新的體重值添加到數據數組中
+        data[6] = parseFloat(value);
+
+        // 更新點的半徑和背景色
+        chart.data.datasets[0].pointRadius[6] = 3;
+        chart.data.datasets[0].pointBackgroundColor[6] = 'blue';
         
+        // 更新圖表
+        chart.update();
+
+        console.log(data);
+
         input.style.backgroundColor = "#CCC5B9";
         input.disabled = true;
         this.innerHTML = '<i class="fa-solid fa-check"></i>';
         localStorage.setItem('inputState', 'disabled');
+
       }
     });
 
@@ -242,27 +276,9 @@
       localStorage.removeItem('inputState');
     }
 
-    // setInterval(function() {
-    //   let now = new Date();
-    //   if (now.getHours() === 0 && now.getMinutes() === 0) {
-    //     resetInputAndButton();
-    //   }
-    // }, 60000);
-
-    // let inputState = localStorage.getItem('inputState');
-    // if (inputState === 'disabled') {
-    //   let input = document.getElementById('weightInput');
-    //   let button = document.getElementById('submitButton');
-    //   input.style.backgroundColor = "#CCC5B9";
-    //   input.disabled = true;
-    //   button.innerHTML = '<i class="fa-solid fa-check"></i>';
-    // }
-
     // 體重變化表
     let chartElement = document.getElementById('myChart');
-
     let today = new Date();
-
     let labels = [];
 
     for (let i = 6; i >= 0; i--) {
@@ -275,19 +291,18 @@
 
     let originalData = weight_list;
     let data = originalData.map(value => value !== 0 ? value : null);
-    console.log(data)
 
     let chartData = {
       labels: labels,
       datasets: [{
         label: 'weight',
-        data: [45,46,45,42.1,43,42,],
+        data: data,
         pointRadius: data.map(value => value !== null ? 3 : 0), 
         pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), 
       }]
     };
 
-    new Chart(chartElement, {
+    let chart = new Chart(chartElement, {
       type: 'line',
       data: chartData,
     });
@@ -307,9 +322,14 @@
     }
 
     function enableEditing(type) {
-      isEditing[type] = true;
-      const fileInput = document.getElementById(`${type}fileInput`);
-      fileInput.click(); // Trigger the file input click event
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (icon.classList.contains('fa-upload')) {
+        uploadImage(type);
+      } else {
+        isEditing[type] = true;
+        const fileInput = document.getElementById(`${type}fileInput`);
+        fileInput.click(); // Trigger the file input click event
+      }
     }
 
     function clearImage(type) {
@@ -327,39 +347,64 @@
       isEditing[type] = false;
     }
 
-    function beforepreviewImage(event) {
+    function previewImage(event, type) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const previewImage = document.getElementById('beforepreviewImage');
+          const previewImage = document.getElementById(`${type}previewImage`);
           previewImage.src = e.target.result;
           previewImage.style.display = 'block';
-          document.querySelector('.before .icon').style.display = 'none';
-          isEditing['before'] = true;
-          const editDiv = document.querySelector('.before .edit');
+          document.querySelector(`.${type} .icon`).style.display = 'none';
+          isEditing[type] = true;
+          const editDiv = document.querySelector(`.${type} .edit`);
           editDiv.style.display = 'flex';
+          toggleUploadIcon(type, true);
         }
         reader.readAsDataURL(file);
       }
     }
 
-    function afterpreviewImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const previewImage = document.getElementById('afterpreviewImage');
-          previewImage.src = e.target.result;
-          previewImage.style.display = 'block';
-          document.querySelector('.after .icon').style.display = 'none';
-          isEditing['after'] = true;
-          const editDiv = document.querySelector('.after .edit');
-          editDiv.style.display = 'flex';
-        }
-        reader.readAsDataURL(file);
+    function toggleUploadIcon(type, isUpload) {
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (isUpload) {
+        icon.classList.remove('fa-pen');
+        icon.classList.add('fa-upload');
+      } else {
+        icon.classList.remove('fa-upload');
+        icon.classList.add('fa-pen');
       }
     }
+
+    function uploadImage(type) {
+      const previewImage = document.getElementById(`${type}previewImage`);
+      if (previewImage.src) {
+        // Your logic to upload the image to the database
+        console.log(`Uploading ${type} image to the database`);
+        
+        // Simulating upload completion
+        setTimeout(() => {
+          console.log(`${type} image uploaded`);
+          toggleUploadIcon(type, false);
+        }, 1000); // Simulate 1 second upload time
+      }
+    }
+
+    function beforepreviewImage(event) {
+      previewImage(event, 'before');
+    }
+
+    function afterpreviewImage(event) {
+      previewImage(event, 'after');
+    }
+
+    // 上傳對比照日期
+    var currentDate = new Date();
+
+    var formattedDate = currentDate.getFullYear() + '.' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '.' + currentDate.getDate().toString().padStart(2, '0');
+
+    document.getElementById('currentDate1').innerHTML = formattedDate;
+    document.getElementById('currentDate2').innerHTML = formattedDate;
 
     // 彈跳視窗 新增打卡目標
     let opencheck=document.getElementById('opencheck');

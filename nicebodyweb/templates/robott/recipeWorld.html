@@ -10,13 +10,14 @@
   <link rel="stylesheet" href="/static/css/base/reset.css">
   <link rel="stylesheet" href="/static/css/base/global.css">
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
-	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/robott/recipeWorld.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
-	<script src="/static/components/layout/navbar.js" defer></script>
-  <script src="/static/components/layout/sidebar.js" defer></script>
+  <script src="/static/components/layout/navbar.js" defer></script>
+  <!-- <script src="/static/components/layout/sidebar.js" defer></script> -->
   <script src="/static/components/layout/footer.js" defer></script>
   <title>食譜天地</title>
 </head>
@@ -28,117 +29,227 @@
 
   <article>
     <section>
-      <div class="switch">
-        <a class="generate-recipes" href="/robott/generateRecipes">生成食譜</a>
-        <a class="active recipe-world" href="/robott/recipeWorld">食譜天地</a>
-      </div>
-
-      <div class="search">
-        <div class="cooking-time">
-          <input type="text" placeholder="烹飪時間"><span>分</span><span>~</span> 
-          <input type="text" placeholder="烹飪時間"><span>分</span>
-          <input type="text" placeholder="預算範圍">
-          <select name="" id="">
-            <option value="">所有飲食法</option>
-            <option value="">地中海飲食法</option>
-            <option value="">得舒飲食法</option>
-            <option value="">彈性素食</option>
-            <option value="">234飲食法</option>
-          </select>
+        <div class="switch">
+            <a class="generate-recipes" href="/robott/generateRecipes">生成食譜</a>
+            <a class="active recipe-world" href="/robott/recipeWorld">食譜天地</a>
         </div>
-
-        <label class="keyword-query">
-          <input type="text" placeholder="關鍵字查詢">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </label>
-      </div>
-    </section>
-
-    <section>
-      <div class="filter">
-        <p class="active">最新</p>
-        <p>最熱門</p>
-        <p>分享最多</p>
-      </div>
-
-      <div class="content">
-        {% for d in data %}
-        <div class="ai-recipe-share">
-          <img src="{{ Recipes_image_path }}/{{ d[3] }}" alt="">
-          <div class="title">
-            <img src="{{ user_image_path }}/{{ d[6] }}" alt="">
-            <h3>{{d[0]}}</h3>
-          </div>
-          <p>{{d[1]}}</p>
-          {% if d[2]|length > 60 %}
-          <p>{{d[2][:60]}}...</p>
-          {% else %}
-          <p>{{d[2]}}</p>
-          {% endif %}
-          <div class="diet">
-            {% if d[7] is not none %}
-                {% if '1' in d[7] %}
-                    <span class="dietname mediterranean">地中海</span>
-                {% endif %}
-                {% if '2' in d[7] %}
-                    <span class="dietname deshu">得舒</span>
-                {% endif %}
-                {% if '3' in d[7] %}
-                    <span class="dietname vegetarian">彈性素食</span>
-                {% endif %}
-                {% if '4' in d[7] %}
-                    <span class="dietname numdiet">234</span>
-                {% endif %}
-            {% else %}
-                <span class="dietname none">無</span>
-            {% endif %}
-          </div>
-          <form action="/robott/shareResults" method="get">
-            <div class="more">
-              <input type="hidden" name="recipe_id" value="{{ d[8] }}">
-              <button type="submit">了解更多</button>
-              <div class="icon">
-                <div class="like">
-                  <i class="fa-solid fa-thumbs-up"></i>
-                  <input type="hidden" name="likecount" value="{{ d[4] }}">
-                  <span>{{d[4]}}&ensp;</span>
-                </div>
-                <div class="share">
-                  <i class="fa-solid fa-comment"></i>
-                  <input type="hidden" name="messagecount" value="{{ d[5] }}">
-                  <span>{{d[5]}}</span>
-                </div>
-              </div>
+        <div class="search">
+            <div class="cooking-time">
+                <input type="text" id="cookTimeBefore" placeholder="烹飪時間" value="0"><span>分</span><span>~</span>
+                <input type="text" id="cookTimeAfter" placeholder="烹飪時間"><span>分</span>
+                <input type="text" id="budgetRange" placeholder="食材預算">
+                <select name="" id="dietFilter">
+                    <option value="">所有飲食法</option>
+                    <option value="1">地中海</option>
+                    <option value="2">得舒</option>
+                    <option value="3">彈性素食</option>
+                    <option value="4">234</option>
+                </select>
             </div>
-          </form>
+            <label class="keyword-query">
+                <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </label>
         </div>
-        {% endfor %}
-      </div>
     </section>
+    <section>
+        <div class="filter">
+            <p class="active" onclick="sortContent('latest')" unselectable="on">最新</p>
+            <p onclick="sortContent('likecount')" unselectable="on">最熱門</p>
+            <p onclick="sortContent('messagecount')" unselectable="on">分享最多</p>
+        </div>
+        <div class="content" id="content">
+            {% for d in data %}
+            <div class="ai-recipe-share" data-likecount="{{ d[4] }}" data-messagecount="{{ d[5] }}" data-timestamp="{{ loop.index }}">
+                <img src="{{ Recipes_image_path }}/{{ d[3] }}" alt="">
+                <div class="title">
+                    <img src="{{ user_image_path }}/{{ d[6] }}" alt="">
+                    <h3>{{d[0]}}</h3>
+                </div>
+                <p>{{d[1]}}</p>
+                {% if d[2]|length > 60 %}
+                <p>{{d[2][:60]}}...</p>
+                {% else %}
+                <p>{{d[2]}}</p>
+                {% endif %}
+                <div class="diet">
+                    {% if d[7] is not none %}
+                        {% if '1' in d[7] %}
+                            <span class="dietname mediterranean">地中海</span>
+                        {% endif %}
+                        {% if '2' in d[7] %}
+                            <span class="dietname deshu">得舒</span>
+                        {% endif %}
+                        {% if '3' in d[7] %}
+                            <span class="dietname vegetarian">彈性素食</span>
+                        {% endif %}
+                        {% if '4' in d[7] %}
+                            <span class="dietname numdiet">234</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="dietname none">無</span>
+                    {% endif %}
+                </div>
+                
+                <input type="hidden" name="c" value="{{ d[9] }}">
+                <input type="hidden" name="p" value="{{ d[10] }}">
+                <form action="/robott/shareResults" method="get">
+                    <div class="more">
+                        <input type="hidden" name="recipe_id" value="{{ d[8] }}">
+                        <button type="submit">了解更多</button>
+                        <div class="icon">
+                            <div class="like">
+                                {% if d[12] == 1 %}
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                {% endif %}
+                                <span>{{d[4]}}&ensp;</span>
+                            </div>
+                            <div class="share">
+                                {% if d[12] == 1 %}
+                                    <i class="fa-solid fa-comment"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-comment"></i>
+                                {% endif %}
+                                <span>{{d[5]}}&ensp;</span>
+                            </div>
+                            <div class="rate">
+                                <i class="fa-solid fa-star"></i>
+                                <span>3.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+          </div>
+      </section>
+
+      <dialog id="loginDialog">
+        <h1>請先登入</h1>
+        <div class="contentsave">
+          <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+        </div>
+      </dialog>
   </article>
 
   <footer id="footer-container"></footer>
 
   <script>
-    let messageText = "烤焦羊";
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
 
     window.onload = function() {
       renderNav();
       renderFooter();
     };
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const menuIcon = document.getElementById('menuIcon');
-      const closeIcon = document.getElementById('closeIcon');
-      const sideBar = document.querySelector('.sideBar');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   const menuIcon = document.getElementById('menuIcon');
+    //   const closeIcon = document.getElementById('closeIcon');
+    //   const sideBar = document.querySelector('.sideBar');
 
-      menuIcon.addEventListener('click', function () {
-        sideBar.classList.add('active');
-      });
+    //   menuIcon.addEventListener('click', function () {
+    //     sideBar.classList.add('active');
+    //   });
 
-      closeIcon.addEventListener('click', function () {
-        sideBar.classList.remove('active');
+    //   closeIcon.addEventListener('click', function () {
+    //     sideBar.classList.remove('active');
+    //   });
+    // });
+
+    // 關鍵字查詢
+    document.addEventListener('DOMContentLoaded', function() {
+    const cookTimeBefore = document.getElementById('cookTimeBefore');
+    const cookTimeAfter = document.getElementById('cookTimeAfter');
+    const budgetRange = document.getElementById('budgetRange');
+    const dietFilter = document.getElementById('dietFilter');
+    const keywordQuery = document.getElementById('keywordQuery');
+    const content = document.getElementById('content');
+
+    function filterContent() {
+      const cookTimeBeforeValue = parseInt(cookTimeBefore.value) || 0;
+      const cookTimeAfterValue = parseInt(cookTimeAfter.value) || Infinity;
+      const budgetRangeValue = parseInt(budgetRange.value) || Infinity;
+      let dietFilterValue = dietFilter.value;
+      const keywordQueryValue = keywordQuery.value.toLowerCase();
+      
+      if (dietFilter.value === '1') {
+            dietFilterValue = '地中海';
+        }else if (dietFilter.value === '2') {
+            dietFilterValue = "得舒";
+        }else if (dietFilter.value === '3') {
+            dietFilterValue = "彈性素食";
+        }else if (dietFilter.value === '4') {
+            dietFilterValue = "234";
+        }
+
+        console.log(dietFilterValue);
+
+      const items = Array.from(content.children);
+      items.forEach(item => {
+        const cookTIme = parseInt(item.querySelector('input[name="c"]').value);
+        const prepareMoney = parseInt(item.querySelector('input[name="p"]').value);
+        const diet = item.querySelector('.diet').textContent;
+        const title = item.querySelector('.title h3').textContent.toLowerCase();
+        const description = item.querySelector('p:nth-of-type(2)').textContent.toLowerCase();
+
+        const matchesCookTime = cookTIme >= cookTimeBeforeValue && cookTIme <= cookTimeAfterValue;
+        const matchesBudget = prepareMoney <= budgetRangeValue;
+        const matchesDiet = !dietFilterValue || diet.includes(dietFilterValue);
+        const matchesKeyword = title.includes(keywordQueryValue) || description.includes(keywordQueryValue);
+
+        if (matchesCookTime && matchesBudget && matchesDiet && matchesKeyword) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
       });
+    }
+
+    cookTimeBefore.addEventListener('input', filterContent);
+    cookTimeAfter.addEventListener('input', filterContent);
+    budgetRange.addEventListener('input', filterContent);
+    dietFilter.addEventListener('change', filterContent);
+    keywordQuery.addEventListener('input', filterContent);
+  });
+
+  // 排序
+  function sortContent(sortBy) {
+        let contentDiv = document.getElementById('content');
+        let recipes = Array.from(contentDiv.getElementsByClassName('ai-recipe-share'));
+
+        recipes.sort((a, b) => {
+            if (sortBy === 'latest') {
+                return parseInt(a.getAttribute('data-timestamp')) - parseInt(b.getAttribute('data-timestamp'));
+            }
+            let aValue = parseInt(a.getAttribute(`data-${sortBy}`));
+            let bValue = parseInt(b.getAttribute(`data-${sortBy}`));
+            return bValue - aValue; // 降序排列
+        });
+
+        // 清空內容並按排序順序重新添加
+        contentDiv.innerHTML = '';
+        recipes.forEach(recipe => {
+            contentDiv.appendChild(recipe);
+        });
+
+        // 更新active class
+        document.querySelectorAll('.filter p').forEach(p => p.classList.remove('active'));
+        if (sortBy === 'latest') {
+            document.querySelector('.filter p:nth-child(1)').classList.add('active');
+        } else if (sortBy === 'likecount') {
+            document.querySelector('.filter p:nth-child(2)').classList.add('active');
+        } else if (sortBy === 'messagecount') {
+            document.querySelector('.filter p:nth-child(3)').classList.add('active');
+        }
+    }
+
+    // 禁止選中文字
+    document.querySelectorAll('.filter p').forEach(p => {
+        p.onselectstart = function() { return false; };
+        p.style.userSelect = "none"; // for modern browsers
     });
   </script>
 </body>

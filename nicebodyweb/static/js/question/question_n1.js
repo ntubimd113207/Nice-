@@ -1,4 +1,3 @@
-let messageText = "{{data}}";
 window.onload = function () {
     // Navbar
     renderNav();
@@ -11,6 +10,10 @@ window.onload = function () {
     const inputField = document.getElementById('tag-ip');
 
     const savedValue = sessionStorage.getItem('tagInputValue');
+
+    if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+    }
     
     // 检查输入框中是否有文本，并根据情况更新按钮状态和样式
     function checkInput() {

@@ -1,6 +1,6 @@
 article {
   background-color: #F0EAD2;
-  padding: 13% 20% 5%;
+  padding: 8% 20% 5%;
   color: #495057;
   display: flex;
   flex-direction: column;
@@ -90,11 +90,6 @@ section {
   line-height: 25px;
 }
 
-.pocontent > .middle > .hashtag {
-  color: #BC6C25;
-  font-weight: bold;
-}
-
 .pocontent > .line {
   width: 100%;
   height: 1px;
@@ -121,20 +116,12 @@ section {
   color: #CCC5B9;
 }
 
-.pocontent > .bottom > .right {
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
 .pocontent > .bottom i {
   font-size: 1.2em;
   cursor: pointer;
 }
 
-.pocontent > .bottom > .right > button {
+.pocontent > .bottom > button {
   background-color: #FFCF56;
   border: none;
   height: 100%;
@@ -164,50 +151,59 @@ section {
 }
 
 /* each */
-.comment .each {
+.comment > .each {
   width: 100%;
   display: flex;
+  flex-direction: column;
   background-color: #FFF;
-  padding: 1%; 
+  padding: 2%; 
   box-sizing: border-box;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
   border-radius: 10px;
   margin-bottom: 20px;
 }
 
-.each .left {
+.comment > .each > .top {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  flex-grow: 1;
+  margin-bottom: 25px;
 }
 
-.each .right {
+.optimal {
+  width: fit-content;
+  padding: 1%;
+  border: #FFCF56 1px solid;
+  border-radius: 10px;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #FFF;
+}
+
+.optimal:hover {
+  background-color: #FFCF56;
+  color: #FFF;
+  font-weight: bold;
+}
+
+.each > .top > .right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin: 0 1% 0 3%;
+  margin-left:3%;
 }
 
-.left .like {
-  display: flex;
-  align-items: center;
+.each > .top > .right > p {
   margin-right: 10px;
+  font-size: 12px;
 }
 
-.left .like i {
-  font-size: 25px;
-  color: #ff3333bb;
-  margin-right: 5px;
-}
-
-.left p {
-  width: 100%;
+.each > .bottom {
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 25px;
 }
 
 .photostickers {
@@ -218,9 +214,4 @@ section {
 .photostickers img{
   max-width: 100%;
   max-height: 100%;
-}
-
-.right p {
-  margin-right: 10px;
-  font-size: 12px;
 }

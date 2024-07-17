@@ -72,14 +72,13 @@ nav .middle .icon {
 /* logSign */
 
 nav .logSign {
-  display: none;
   justify-content: flex-end;
   align-items: center;
   flex: 1;
   margin-right: 5%;
 }
 
-nav .logSign :last-child {
+nav .logSign a {
   padding: 3%;
   border: #6E3D0D 1px solid;
   border-radius: 10px;

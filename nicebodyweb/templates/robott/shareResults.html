@@ -15,12 +15,15 @@
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
 		<link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
-    <link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
+    	<link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
+		<link rel="stylesheet" href="/static/css/components/dialog.css">
 		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
 		<script src="/static/components/mousemove.js" defer></script>
 		<script src="/static/components/layout/navbar.js" defer></script>
-  	<script src="/static/components/layout/footer.js" defer></script>
+  		<script src="/static/components/layout/footer.js" defer></script>
 		<script src="/static/components/jquery.fancybox.js"></script> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<title>分享食譜</title>
 	</head>
 
@@ -42,9 +45,21 @@
 					<div class="title">
 						<div class="left">
 							<h1>{{data[0]}}</h1>
-							<div class="like">
-								<i class="fa-regular fa-thumbs-up"></i>
-								<span>{{likecount[0]}}&ensp;</span>
+							<div class="like" id="like-button">
+								{% if data[12] == 1 %}
+									<i class="fa-solid fa-thumbs-up"></i>
+								{% else %}
+									<i class="fa-regular fa-thumbs-up"></i>
+								{% endif %}
+								<span>{{data[13]}}&ensp;</span>
+							</div>
+							<div class="receiperate">
+								{% if data[12] == 1 %}
+									<i class="fa-solid fa-star"></i>
+								{% else %}
+									<i class="fa-regular fa-star"></i>
+								{% endif %}
+								<span>3.5</span>
 							</div>
 						</div>
 						<div class="diet" id="openinfor">
@@ -84,9 +99,7 @@
 					<div class="summary">
 						<p>{{data[1]}}</p>
 						<h2>摘要</h2>
-						<p>
-							{{data[2]}}
-						</p>
+						<p>{{data[2]}}</p>
 					</div>
 						
 					<div class="content">
@@ -108,7 +121,12 @@
 						</ol>
 
 						<h2>營養配比</h2>
-						<p>{{data[6]}}</p>
+						<div class="chart-container">
+							<p>{{data[6]}}</p>
+							{% if data[10] > 134 %}
+								<canvas id="nutritionChart" width="400" height="400"></canvas>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 			</section>
@@ -120,13 +138,32 @@
 							<h1>大家一起做</h1>
 							<div class="share">
 								<i class="fa-solid fa-comments"></i>
-								<span>{{messagecount}}</span>
+								<span>{{data[14]}}</span>
 							</div>
 						</div>
 					</div>
 
 					<div class="message">
-						<input type="text" placeholder="說點什麼吧！">
+						<div class="left">
+							<div class="evaluaterate">
+								<h3>食譜品質</h3>
+								<i class="fa-solid fa-star"></i>
+								<select name="" id="">
+									<option value="">0</option>
+									<option value="">0.5</option>
+									<option value="">1</option>
+									<option value="">1.5</option>
+									<option value="">2</option>
+									<option value="">2.5</option>
+									<option value="">3</option>
+									<option value="">3.5</option>
+									<option value="">4</option>
+									<option value="">4.5</option>
+									<option value="">5</option>
+								</select>
+							</div>
+							<input type="text" placeholder="說點什麼吧！">
+						</div>
 						<i class="fa-solid fa-paper-plane"></i>
 					</div>
 
@@ -136,6 +173,10 @@
 								<div class="like">
 									<i class="fa-solid fa-heart"></i>
 									<span>{{d[5]}}</span>
+								</div>
+								<div class="receiperate">
+									<i class="fa-solid fa-star"></i>
+									<span>3.5</span>
 								</div>
 								<p>{{d[4]}}</p>
 							</div>
@@ -149,17 +190,93 @@
 					{% endfor %}
 				</div>
 			</section>
+
+			<dialog id="loginDialog">
+				<h1>請先登入</h1>
+				<div class="contentsave">
+				  <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+				</div>
+			</dialog>
 		</article>
 
 		<footer id="footer-container"></footer>
 
 		<script>
-			let messageText = "烤焦羊";
+			let messageText = "{{name}}";
+			let userImage = "{{userImage}}"
 
 			window.onload = function() {
 				renderNav();
 				renderFooter();
+				renderChart();
+
+				if (messageText == "0") {
+                	document.getElementById("loginDialog").showModal();
+            	}
 			};
+
+			function showModal() {
+            	document.getElementById("loginModal").style.display = "flex";
+    		}
+
+			function renderChart() {
+				var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
+					var parts = item.match(/(\D+)(\d+)%/);
+					return {
+						label: parts[1],
+						value: parseInt(parts[2])
+					};
+				});
+
+				var labels = nutritionData.map(function(item) {
+					return item.label;
+				});
+
+				var data = nutritionData.map(function(item) {
+					return item.value;
+				});
+
+				var ctx = document.getElementById('nutritionChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: '營養配比',
+							data: data,
+							backgroundColor: [
+								'#a3a380', 
+								'#d6ce93', 
+								'#efebce', 
+								'#d8a48f', 
+								'#bb8588'
+							],
+							borderColor: [
+								'#a3a380', 
+								'#d6ce93', 
+								'#efebce', 
+								'#d8a48f', 
+								'#bb8588'
+							],
+							borderWidth: 1
+						}]
+					},
+					options: {
+						responsive: false,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'top',
+							},
+							title: {
+								display: false,
+								text: '營養配比'
+							}
+						}
+					}
+				});
+			}
+
 
 			// 彈跳視窗 飲食法簡介
 			let openinfor=document.getElementById('openinfor');
@@ -172,45 +289,57 @@
 				infor.close();
 			})
 
-			// 改變按讚icon、數字
-			// $(document).ready(function() {
-			// 	const likeButton = $(".like i");
-			// 	const likeCount = $(".like span");
+			// 按讚
+			document.addEventListener('DOMContentLoaded', function() {
+				const likeButton = document.getElementById('like-button');
+				const likeIcon = likeButton.querySelector('i');
+				const likeCountSpan = likeButton.querySelector('span');
+				let likeCount = parseInt(likeCountSpan.textContent);
 
-			// 	let currentLikeCount = parseInt(likeCount.text());
+				likeButton.addEventListener('click', function() {
+					if (likeIcon.classList.contains('fa-regular')) {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeAdd",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
 
-			// 	const isLiked = likeButton.hasClass("fa-solid");
+						likeIcon.classList.remove('fa-regular');
+						likeIcon.classList.add('fa-solid', 'liked');
+						likeCount++;
+					} else {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeSub",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
 
-			// 	likeButton.on("click", function() {
-			// 		likeButton.toggleClass("fa-regular fa-solid");
+						likeIcon.classList.remove('fa-solid', 'liked');
+						likeIcon.classList.add('fa-regular');
+						likeCount--;
+					}
+					likeCountSpan.textContent = likeCount;
+				});
+			});
 
-			// 		if (isLiked) {
-			// 			currentLikeCount--;
-			// 		} else {
-			// 			currentLikeCount++;
-			// 		}
-
-			// 		likeCount.text(currentLikeCount + " ");
-
-			// 		$.ajax({
-			// 			method: "POST",
-			// 			data: {
-			// 				recipe_id: recipe_id,
-			// 				likeCount: currentLikeCount,
-			// 			},
-			// 			async: true,
-			// 			success: function(response) {
-			// 				console.log("Like count updated successfully:", response);
-			// 				if (response.message === "Like count updated successfully") {
-			// 					likeCount.text(response.data.likeCount + " ");
-			// 				}
-			// 			},
-			// 			error: function(error) {
-			// 				console.error("Error updating like count:", error);
-			// 			},
-			// 		});
-			// 	});
-			// });
 		</script>
 	</body>
 </html>

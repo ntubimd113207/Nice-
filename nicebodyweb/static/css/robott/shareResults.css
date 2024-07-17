@@ -1,48 +1,48 @@
 /* banner */
 .banner {
-    width: 100%;
-    height: 50vh;
-    overflow: hidden;
-    padding-top: 4%;
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+  padding-top: 4%;
 }
 
 .banner img {
-    max-width: 100%;
-    max-height: 100%;
-    width: 100%;
-    opacity:0.5;
-    object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  opacity:0.5;
+  object-fit: cover;
 }
 
 /* receipe */
 .receipe,
 .summary,
 .wrap > .content {
-    line-height: 25px;
+  line-height: 25px;
 }
 
 .receipe {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .receipe > .wrap {
-    width: 60%;
-    margin-bottom: 50px;
-    display: grid;
-    justify-content: center;
-    align-items: center;
+  width: 60%;
+  margin-bottom: 50px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 
 /* title */
 .receipe > .wrap > .title {
-    display: flex;
-    margin: 40px 0 20px;
-    margin-top: 10%;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  margin: 40px 0 20px;
+  margin-top: 10%;
+  align-items: center;
+  width: 100%;
 }
 
 .title > .left {
@@ -52,14 +52,26 @@
 }
 
 .title > .left > h1 {
-    margin-right: 10px;
-    font-size: 1.875em;
-    font-weight: bold;
+  margin-right: 10px;
+  font-size: 1.875em;
+  font-weight: bold;
 }
 
 .receipe > .wrap > .title > .left > .like > i,
 .left > .like {
-    color: #D4A373;
+  color: #D4A373;
+}
+
+.receiperate {
+  display: flex;
+  align-items: center;
+  color: #f6bd60;
+}
+
+.receiperate > i {
+  margin-right: 10px;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 /* diet */
@@ -85,57 +97,78 @@
 
 /* .summary */
 .summary {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    font-size: 0.75em;
-    margin-bottom: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 0.75em;
+  margin-bottom: 5%;
 }
 
 .summary p:nth-of-type(1) {
-    margin-bottom: 1.5%;
+  margin-bottom: 1.5%;
 }
 
 .summary h2 {
-    margin-bottom: 1%;
+  margin-bottom: 1%;
 }
 
 .summary p:nth-of-type(2) {
-    font-size: 1.25em;
+  font-size: 1.25em;
 }
 
 /* content */
 .wrap > .content > h2 {
-    font-size: 1.6875em;
-    font-weight: bold;
-    margin-bottom: 3%;
+  font-size: 1.6875em;
+  font-weight: bold;
+  margin-bottom: 3%;
 }
 
 .wrap > .content > ol {
-    list-style: decimal;
-    padding-left: 30px;
-    margin-bottom: 5%;
+  list-style: decimal;
+  padding-left: 30px;
+  margin-bottom: 5%;
 }
 
 .wrap > .content > p {
-    margin-bottom: 5%;
+  margin-bottom: 5%;
+}
+
+/* canvas */
+.chart-container {
+  width: 100%;
+  height: 100%;
+  
+  margin-bottom: 5%;
+}
+#nutritionChart {
+  margin: 2% auto; /* 將 canvas 水平置中 */
+  text-align: center; /* 將內容置中 */
 }
 
 /* button */
 .button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button button {
-    background-color: #D4A373;
-    color: #FFF;
-    border: none;
-    border-radius: 10px;
-    padding: 1% 2%;
-    font-size: 1.125em;
+  background-color: #D4A373;
+  color: #FFF;
+  border: none;
+  border-radius: 10px;
+  padding: 1% 2%;
+  font-size: 1.125em;
+}
+
+/* like */
+.like i {
+  transition: transform 0.3s ease;
+}
+
+.like i.liked {
+  transform: scale(1.2);
 }
 
 .button  .published {
@@ -144,11 +177,11 @@
 
 /* comment */
 .comment {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #86baa15f;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #86baa15f;
 }
 
 .comment > .wrap {
@@ -159,16 +192,16 @@
 
 
 .comment > .wrap > .title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    margin: 10% 0 5%;
-    color: #464646;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin: 10% 0 5%;
+  color: #464646;
 }
 
 .comment > .wrap > .title >.share {
-    color: #464646;
+  color: #464646;
 }
 
 /* each */
@@ -185,7 +218,27 @@
   margin-bottom: 20px;
 }
 
-.comment .message > input {
+.comment .message > .left > .evaluaterate {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.evaluaterate > h3 {
+  font-size: 0.5em;
+}
+
+.evaluaterate i {
+  color: #f6bd60;
+  margin: 0 10px;
+}
+
+.evaluaterate select {
+  border: none;
+  color: #464646;
+}
+
+.comment .message > .left > input {
   border: none;
   flex-grow: 1;
   font-size: 15px;
@@ -218,17 +271,18 @@
   margin-left: 3%;
 }
 
-.left .like {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
+.left .like,
+.left .receiperate {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .left .like i {
-    font-size: 25px;
-    color: #ff3333bb;
-    margin-right: 5px;
-    cursor: pointer;
+  font-size: 25px;
+  color: #ff3333bb;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 .left p {

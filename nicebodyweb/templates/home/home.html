@@ -63,17 +63,21 @@
 			</section>
 
 			<section class="carousel">
-				<div class="reel" >
-					{% for d in recipe_data%}
+				<div class="reel">
+					{% for d in recipe_data %}
 					<div class="food">
-						<a href="#" class="image featured">
-							<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
-							<h3>{{ d[1] }}</h3>
-						</a>
+						<form action="/robott/shareResults" method="get">
+							<input type="hidden" name="recipe_id" value="{{ d[2] }}">
+							<button type="submit" class="image featured" style="border: none; background: none; padding: 0;">
+								<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
+								<h3>{{ d[1] }}</h3>
+							</button>
+						</form>
 					</div>
 					{% endfor %}
 				</div>
 			</section>
+			
 
 			<section class="honoroll">
 				<div data-aos="fade-down" data-aos-anchor-placement="top-center" class="title">
@@ -177,7 +181,8 @@
 		<script>
 			AOS.init();
 			
-			let messageText = "烤焦羊";
+			let messageText = "{{name}}";
+			let userImage = "{{userImage}}"
 
 			window.onload = function() {
 				renderNav();

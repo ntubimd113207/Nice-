@@ -5,7 +5,7 @@ import os
 import time
 import urllib.request
 import json
-from flask import Flask, render_template 
+from flask import Flask, render_template, session
 from openai import OpenAI
 from datetime import datetime
 from utils import db
@@ -25,15 +25,24 @@ from services.login.app import login_bp
 # 產生主程式, 加入主畫面
 #-------------------------
 app = Flask(__name__)
+app.secret_key = os.environ.get("APP_SECRET")
 
 # Recipes_image_path = ""
 # user_image_path = ""
 Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
 user_image_path = "http://127.0.0.1:5000/static/images/userImage"
 
+
 #主畫面
 @app.route('/')
 def index():
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
     connection = db.get_connection()
     cursor = connection.cursor()
 
@@ -42,12 +51,12 @@ def index():
     knowledge_data = cursor.fetchone()
 
     # 獲取前 7 個最喜歡的食譜
-    cursor.execute('SELECT "cookImage", title FROM body."v_recipeWorld" ORDER BY likecount DESC LIMIT 7;')
+    cursor.execute('SELECT "cookImage", title, "Cookid" FROM body."v_recipeWorld" ORDER BY likecount DESC LIMIT 7;')
     recipe_data = cursor.fetchall()
 
     connection.close()
 
-    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path)
+    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage)
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "openai-api-key"))
 
