@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/goal/goalMain.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -136,17 +137,51 @@
       </div>
     
       <div class="photo">
+        <dialog id="beforedelete">
+          <h1>確定刪除before照片?</h1>
+          <div class="contentsave">
+              <button id="closebeforedelete" class="closebtn">cancel</button>
+              <button id="savebeforedelete" class="savebtn">confirm</button>
+          </div>
+        </dialog>
+
+        <dialog id="afterdelete">
+          <h1>確定刪除after照片?</h1>
+          <div class="contentsave">
+              <button id="closeafterdelete" class="closebtn">cancel</button>
+              <button id="saveafterdelete" class="savebtn">confirm</button>
+          </div>
+        </dialog>
+        
         <div class="before">
           <div class="container">
             <span class="text">before</span>
             <div class="background">&nbsp;</div>
           </div>
+          {% if contrast[0] is not none %}
+          <label for="beforefileInput" class="custom-input">
+            <input type="file" id="beforefileInput" accept="image/*" onchange="beforepreviewImage(event)" disabled>
+            <div class="icon" style="display: none;">
+              <i class="fas fa-plus"></i>
+            </div>
+
+            <img id="beforepreviewImage" src="{{ contrast_image_path }}/{{ contrast[0] }}" alt="" style="display: block">
+
+          </label>
+          <div class="edit" style="visibility: visible;">
+            <div class="right" id="currentDate1">{{ contrast[0][:8]|replace(".", "-")|replace(".", "-") }}</div>
+            <div class="left">
+              <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% else %}
           <label for="beforefileInput" class="custom-input">
             <input type="file" id="beforefileInput" accept="image/*" onchange="beforepreviewImage(event)">
             <div class="icon">
               <i class="fas fa-plus"></i>
             </div>
-            <img id="beforepreviewImage" src="" alt="">
+              <img id="beforepreviewImage" src="" alt="">
           </label>
           <div class="edit">
             <div class="right" id="currentDate1"></div>
@@ -155,6 +190,7 @@
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
+          {% endif %}
         </div>
     
         <i class="fa-solid fa-angles-right"></i>
@@ -164,6 +200,22 @@
             <span class="text">after</span>
             <div class="background">&nbsp;</div>
           </div>
+          {% if contrast[1] is not none %}
+          <label for="afterfileInput" class="custom-input">
+            <input type="file" id="afterfileInput" accept="image/*" onchange="afterpreviewImage(event)" disabled>
+            <div class="icon" style="display: none;">
+              <i class="fas fa-plus"></i>
+            </div>
+            <img id="afterpreviewImage" src="{{ contrast_image_path }}/{{ contrast[1] }}" alt="" style="display: block">
+          </label>
+          <div class="edit" style="visibility: visible;">
+            <div class="right" id="currentDate2">{{ contrast[1][:8]|replace(".", "-")|replace(".", "-") }}</div>
+            <div class="left">
+              <button onclick="uploadImage('after')"><i class="fa-solid fa-upload"></i></button>
+              <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% else %}
           <label for="afterfileInput" class="custom-input">
             <input type="file" id="afterfileInput" accept="image/*" onchange="afterpreviewImage(event)">
             <div class="icon">
@@ -174,13 +226,18 @@
           <div class="edit">
             <div class="right" id="currentDate2"></div>
             <div class="left">
-              <button onclick="enableEditing('after')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="uploadImage('after')"><i class="fa-solid fa-upload"></i></button>
               <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </section>
+
+    <div id="loading" style="display: none;">
+      <div class="loader2"></div>
+    </div>
 
     <dialog id="loginDialog">
       <h1>請先登入</h1>
@@ -328,27 +385,57 @@
       } else {
         isEditing[type] = true;
         const fileInput = document.getElementById(`${type}fileInput`);
+        fileInput.disabled = false;
         fileInput.click(); // Trigger the file input click event
+        fileInput.disabled = true;
       }
     }
 
+    // 清除照片
     function clearImage(type) {
-      const previewImage = document.getElementById(`${type}previewImage`);
-      previewImage.src = "";
-      previewImage.style.display = 'none';
-      const fileInput = document.getElementById(`${type}fileInput`);
-      fileInput.value = "";  // Reset the file input value
-      const inputLabel = document.querySelector(`.${type} .custom-input`);
-      inputLabel.style.pointerEvents = 'auto';
-      const editDiv = document.querySelector(`.${type} .edit`);
-      editDiv.style.display = 'none';
-      const plusIcon = document.querySelector(`.${type} .icon`);
-      plusIcon.style.display = 'flex';
-      isEditing[type] = false;
+      const dialog = document.getElementById(`${type}delete`);
+      dialog.showModal();
+    }
+
+    function clearImage_confirm(type) {
+      document.getElementById('loading').style.display = 'flex';
+
+      $.ajax({
+        type: 'POST',
+        url: '/goal/clearImage',
+        data: {
+          type: type
+        },
+        success: function(response) {
+          console.log(response);
+          const previewImage = document.getElementById(`${type}previewImage`);
+          previewImage.src = "";
+          previewImage.style.display = 'none';
+          const fileInput = document.getElementById(`${type}fileInput`);
+          fileInput.value = "";  // Reset the file input value
+          fileInput.disabled = false;
+          const inputLabel = document.querySelector(`.${type} .custom-input`);
+          inputLabel.style.pointerEvents = 'auto';
+          const editDiv = document.querySelector(`.${type} .edit`);
+          editDiv.style.visibility = 'hidden';
+          const plusIcon = document.querySelector(`.${type} .icon`);
+          plusIcon.style.display = 'block';
+          isEditing[type] = false;
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          alert('出現錯誤，請稍後再試！');
+        },
+        complete: function() {
+          document.getElementById('loading').style.display = 'none';
+        }
+      });
     }
 
     function previewImage(event, type) {
       const file = event.target.files[0];
+      const fileInput = document.getElementById(`${type}fileInput`);
+      fileInput.disabled = true;
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -358,7 +445,7 @@
           document.querySelector(`.${type} .icon`).style.display = 'none';
           isEditing[type] = true;
           const editDiv = document.querySelector(`.${type} .edit`);
-          editDiv.style.display = 'flex';
+          editDiv.style.visibility = 'visible';
           toggleUploadIcon(type, true);
         }
         reader.readAsDataURL(file);
@@ -373,20 +460,6 @@
       } else {
         icon.classList.remove('fa-upload');
         icon.classList.add('fa-pen');
-      }
-    }
-
-    function uploadImage(type) {
-      const previewImage = document.getElementById(`${type}previewImage`);
-      if (previewImage.src) {
-        // Your logic to upload the image to the database
-        console.log(`Uploading ${type} image to the database`);
-        
-        // Simulating upload completion
-        setTimeout(() => {
-          console.log(`${type} image uploaded`);
-          toggleUploadIcon(type, false);
-        }, 1000); // Simulate 1 second upload time
       }
     }
 
@@ -466,6 +539,63 @@
           return "#ffffff";
       }
     }
+
+    // 上傳before照片
+    function uploadImage(type) {
+      const isBefore = type === 'before';
+      const inputId = isBefore ? 'beforefileInput' : 'afterfileInput';
+      const uploadUrl = isBefore ? '/goal/uploadBeforeImage' : '/goal/uploadAfterImage';
+      const iconClass = isBefore ? '.before .left button i' : '.after .left button i';
+
+      const uploadImage = document.getElementById(inputId);
+      uploadImage.disabled = true;
+      document.getElementById('loading').style.display = 'flex';
+      const icon = document.querySelector(iconClass);
+
+      const formData = new FormData();
+      formData.append('image', uploadImage.files[0]);
+
+      $.ajax({
+        type: 'POST',
+        url: uploadUrl,
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          console.log(response);
+          icon.classList.remove('fa-upload');
+          icon.classList.add('fa-pen');
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          alert('出現錯誤，請稍後再試！');
+        },
+        complete: function() {
+          document.getElementById('loading').style.display = 'none';
+          uploadImage.disabled = false;
+        }
+      });
+    }
+
+    // contrast dialog
+    document.getElementById('closebeforedelete').addEventListener('click', function() {
+        document.getElementById('beforedelete').close();
+    });
+
+    document.getElementById('closeafterdelete').addEventListener('click', function() {
+        document.getElementById('afterdelete').close();
+    });
+
+    document.getElementById('savebeforedelete').addEventListener('click', function() {
+        clearImage_confirm('before');
+        document.getElementById('beforedelete').close();
+    });
+
+    document.getElementById('saveafterdelete').addEventListener('click', function() {
+        clearImage_confirm('after');
+        document.getElementById('afterdelete').close();
+    });
+      
   </script>
 </body>
 </html>

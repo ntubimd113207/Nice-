@@ -206,7 +206,8 @@ canvas {
 }
 
 .edit {
-  display: none;
+  visibility: hidden;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
