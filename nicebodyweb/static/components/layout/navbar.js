@@ -12,7 +12,7 @@ let renderNav = function() {
           <a href="/robott/generateRecipes" class="nav-link">Robot</a>
           <a href="/goal/goalMain" class="nav-link">Record</a>
           <a href="/task/taskPage" class="nav-link">Task</a>
-          <a href="/community/communityMain" class="nav-link">Community</a>
+          <a href="/community/communityMain" class="nav-link">Q&A</a>
         </div>
         <div class="icon">
           <i class="fa-solid fa-bars" id="menuIcon"></i>
@@ -40,7 +40,7 @@ let renderNav = function() {
       <a href="/robott/generateRecipes" class="nav-link">Robot</a>
       <a href="/goal/goalMain" class="nav-link">Record</a>
       <a href="/task/taskPage" class="nav-link">Task</a>
-      <a href="/community/communityMain" class="nav-link">Community</a>
+      <a href="/community/communityMain" class="nav-link">Q&A</a>
     </div>
   </div>
   `;

@@ -61,6 +61,46 @@
 								{% endif %}
 								<span>{{data[15]}}</span>
 							</div>
+							<div class="bookmark">
+								<i class="fa-regular fa-bookmark" id="opencollect"></i>
+							</div>
+							<dialog id="collect">
+								<h1>編輯分類</h1>
+								<div class="content">
+									<div class="eachclass">
+										<div class="left">
+											<input type="checkbox" id="scales" name="scales" checked />
+											<label for="scales">我的最愛</label>
+										</div>
+										<div class="num">(2篇)</div>
+									</div>
+									<div class="eachclass">
+										<div class="left">
+											<input type="checkbox" id="scales" name="scales" />
+											<label for="scales">總有一天會用到</label>
+										</div>
+										<div class="num">(2篇)</div>
+									</div>
+									<div class="eachclass">
+										<div class="left">
+											<input type="checkbox" id="scales" name="scales" />
+											<label for="scales">蔬食天堂</label>
+										</div>
+										<div class="num">(2篇)</div>
+									</div>
+									<div class="eachclass">
+										<div class="left">
+											<input type="checkbox" id="scales" name="scales" />
+											<label for="scales">高蛋白飲食</label>
+										</div>
+										<div class="num">(2篇)</div>
+									</div>
+								</div>
+								<div class="save">
+									<button id="closecollect" class="closebtn closecollect">close</button>
+									<button id="savecollect" class="savebtn savecollect">save</button>
+								</div>
+							</dialog>
 						</div>
 						<div class="diet" id="openinfor">
 							{% if data[8] is not none %}
@@ -128,6 +168,14 @@
 							{% endif %}
 						</div>
 					</div>
+				</div>
+			</section>
+
+			<section class="sharebtns">
+				<h2>分享你的創意食譜</h2>
+				<div class="links">
+					<a href=""><i class="fa-brands fa-facebook"></i></a>
+					<a href=""><i class="fa-brands fa-square-x-twitter"></i></a>
 				</div>
 			</section>
 
@@ -207,13 +255,13 @@
 				renderChart();
 
 				if (messageText == "0") {
-                	document.getElementById("loginDialog").showModal();
-            	}
+					document.getElementById("loginDialog").showModal();
+				}
 			};
 
 			function showModal() {
-            	document.getElementById("loginModal").style.display = "flex";
-    		}
+        document.getElementById("loginModal").style.display = "flex";
+    	}
 
 			function renderChart() {
 				var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
@@ -273,7 +321,6 @@
 				});
 			}
 
-
 			// 彈跳視窗 飲食法簡介
 			let openinfor=document.getElementById('openinfor');
 			let infor=document.getElementById('infor');
@@ -284,6 +331,33 @@
 			closeinfor.addEventListener("click", function(){
 				infor.close();
 			})
+
+			// 彈跳視窗 收藏
+			let opencollect=document.getElementById('opencollect');
+			let collect=document.getElementById('collect');
+			let closecollect=document.getElementById('closecollect');
+			opencollect.addEventListener("click", function(){
+				collect.showModal();
+			})
+			closecollect.addEventListener("click", function(){
+				collect.close();
+			})
+
+			// 改變收藏icon
+			function handleCollectSave() {
+				const openCollectButton = document.querySelector('.fa-regular.fa-bookmark, .fa-solid.fa-bookmark');
+				if (openCollectButton) {
+					if (openCollectButton.classList.contains('fa-regular')) {
+						openCollectButton.classList.remove('fa-regular');
+						openCollectButton.classList.add('fa-solid');
+						openCollectButton.id = 'opencollect';
+					} else {
+						openCollectButton.classList.remove('fa-solid');
+						openCollectButton.classList.add('fa-regular');
+						openCollectButton.id = ''; 
+					}
+				}
+			}
 
 			// 按讚
 			document.addEventListener('DOMContentLoaded', function() {
@@ -372,10 +446,9 @@
 
 					// 取得現在的日期
 					const today = new Date();
-        			const formattedDate = ('0' + (today.getMonth() + 1)).slice(-2) + '.' + 
-                              ('0' + today.getDate()).slice(-2) + '.' + 
-                              today.getFullYear();
-
+					const formattedDate = ('0' + (today.getMonth() + 1)).slice(-2) + '.' + 
+						('0' + today.getDate()).slice(-2) + '.' + 
+						today.getFullYear();
 
 					// 新增留言到 .each 元素中
 					const newMessage = document.createElement('a');

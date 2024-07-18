@@ -7,11 +7,43 @@ article {
   gap: 30px;
 }
 
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.filter .select {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter .select span {
+  color: #6E3D0D;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.filter .select span:last-child,
+.filter .select span:hover {
+  color: #FFCF56;
+}
+
+.filter .select .line {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #6E3D0D;
+}
+
 .keyword-query {
-  position:relative;
-  display:inline-block;
+  position: relative;
+  display: inline-block;
   width: 100%;
-  margin-bottom: 20PX;
 }
 
 .keyword-query input {

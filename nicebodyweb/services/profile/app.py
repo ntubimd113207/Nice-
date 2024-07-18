@@ -34,7 +34,7 @@ def follow_list():
     return render_template('/profile/followList.html', name=name, userImage=userImage)
 
 
-#收藏列表頁面
+#食譜收藏頁面
 @profile_bp.route('/collectionList')
 def collection_list(): 
     if "google_id" in session:
@@ -45,3 +45,16 @@ def collection_list():
         userImage='0'
 
     return render_template('/profile/collectionList.html', name=name, userImage=userImage)
+
+
+#Q&A收藏頁面
+@profile_bp.route('/QAcollection')
+def QA_collection(): 
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+    else:
+        name='0'
+        userImage='0'
+
+    return render_template('/profile/QAcollection.html', name=name, userImage=userImage)
