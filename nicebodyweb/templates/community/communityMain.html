@@ -19,7 +19,7 @@
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
-  <title>社群</title>
+  <title>Q&A</title>
 </head>
 <body>
   <div id="myCursor"></div>
@@ -28,10 +28,17 @@
   <nav id="nav-container"></nav>
 
   <article>
-    <label class="keyword-query">
-      <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </label>
+    <div class="filter">
+      <div class="select">
+        <span>My</span>
+        <div class="line"></div>
+        <span>All</span>
+      </div>
+      <label class="keyword-query">
+        <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </label>
+    </div>
 
     <a class="po" href="">
       <div class="photostickers">
@@ -90,7 +97,6 @@
               <span>2024/2/4 22:00</span>
             </div>
             <div class="right">
-              <i class="fa-solid fa-user-plus"></i>
               <i class="fa-regular fa-bookmark" id="opencollect"></i>
               <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
             </div>
@@ -242,6 +248,18 @@
       document.getElementById("loginModal").style.display = "flex";
     }
 
+    // filter按鈕變化
+    document.addEventListener("DOMContentLoaded", () => {
+      const spans = document.querySelectorAll(".filter .select span");
+
+      spans.forEach(span => {
+        span.addEventListener("click", () => {
+          spans.forEach(s => s.style.color = "#6E3D0D");
+          span.style.color = "#FFCF56";
+        });
+      });
+    });
+
     // 彈跳視窗
     function setupModal(openBtnId, modalId, closeBtnId, saveBtnId, onSaved) {
       const openBtn = document.getElementById(openBtnId);
@@ -291,22 +309,6 @@
         }
       }
     }
-
-    // 改變關注icon樣式
-    document.addEventListener('DOMContentLoaded', function() {
-      const userIcons = document.querySelectorAll('.fa-solid.fa-user-plus');
-      userIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-          if (this.classList.contains('fa-user-plus')) {
-            this.classList.remove('fa-user-plus');
-            this.classList.add('fa-user-check');
-          } else {
-            this.classList.remove('fa-user-check');
-            this.classList.add('fa-user-plus');
-          }
-        });
-      });
-    });
 
     // 發文小圓出場
     window.addEventListener('scroll', () => {

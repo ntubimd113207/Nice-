@@ -19,7 +19,7 @@ article {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 30px;
+  gap: 3%;
 }
 
 .profile-picture {
@@ -55,41 +55,6 @@ article {
   outline: none;
 }
 
-.profile .lists {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 30px;
-  width: 100%;
-}
-
-.lists a {
-  width: 50%;
-  text-decoration: none;
-  box-sizing: border-box;
-  height: 50px;
-  padding: 10px 10px;
-  border: none;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-  background-color: white;
-  color: #d4a373;
-  text-align: center;
-  font-size: 1em;
-  cursor: pointer;
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  transition: background-color 0.3s;
-}
-
-.lists a:hover {
-  background-color:  #d4a373;
-  color: white;
-}
-
 .settings {
   display: flex;
   flex-direction: column;
@@ -102,6 +67,7 @@ article {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .progress-bar > form {
@@ -140,6 +106,14 @@ progress::-webkit-progress-value {
   border-radius: 5px;
 }
 
+.numerical {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  font-size: 12px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -166,9 +140,7 @@ p{
   margin: 10px 5px 5px 5px;
 }
 
-.out2 .mail,
 .out2 .gender,
-.out2 .password,
 .out2 .birthday {
   display: flex;
   flex-direction: column;
@@ -215,6 +187,37 @@ p{
 
 .femaleButtonactive {
   border: #c22574 2px solid;
+}
+
+.container .lists {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5%;
+  width: 100%;
+}
+
+.lists a {
+  width: 50%;
+  text-decoration: none;
+  box-sizing: border-box;
+  padding: 15px 10px;
+  border: #d4a373 1px solid;
+  border-radius: 15px;
+  background-color: white;
+  color: #d4a373;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  transition: background-color 0.3s;
+}
+
+.lists a:hover {
+  background-color:  #d4a373;
+  color: white;
 }
 
 .settings input {
@@ -270,4 +273,105 @@ p{
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.5;
+}
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  .sectionwrap {
+    height: 90vh;
+    padding: 15% 5% 5%;
+  }
+
+  .profile {
+    gap: 10px;
+  }
+
+  .profile-picture {
+    width: 200px;
+    height: 200px;
+  }
+
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  .sectionwrap {
+    gap: 30px;
+  }
+  
+  .profile-picture {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* Middle 1024px */
+
+@media screen and (max-width:1024px) {
+  .sectionwrap {
+    height: 95vh;
+    padding: 20% 5% 5%;
+    gap: 50px;
+  }
+
+  .lists a {
+    width: 80%;
+  }
+}
+
+/* Small 768px */
+
+@media screen and (max-width:768px) {
+  .sectionwrap {
+    height: 100%;
+    padding: 20% 5% 5%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lists a {
+    width: 60%;
+  }
+
+  .out1 {
+    margin: 5% 0;
+  }
+
+  .out2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .out2 .mail,
+  .out2 .gender,
+  .out2 .password,
+  .out2 .birthday {
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+    flex: 1;
+    position: relative;
+    width: 100%;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  .sectionwrap {
+    height: 100%;
+    padding: 35% 5% 20%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .out1 {
+    margin: 5% 0 10%;
+  }
 }

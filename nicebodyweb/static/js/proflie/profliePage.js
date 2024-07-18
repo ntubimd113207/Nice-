@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let changeButton = document.querySelector(".closesetting button:last-child");
   let inputs = [
     document.getElementById("name"),
-    document.getElementById("email"),
-    document.getElementById("password"),
     document.getElementById("birthday")
   ];
   let maleButton = document.getElementById("maleButton");

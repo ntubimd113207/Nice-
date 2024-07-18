@@ -30,7 +30,6 @@
 
 .receipe > .wrap {
   width: 60%;
-  margin-bottom: 50px;
   display: grid;
   justify-content: center;
   align-items: center;
@@ -49,28 +48,38 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 15px;
 }
 
 .title > .left > h1 {
-  margin-right: 10px;
   font-size: 1.875em;
   font-weight: bold;
 }
 
-.receipe > .wrap > .title > .left > .like > i,
+.left > .like,
+.receiperate,
+.bookmark {
+  display: flex;
+  align-items: center;  
+}
+
 .left > .like {
   color: #D4A373;
 }
 
 .receiperate {
-  display: flex;
-  align-items: center;
   color: #f6bd60;
 }
 
-.receiperate > i {
+.left > .like > i,
+.receiperate > i,
+.bookmark > i {
   margin-right: 10px;
   font-size: 1.5em;
+  cursor: pointer;
+}
+
+.receiperate > i {
   font-weight: bold;
 }
 
@@ -138,41 +147,43 @@
 .chart-container {
   width: 100%;
   height: 100%;
-  
   margin-bottom: 5%;
 }
+
 #nutritionChart {
   margin: 2% auto; /* 將 canvas 水平置中 */
   text-align: center; /* 將內容置中 */
 }
 
-/* button */
-.button {
+/* sharebtns */
+.sharebtns {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #FCFAF1;
+  gap: 30px;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 
-.button button {
-  background-color: #D4A373;
-  color: #FFF;
-  border: none;
-  border-radius: 10px;
-  padding: 1% 2%;
-  font-size: 1.125em;
+.sharebtns > h2 {
+  font-size: 1em;
+  font-weight: bold;
 }
 
-/* like */
-.like i {
-  transition: transform 0.3s ease;
+.sharebtns > .links {
+  font-size: 2.5em;
+  display: flex;
+  gap: 50px;
 }
 
-.like i.liked {
-  transform: scale(1.2);
+.sharebtns > .links > a:first-child {
+  color: rgb(24, 119, 242);
 }
 
-.button  .published {
-  background-color: #86BAA1;
+.sharebtns > .links > a:last-child {
+  color: #14171A;
 }
 
 /* comment */
@@ -190,17 +201,16 @@
     align-items: center;
 }
 
-
 .comment > .wrap > .title {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  margin: 10% 0 5%;
+  margin: 50px 0;
   color: #464646;
 }
 
-.comment > .wrap > .title >.share {
+.comment > .wrap > .title > .share {
   color: #464646;
 }
 
@@ -209,13 +219,18 @@
 .comment .message {
   width: 100%;
   background-color: #FFF;
-  padding: 1%; 
+  padding: 2%; 
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
   margin-bottom: 20px;
+  gap: 10px;
+}
+
+.comment .message > .left {
+  flex-grow: 1;
 }
 
 .comment .message > .left > .evaluaterate {
@@ -240,9 +255,9 @@
 
 .comment .message > .left > input {
   border: none;
-  flex-grow: 1;
   font-size: 15px;
   color: #464646;
+  width: 100%;
 }
 
 .comment .submitButton {
@@ -269,39 +284,27 @@
   justify-content: flex-start;
   align-items: center;
   flex-grow: 1;
+  min-width: 0;
+  gap: 10px;
 }
 
 .each .right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 3%;
-}
-
-.left .like,
-.left .receiperate {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-.left .like i {
-  font-size: 25px;
-  color: #ff3333bb;
-  margin-right: 5px;
-  cursor: pointer;
 }
 
 .left p {
-  width: 100%;
-  text-overflow: ellipsis;
+  flex-grow: 1;
   overflow: hidden;
-  white-space: nowrap;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 25px;
 }
 
 .right p {
-    margin-right: 10px;
-    font-size: 12px;
+  margin-right: 10px;
+  font-size: 12px;
 }
 
 .right .photostickers {
