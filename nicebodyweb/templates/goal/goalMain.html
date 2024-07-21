@@ -165,7 +165,7 @@
               <i class="fas fa-plus"></i>
             </div>
 
-            <img id="beforepreviewImage" src="{{ contrast_image_path }}/{{ contrast[0] }}" alt="" style="display: block">
+            <img id="beforepreviewImage" src="{{ contrast_image_path }}/{{uid}}/{{ contrast[0] }}" alt="" style="display: block">
 
           </label>
           <div class="edit" style="visibility: visible;">
@@ -206,12 +206,12 @@
             <div class="icon" style="display: none;">
               <i class="fas fa-plus"></i>
             </div>
-            <img id="afterpreviewImage" src="{{ contrast_image_path }}/{{ contrast[1] }}" alt="" style="display: block">
+            <img id="afterpreviewImage" src="{{ contrast_image_path }}/{{uid}}/{{ contrast[1] }}" alt="" style="display: block">
           </label>
           <div class="edit" style="visibility: visible;">
             <div class="right" id="currentDate2">{{ contrast[1][:8]|replace(".", "-")|replace(".", "-") }}</div>
             <div class="left">
-              <button onclick="uploadImage('after')"><i class="fa-solid fa-upload"></i></button>
+              <button onclick="uploadImage('after')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
@@ -568,7 +568,7 @@
         },
         error: function(xhr, status, error) {
           console.error(error);
-          alert('出現錯誤，請稍後再試！');
+          alert(xhr.responseText);
         },
         complete: function() {
           document.getElementById('loading').style.display = 'none';

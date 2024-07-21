@@ -44,6 +44,15 @@ progress::-webkit-progress-value {
   border-radius: 5px;
 }
 
+/* right side */
+.right {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+
+
 .title {
   display: flex;
   justify-content: space-between;
@@ -85,7 +94,7 @@ progress::-webkit-progress-value {
   justify-content: space-between;
   align-items: center;
   background-color: #FCFAF1;
-  padding: 2%;
+  padding: 1.5%;
   border-radius: 10px;
   margin-bottom: 2%;
   cursor: pointer;
@@ -102,10 +111,15 @@ progress::-webkit-progress-value {
   width: fit-content;
   display: flex;
   flex-grow: 1;
+  color: #483949;;
 }
 
 .eachtask span {
   margin-left: 2%;
+}
+
+.eachtask button span{
+  margin-left: 0%;
 }
 
 .eachtask i {
