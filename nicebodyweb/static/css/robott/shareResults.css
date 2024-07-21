@@ -178,12 +178,19 @@
   gap: 50px;
 }
 
-.sharebtns > .links > a:first-child {
+.sharebtns > .links > button:first-child {
   color: rgb(24, 119, 242);
 }
 
-.sharebtns > .links > a:last-child {
+.sharebtns > .links > button:last-child {
   color: #14171A;
+}
+
+.sharebtns > .links > button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 40px;
 }
 
 /* comment */

@@ -128,7 +128,7 @@ def robott_share():
 
     data = cursor.fetchone()
 
-    cursor.execute('select * from body."v_shareResults" where "Cookid" =%s order by create_time desc;', (recipe_id,))
+    cursor.execute('select * from body."v_shareResults" where "Cookid" =%s;', (recipe_id,))
 
     data2 = cursor.fetchall()
 

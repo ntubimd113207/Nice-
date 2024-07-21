@@ -174,8 +174,8 @@
 			<section class="sharebtns">
 				<h2>分享你的創意食譜</h2>
 				<div class="links">
-					<a href=""><i class="fa-brands fa-facebook"></i></a>
-					<a href=""><i class="fa-brands fa-square-x-twitter"></i></a>
+					<button id="fa-facebook"><i class="fa-brands fa-facebook"></i></button>
+					<button id="twitter"><i class="fa-brands fa-square-x-twitter"></i></button>
 				</div>
 			</section>
 
@@ -418,6 +418,7 @@
 
 				submitButton.addEventListener('click', function() {
 					const message = messageInput.value;
+					const starValue = star.value;
 					if (message === '') {
 						alert('請輸入留言');
 						return;
@@ -429,7 +430,7 @@
 						data: {
 							recipe_id: "{{ data[10] }}",
 							message: message,
-							star: star.value
+							star: starValue
 						},
 						success: function(response) {
 							console.log(response);
@@ -457,7 +458,7 @@
 						<div class="left">
 							<div class="receiperate">
 								<i class="fa-solid fa-star"></i>
-								<span>${star.value}</span>
+								<span>${starValue}</span>
 							</div>
 							<p>${message}</p>
 						</div>
@@ -474,6 +475,20 @@
 					} else {
 						document.querySelector('.comment .wrap').appendChild(newMessage);
 					}
+				});
+			});
+
+			// 分享
+			document.addEventListener('DOMContentLoaded', function() {
+				const facebookButton = document.getElementById('fa-facebook');
+				const twitterButton = document.getElementById('twitter');
+
+				facebookButton.addEventListener('click', function() {
+					window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href, '_blank');
+				});
+
+				twitterButton.addEventListener('click', function() {
+					window.open('https://twitter.com/intent/tweet?url=' + window.location.href, '_blank');
 				});
 			});
 		</script>
