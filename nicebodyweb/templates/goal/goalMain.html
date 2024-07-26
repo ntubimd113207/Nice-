@@ -105,9 +105,9 @@
         <h1>新增體重紀錄</h1>
         <div class="content">
           <h2>日期</h2>
-          <input type="date" class="input">
-          <h2>體重</h2>
-          <input type="text" class="input">
+          <input type="date" class="input" id = "inputDate">
+          <h2>體重(kg)</h2>
+          <input type="text" class="input" id = "inputWeight">
         </div>
         <div class="save">
           <button id="closeweight" class="closebtn">close</button>
@@ -255,6 +255,8 @@
     let userImage = "{{userImage}}"
     let weight_data= "{{ weight }}";
     let weight_list = JSON.parse(weight_data);
+
+    console.log(weight_list);
 
     window.onload = function() {
       renderNav();
@@ -576,6 +578,130 @@
         }
       });
     }
+
+    // 新增體重紀錄
+    document.getElementById('saveweight').addEventListener('click', function() {
+      let date = document.querySelector('#weight input[type="date"]').value;
+      let weight = document.querySelector('#weight input[type="text"]').value;
+
+      // 格式化日期到只包含年月日，忽略時間
+      let formattedDate = new Date(date);
+      let formattedDateStr = formattedDate.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+      let formattedDateDisplay = (formattedDate.getMonth() + 1) + '/' + formattedDate.getDate(); // 'MM/DD'
+
+      // 獲取今天的日期和七天前的日期，僅日期部分
+      let today = new Date();
+      let todayStr = today.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+      let sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 6);
+      let sevenDaysAgoStr = sevenDaysAgo.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+      // 檢查日期是否已存在
+      let index = chart.data.labels.indexOf(formattedDateDisplay);
+
+      if (date === "" || weight === "") {
+        alert("請輸入日期和體重");
+        return;
+      } else if (isNaN(weight) || parseFloat(weight) <= 0) {
+        alert("請輸入合理的數字或浮點數");
+        return;
+      } else if (formattedDateStr > todayStr) {
+        alert("日期不可大於今天");
+      } else if (index !== -1){
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          },
+        });
+            // 更新已存在日期的體重數據
+            chart.data.datasets[0].data[index] = parseFloat(weight);
+            chart.data.datasets[0].pointRadius[index] = 3;
+            chart.data.datasets[0].pointBackgroundColor[index] = 'blue';
+
+            // // 重新排序日期和數據
+            let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+              .sort((a, b) => new Date(a.label) - new Date(b.label));
+
+            chart.data.labels = combined.map(item => item.label);
+            chart.data.datasets[0].data = combined.map(item => item.data);
+
+            // // 更新圖表
+            chart.update();
+
+            document.getElementById('weight').close();
+
+            document.getElementById('inputDate').value = "";
+            document.getElementById('inputWeight').value = "";
+      }else if (formattedDateStr < sevenDaysAgoStr) {
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          }
+        });
+            document.getElementById('weight').close();
+
+            document.getElementById('inputDate').value = "";
+            document.getElementById('inputWeight').value = "";
+      } else {
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          }
+        });
+            // 添加新的日期和體重數據
+            chart.data.labels.push(formattedDateDisplay);
+            chart.data.datasets[0].data.push(parseFloat(weight));
+            chart.data.datasets[0].pointRadius.push(3);
+            chart.data.datasets[0].pointBackgroundColor.push('blue');
+
+            // 重新排序日期和數據
+            let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+              .sort((a, b) => new Date(a.label) - new Date(b.label));
+
+            chart.data.labels = combined.map(item => item.label);
+            chart.data.datasets[0].data = combined.map(item => item.data);
+
+            // 更新圖表
+            chart.update();
+            
+            document.getElementById('weight').close();
+
+            document.getElementById('inputDate').value = "";
+            document.getElementById('inputWeight').value = "";
+
+      }
+    });
 
     // contrast dialog
     document.getElementById('closebeforedelete').addEventListener('click', function() {

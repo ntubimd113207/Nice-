@@ -33,7 +33,7 @@
         <img src="/static/images/userImage/Joey1.png" alt="Profile Picture" class="profile-picture" id="profile-picture">
         <input type="file" id="upload-picture" accept="image/*" style="display: none;">
         <div class="title">
-          <input type="text" id="name" placeholder="輸入暱稱">
+          <input type="text" id="name" placeholder="輸入暱稱" value="{{ name }}">
           <i class="fa-solid fa-lock"></i>
         </div>
       </section>
@@ -41,14 +41,14 @@
       <section class="settings">
         <div class="progress-bar">
           <div class="level">
-            <span>LV.</span>3
+            <span>LV.</span>{{profile_data[0]}}
           </div>
           <form action="test.aspx" method="get">
-            <progress value="0.5"></progress>
+            <progress value="{{profile_data[1] / profile_data[2]}}"></progress>
           </form>
           <div class="numerical">
-            <div class="molecular">50</div>/
-            <div class="denominator">100</div>
+            <div class="molecular">{{profile_data[1]}}</div>/
+            <div class="denominator">{{profile_data[2]}}</div>
           </div>
         </div>
 
@@ -61,8 +61,8 @@
                   <i class="fa-solid fa-lock"></i>
                 </div>    
                 <div class="gbt">
-                  <button type="button" id="maleButton">男性</button>
-                  <button type="button" id="femaleButton">女性</button>
+                  <button type="button" id="maleButton" {% if profile_data[3] == 'M' %}style="border: 2px solid rgb(41, 123, 205);"{% endif %}>男性</button>
+                  <button type="button" id="femaleButton" {% if profile_data[3] == 'F' %}style="border: 2px solid rgb(194, 37, 116);"{% endif %}>女性</button>
                 </div>
               </div>
               <div class="birthday">
@@ -70,7 +70,7 @@
                   <p>生日</p>
                   <i class="fa-solid fa-lock"></i>
                 </div>   
-                <input type="date" id="birthday">
+                <input type="date" id="birthday" value="{{ profile_data[4] }}">
               </div>
             </div>
 
