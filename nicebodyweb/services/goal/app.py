@@ -60,16 +60,24 @@ def goal_main():
             cursor.execute('SELECT "ChCategoryid", "checkName", "Iconid", "isCheck"  FROM body.v_check where "Uid" = %s order by create_time;', (uid,))
             data = cursor.fetchall()
 
-            cursor.execute('SELECT COALESCE(weight, \'0\') from ('
-                           'select "Wid", weight , date(create_time) as create_time '
-                           'FROM body.weight as a where "Uid" = %s) as a '
-                           'RIGHT JOIN ('
-                           '    SELECT current_date - i AS create_time '
-                           '    FROM generate_series(0, 6) AS t(i) '
-                           ') as b '
-                           'ON a.create_time = b.create_time '
-                           'order by b.create_time;'
-                           ,(uid,))
+            now = datetime.now()
+            formatted_date = now.strftime('%Y-%m-%d')
+
+            cursor.execute('''
+                SELECT COALESCE(a.weight, '0') AS weight
+                FROM (
+                    SELECT "Wid", weight, DATE(create_time) AS create_time
+                    FROM body.weight
+                    WHERE "Uid" = %s
+                ) AS a
+                RIGHT JOIN (
+                    SELECT (DATE %s - INTERVAL '1 day' * i) AS create_time
+                    FROM generate_series(0, 6) AS t(i)
+                ) AS b
+                ON a.create_time = b.create_time
+                ORDER BY b.create_time;
+            '''
+                           ,(uid, formatted_date))
             weight = cursor.fetchall()
             weight = [item[0] for item in weight]
             weight = [float(w) for w in weight]
@@ -214,7 +222,10 @@ def save_todayWeight():
             connection = db.get_connection() 
             cursor = connection.cursor()
 
-            cursor.execute('INSERT INTO body.weight(weight, "Uid", create_time, update_time) VALUES(%s, %s, now(), now())', (weight, uid))
+            now = datetime.now()
+            formatted_date = now.strftime('%Y-%m-%d')
+
+            cursor.execute('INSERT INTO body.weight(weight, "Uid", create_time, update_time) VALUES(%s, %s, %s, now())', (weight, uid, formatted_date))
             response = {'message': f'deleteCheckbox successfully.'}
             
             connection.commit()
@@ -315,7 +326,7 @@ def upload_after_image():
                     message = 'Updated existing record.'
                 else:
                     print(uid, unique_filename)
-                    cursor.execute('INSERT INTO body.contrast("Uid", after_image, create_time, update_time) VALUES(%s, %s, now(), now())',
+                    cursor.execute('INSERT INTO body.contrast("Uid", after_image, create_time, update_time) VALUES(%s, %s, CURRENT_DATE, now())',
                                    (uid, unique_filename))
                     message = 'Inserted new record.'
 
@@ -350,6 +361,38 @@ def delete_contrast_image():
             connection.close()
 
             return jsonify({'message': 'deletecontrastImage successfully'})
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# 新增體重紀錄
+@goal_bp.route('/saveWeight', methods=['POST'])
+def save_weight():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            weight = request.form.get('weight')
+            date = request.form.get('date')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+        
+            cursor.execute(
+                '''
+                INSERT INTO body.weight("Uid", weight, create_time, update_time)
+                VALUES (%s, %s, %s, now())
+                ON CONFLICT ("Uid", create_time)
+                DO UPDATE SET
+                    weight = EXCLUDED.weight,
+                    update_time = now();
+                ''', (uid, weight, date))
+            response = {'message': f'saveWeight inserted successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
