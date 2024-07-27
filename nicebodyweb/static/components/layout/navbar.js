@@ -25,7 +25,7 @@ let renderNav = function() {
       <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">
           <img src="/static/images/userImage/${userImage}" alt="">
-          <h3>${messageText}</h3>
+          <h3 id="messageText">${messageText}</h3>
         </a>
         <a href="/login/logout">
           <i class="fa-solid fa-right-from-bracket"></i>
