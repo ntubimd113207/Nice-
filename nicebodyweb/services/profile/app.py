@@ -1,5 +1,5 @@
 # 匯入Blueprint模組
-from flask import render_template, Blueprint, session, jsonify
+from flask import render_template, Blueprint, request, session, jsonify
 from utils import db
 
 # 產生目標服務藍圖
@@ -29,6 +29,37 @@ def profile_page():
     connection.close()
 
     return render_template('/profile/profilePage.html', name=name, userImage=userImage, profile_data=profile_data)
+
+#update - 個人檔案頁面
+@profile_bp.route('/updateProfile', methods=['POST'])
+def update_profile():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            name = request.form.get('name')
+            gender = request.form.get('gender')
+            birthday = request.form.get('birthday')
+            
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            gender = None if gender == '' else gender
+            birthday = None if birthday == '' else birthday
+
+            cursor.execute('UPDATE body.user_profile SET username = %s, gender = %s, birthday = %s WHERE "Uid" = %s;', (name, gender, birthday, uid))
+            response = {'message': f'updateProfile successfully.'}
+
+            session['name'] = name
+
+            connection.commit()
+            connection.close()
+          
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
 
 
 #關注列表頁面

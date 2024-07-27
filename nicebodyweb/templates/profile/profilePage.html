@@ -19,6 +19,7 @@
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
   <script src="/static/js/proflie/profliePage.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>個人檔案</title>
 </head>
 <body>
@@ -61,8 +62,8 @@
                   <i class="fa-solid fa-lock"></i>
                 </div>    
                 <div class="gbt">
-                  <button type="button" id="maleButton" {% if profile_data[3] == 'M' %}style="border: 2px solid rgb(41, 123, 205);"{% endif %}>男性</button>
-                  <button type="button" id="femaleButton" {% if profile_data[3] == 'F' %}style="border: 2px solid rgb(194, 37, 116);"{% endif %}>女性</button>
+                  <button type="button" id="maleButton" {% if profile_data[3] == 'M' %}style="border: 2px solid rgb(41, 123, 205);" class="selected" {% endif %}>男性</button>
+                  <button type="button" id="femaleButton" {% if profile_data[3] == 'F' %}style="border: 2px solid rgb(194, 37, 116);" class="selected"{% endif %}>女性</button>
                 </div>
               </div>
               <div class="birthday">
@@ -82,7 +83,7 @@
 
           <div class="closesetting">
             <button id="openapplynutritionist">申請營養師身分</button>
-            <button>變更個資</button>
+            <button id="changeButton">變更個資</button>
           </div>
 
           <dialog id="applynutritionist">
