@@ -205,7 +205,7 @@ def weight_list():
         
     connection = db.get_connection() 
     cursor = connection.cursor()     
-    cursor.execute('SELECT "Wid", weight, TO_CHAR(create_time, \'YYYY/MM/DD\') FROM body.weight where "Uid"  = %s;', (uid,))
+    cursor.execute('SELECT "Wid", weight, TO_CHAR(create_time, \'YYYY/MM/DD\') FROM body.weight where "Uid"  = %s order by create_time desc;', (uid,))
     data = cursor.fetchall()
     connection.close() 
     return render_template('/goal/weightList.html', data=data, name=name, userImage=userImage)
@@ -228,6 +228,53 @@ def save_todayWeight():
             cursor.execute('INSERT INTO body.weight(weight, "Uid", create_time, update_time) VALUES(%s, %s, %s, now())', (weight, uid, formatted_date))
             response = {'message': f'deleteCheckbox successfully.'}
             
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+#修改 - 體重紀錄
+@goal_bp.route('/updateWeight', methods=['POST'])
+def update_weight():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            weight = request.form.get('kg')
+            weight_id = request.form.get('id')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('UPDATE body.weight SET weight=%s, update_time=now() WHERE "Uid"=%s and "Wid"=%s;', (weight, uid, weight_id))
+            response = {'message': f'updateWeight successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+#刪除 - 體重紀錄
+@goal_bp.route('/deleteWeight', methods=['POST'])
+def delete_weight():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            weight_id = request.form.get('id')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('DELETE FROM body.weight WHERE "Uid"=%s and "Wid"=%s;', (uid, weight_id,))
+            response = {'message': f'deleteWeight successfully.'}
+
             connection.commit()
             connection.close()
 

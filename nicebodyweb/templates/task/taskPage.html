@@ -356,7 +356,7 @@
         <dialog id="infor">
           <h1>如何在里程碑留言?</h1>
           <div class="content">
-            <p>在某區塊中達到100次的累積數量，就可以獲得1次在該區塊中留言的機會!加油啊各位!</p>
+            <p>在某區塊中達到10次的累積數量，就可以獲得1次在該區塊中留言的機會!加油啊各位!</p>
           </div>
           <div class="save">
             <button id="closeinfor" class="closebtn">close</button>
@@ -367,23 +367,23 @@
       <div class="milestone">
         <div class="accumulation">
           <i class="fa-regular fa-calendar-check"></i>
-          <h1>20</h1>
+          <h1>{{ milestone[0][0] }}</h1>
           <span class="label">累積打卡天數</span>
         </div>
         <div class="accumulation">
           <i class="fa-solid fa-chart-line"></i>
-          <h1>20</h1>
+          <h1>{{ milestone[1][0] }}</h1>
           <span class="label">累積記錄體重</span>
         </div>
         <div class="accumulation">
           <i class="fa-solid fa-puzzle-piece"></i>
-          <h1>10</h1>
+          <h1>{{ milestone[2][0] }}</h1>
           <span class="label">累積生成食譜</span>
         </div>
         <div class="accumulation">
           <i class="fa-regular fa-thumbs-up"></i>
-          <h1>400</h1>
-          <span class="label">食譜獲讚數量</span>
+          <h1>{{ milestone[3][0] }}</h1>
+          <span class="label">評價食譜數量</span>
         </div>
       </div>
 
@@ -408,7 +408,7 @@
         <dialog id="weightcmt">
           <h1>請輸入你的名言佳句~</h1>
           <div class="content">
-            <p>(送出後無法修改，累積100次才有1次留言機會，請慎重輸入喔!)</p>
+            <p>(送出後無法修改，累積10次才有1次留言機會，請慎重輸入喔!)</p>
             <textarea rows="5" placeholder="說點甚麼吧~"></textarea>
           </div>
           <div class="save">
@@ -511,6 +511,13 @@
 
       <canvas class="fireworks"></canvas>
     </section>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
   </article>
 
   <footer id="footer-container"></footer>
