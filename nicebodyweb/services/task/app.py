@@ -18,12 +18,13 @@ def task_page():
         userImage=session['user_image']
     else:
         name='0'
+        uid='1'
         userImage='0'
 
     connection = db.get_connection()
     cursor = connection.cursor()
 
-    cursor.execute('SELECT a.level_id, point, upgrade_point FROM body.user_profile as a left join body.level_list as b on a.level_id = b.level_id where "Uid" = %s;', (session['uid'],))
+    cursor.execute('SELECT a.level_id, point, upgrade_point FROM body.user_profile as a left join body.level_list as b on a.level_id = b.level_id where "Uid" = %s;', (uid,))
 
     level_data = cursor.fetchone()
 
@@ -40,7 +41,7 @@ def task_page():
                     select taskType from (
                     SELECT '4' as taskType FROM body.v_check where "Uid" = %s and "isCheck"='1' limit 1) as c
                     union
-                    select '5' as taskType from body.user_profile up where birthday is not null and gender is not null and diet is not null and "Uid" = %s
+                    select '5' as taskType from body.user_profile up where birthday is not null and gender is not null and "Uid" = %s
                     ) as task
                     union 
                     select concat('b, ',COALESCE(STRING_AGG(DISTINCT awardtype, ', '), 'b')) from ( 
@@ -52,10 +53,28 @@ def task_page():
     data = cursor.fetchall()
 
     task_data, award_data = data[0][0].split(', '), data[1][0].split(', ')
+
+    cursor.execute('''
+                   select count(*), '1' as  num from body."checkIn" as a
+                    left join body."checkCategory" as b 
+                    on a."ChCategoryid" = b."ChCategoryid"
+                    where "Uid" = %s
+                    union
+                    select count(*), '2' as  num from body.weight
+                    where "Uid" = %s
+                    union
+                    select count(*), '3' as  num from body.cookbook c 
+                    where "Uid" = %s
+                    union
+                    select count(*), '4' as  num from body."cookbookMessage"
+                    where "Uid" = %s
+                    order by num;
+                    ''' % (uid, uid, uid, uid))
+    milestone = cursor.fetchall()
     
     connection.close()
 
-    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data)
+    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data, milestone=milestone)
 
 #taskPage - 領取獎勵
 @task_bp.route('/receiveTask', methods=['POST'])
