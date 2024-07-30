@@ -5,8 +5,8 @@ article {
 }
 
 .sectionwrap {
-  height: 85vh;
-  padding: 10% 5% 5%;
+  min-height: 100vh;
+  padding: 200px 5% 5%;
   display: flex; 
   justify-content: space-between;
   box-sizing: border-box;
@@ -19,20 +19,73 @@ article {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 3%;
 }
 
-.profile-picture {
+.avatarFrame {
+  background-image: url(/static/images/nutritionistFrame.png);
+  width: 350px;
+  height: 350px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.avatarFrame > .profile-picture {
   border-radius: 50%;
+  width: 210px;
+  height: 210px;
+  object-fit: cover;
+}
+
+.noAvatarFrame {
   width: 250px;
   height: 250px;
-  object-fit: cover;
-  cursor: pointer; 
-  transition: opacity 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
+  position: relative;
 }
 
-.profile-picture:hover {
-  opacity: 0.7;
+.noAvatarFrame > .profile-picture {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editAvatar {
+  background-color: #FFF;
+  border: #6E3D0D 1px solid;
+  color: #6E3D0D;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  gap: 5px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.avatarFrame > .editAvatar {
+  right: 10%;
+  bottom: 10%;
+}
+
+.noAvatarFrame > .editAvatar {
+  right: 0;
+  bottom: 5%;
+}
+
+.editAvatar:hover {
+  background-color: #f1f1f1;
 }
 
 .profile .title {
@@ -275,14 +328,13 @@ p{
   opacity: 0.5;
 }
 
+footer img {
+  display: none;
+}
+
 /* X-Large 1440px */
 
 @media screen and (max-width:1440px) {
-  .sectionwrap {
-    height: 90vh;
-    padding: 15% 5% 5%;
-  }
-
   .profile {
     gap: 10px;
   }
@@ -311,9 +363,9 @@ p{
 
 @media screen and (max-width:1024px) {
   .sectionwrap {
-    height: 95vh;
-    padding: 20% 5% 5%;
-    gap: 50px;
+    padding: 150px 5% 50px;
+    display: flex;
+    flex-direction: column;
   }
 
   .lists a {
@@ -324,13 +376,6 @@ p{
 /* Small 768px */
 
 @media screen and (max-width:768px) {
-  .sectionwrap {
-    height: 100%;
-    padding: 20% 5% 5%;
-    display: flex;
-    flex-direction: column;
-  }
-
   .lists a {
     width: 60%;
   }
@@ -364,13 +409,6 @@ p{
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
-  .sectionwrap {
-    height: 100%;
-    padding: 35% 5% 20%;
-    display: flex;
-    flex-direction: column;
-  }
-
   .out1 {
     margin: 5% 0 10%;
   }

@@ -1,5 +1,6 @@
 article {
   background-color: #F0EAD2;
+  min-height: 100vh;
   padding: 10% 20% 5%;
   color: #495057;
   display: flex;
@@ -63,12 +64,27 @@ section {
 section .collecttitle {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   font-size: 1.2em;
   color: #BC6C25;
   font-weight: bold;
   margin: 10% 0 5%;
+}
+
+.collecttitle .left {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  white-space: nowrap;
+}
+
+.collecttitle .right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  white-space: nowrap;
+  font-size: 15px;
 }
 
 section .collectcontent {
@@ -77,11 +93,16 @@ section .collectcontent {
   gap: 20px;
 }
 
+.collecttitle .right i,
+.eachcollect i {
+  cursor: pointer;
+}
+
 .eachcollect {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .eachcollect .wrap {
@@ -99,11 +120,6 @@ section .collectcontent {
   max-height: 100%;
   width: 35px;
   height: 35px;
-}
-
-.eachcollect i {
-  margin: 0 1%;
-  cursor: pointer;
 }
 
 /* Large 1200px */
