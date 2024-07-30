@@ -31,7 +31,18 @@
   <article>
     <section class="sectionwrap">
       <section class="profile">
-        <img src="/static/images/userImage/Joey1.png" alt="Profile Picture" class="profile-picture" id="profile-picture">
+        <div class="avatarFrame">
+          <img class="profile-picture" src="/static/images/userImage/Joey1.png" alt="Profile Picture">
+          <div class="editAvatar">
+            <i class="fa-solid fa-pen"></i> Edit
+          </div>
+        </div>
+        <div class="noAvatarFrame" style="display: none;">
+          <img class="profile-picture" src="/static/images/userImage/Joey1.png" alt="Profile Picture">
+          <div class="editAvatar">
+            <i class="fa-solid fa-pen"></i> Edit
+          </div>
+        </div>
         <input type="file" id="upload-picture" accept="image/*" style="display: none;">
         <div class="title">
           <input type="text" id="name" placeholder="輸入暱稱" value="{{ name }}">

@@ -63,6 +63,17 @@ nav .middle .wrap a,
   color: #6E3D0D;
   border-bottom: none;
   transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+nav .middle .wrap a .pro {
+  background-color: #6E3D0D;
+  color: #fff;
+  padding: 5px;
+  border-radius: 50px;
+  font-size: 10px;
 }
 
 nav .middle .icon {
@@ -106,7 +117,26 @@ nav .alreadyLogin {
   flex-grow: 1;
 }
 
-.alreadyLogin .toprofile img {
+.nav-avatarFrame {
+  background-image: url(/static/images/nutritionistFrame.png);
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-profile {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+}
+
+.noAvatarFrame-nav-profile {
   max-width: 100%;
   max-height: 100%;
   width: 15%;

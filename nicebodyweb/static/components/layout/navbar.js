@@ -12,7 +12,13 @@ let renderNav = function() {
           <a href="/robott/generateRecipes" class="nav-link">Robot</a>
           <a href="/goal/goalMain" class="nav-link">Record</a>
           <a href="/task/taskPage" class="nav-link">Task</a>
-          <a href="/community/communityMain" class="nav-link">Q&A</a>
+          <a href="/community/communityMain" class="nav-link">
+            Q&A
+            <div class="pro">
+              <i class="fa-solid fa-crown"></i>
+              pro
+            </div>
+          </a>
         </div>
         <div class="icon">
           <i class="fa-solid fa-bars" id="menuIcon"></i>
@@ -24,7 +30,10 @@ let renderNav = function() {
       </div>
       <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">
-          <img src="/static/images/userImage/${userImage}" alt="">
+          <div class="nav-avatarFrame" style="display: none;">
+            <img class="nav-profile" src="/static/images/userImage/${userImage}" alt="ProfilePicture">
+          </div>
+          <img src="/static/images/userImage/${userImage}" class="noAvatarFrame-nav-profile" alt="ProfilePicture">
           <h3 id="messageText">${messageText}</h3>
         </a>
         <a href="/login/logout">
