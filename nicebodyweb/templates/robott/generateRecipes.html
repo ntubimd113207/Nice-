@@ -33,7 +33,7 @@
     </div>
 
     <section class="{% if data|length == 2 or data|length == 0 %}fewcontent{% else %}content{% endif %}">
-      <a id="generate-btn" class="AI" href="/question/question_n1">
+      <div id="generate-btn" class="AI">
         <div class="add">
           <img src="/static/images/addcricle.png" class="addcricle" alt="addcricle">
         </div>
@@ -44,7 +44,24 @@
           </div>
           <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
         </div>
-      </a>
+      </div>
+
+      <dialog id="howToGenerate">
+        <h1>選擇食譜的生成方式</h1>
+        <div class="plot">
+          <a class="selectbtn" href="/question/question_n1">
+            <i class="fa-solid fa-hand-pointer"></i>
+            <h3>手動</h3>
+          </a>
+          <div class="selectbtn">
+            <i class="fa-solid fa-shuffle"></i>
+            <h3>隨機</h3>
+          </div>
+        </div>
+        <div class="save">
+          <button id="closehowToGenerate" class="closebtn">close</button>
+        </div>
+      </dialog>
 
       {% for d in data %}
       <div class="ai-recipe-share">
@@ -57,8 +74,8 @@
           <h3>{{d[0]}}</h3>
         </div>
         <p>{{d[1]}}</p>
-        {% if d[2]|length > 60 %}
-        <p>{{d[2][:60]}}...</p>
+        {% if d[2]|length > 55 %}
+        <p>{{d[2][:55]}}...</p>
         {% else %}
         <p>{{d[2]}}</p>
         {% endif %}
@@ -154,6 +171,17 @@
     function showModal() {
       document.getElementById("loginModal").style.display = "flex";
     }
+
+    // 彈跳視窗 選擇食譜的生成方式
+    let openhowToGenerate=document.getElementById('generate-btn');
+    let howToGenerate=document.getElementById('howToGenerate');
+    let closehowToGenerate=document.getElementById('closehowToGenerate');
+    openhowToGenerate.addEventListener("click", function(){
+      howToGenerate.showModal();
+    })
+    closehowToGenerate.addEventListener("click", function(){
+      howToGenerate.close();
+    })
   </script>
 </body>
 </html>

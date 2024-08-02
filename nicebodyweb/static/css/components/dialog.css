@@ -33,6 +33,53 @@ dialog .content {
   line-height: 1.5em;
 }
 
+dialog .plot {
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.selectbtn {
+  position: relative;
+  background-color: #FFF;
+  border: 2px #FFF solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  user-select:none;
+  padding: 5%;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.selectbtn:hover {
+  border: 2px #6E3D0D solid;
+}
+
+.selectbtn > i {
+  font-size: 5.5em;
+  color: #F7F4E7;
+}
+
+.selectbtn h3 {
+  position: absolute;
+  z-index: 1;
+  font-size: 25px;
+  color: #BC6C25;
+  transition: font-size 0.3s;
+  font-weight: bold;
+}
+
+.selectbtn:hover h3 {
+  font-size: 30px;
+}
+
 dialog > .content > h2 {
   font-size: 1.2em;
   font-weight: bold;  
@@ -172,6 +219,13 @@ dialog .content .input {
   align-items: center;
   margin-top: 5%;
   gap: 20px;
+}
+
+#howToGenerate > .save {
+  margin-top: 5%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .save {
