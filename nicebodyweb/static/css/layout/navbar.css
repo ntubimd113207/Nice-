@@ -303,13 +303,16 @@ nav .area .logo h1:hover,
 /* X-Large 1440px */
 
 @media screen and (max-width:1440px) {
+  nav .middle .wrap {
+    width: 80%;
+  }
 }
 
 /* Large 1200px */
 
 @media screen and (max-width:1200px) {
   nav .middle .wrap {
-    width: 80%;
+    width: 90%;
   }
 }
 

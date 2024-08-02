@@ -32,25 +32,28 @@
       <a class="recipe-world" href="/robott/recipeWorld">食譜天地</a>
     </div>
 
-    <section class="content">
-      <a id = "generate-btn" class="ai-recipe-share AI" href="/question/question_n1">
+    <section class="{% if data|length == 2 or data|length == 0 %}fewcontent{% else %}content{% endif %}">
+      <a id="generate-btn" class="AI" href="/question/question_n1">
         <div class="add">
-          <img src="/static/images/addcricle.png" alt="">
+          <img src="/static/images/addcricle.png" class="addcricle" alt="addcricle">
         </div>
-        <div class="title">
-          <img src="/static/images/ai_banana.png" alt="">
-          <h3>Banana營養師</h3>
+        <div class="forrwd">
+          <div class="title">
+            <img src="/static/images/ai_banana.png" class="aibanana" alt="ai_banana">
+            <h3>Banana營養師</h3>
+          </div>
+          <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
         </div>
-        <p>02.04.2024</p>
-        <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
       </a>
 
-      {% if data %}
       {% for d in data %}
       <div class="ai-recipe-share">
-        <img src="{{ Recipes_image_path }}/{{ d[3] }}" alt="">
+        <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
         <div class="title">
-          <img src="/static/images/userImage/{{userImage}}" alt="">
+          <div class="recipe-avatarFrame" style="display: none;">
+            <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+          </div>
+          <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
           <h3>{{d[0]}}</h3>
         </div>
         <p>{{d[1]}}</p>
@@ -59,7 +62,6 @@
         {% else %}
         <p>{{d[2]}}</p>
         {% endif %}
-
         <div class="diet">
           {% if d[5] is not none %}
             {% if '1' in d[5] %}
@@ -91,26 +93,30 @@
         </div>
       </div>
       {% endfor %}
-      {% else %}
-        <div class="ai-recipe-share" style="visibility: hidden">
-          <img src="/static/images/ai_banana.png" alt="">
-          <div class="title">
-            <img src="/static/images/userImage/Joey1.png" alt="">
-            <h3>Banana營養師</h3>
+
+      {% for d in data %}
+      <form class="rwdrecipe" action="/robott/detailedRecipe" method="get">
+        <input type="hidden" name="recipe_id" value="{{ d[6] }}">
+        <button type="submit">
+          <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
+          <div class="forrwd">
+            <div class="title">
+              <div class="recipe-avatarFrame" style="display: none;">
+                <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+              </div>
+              <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+              <h3>{{d[0]}}</h3>
+            </div>
+            <p>{{d[1]}}</p>
+            {% if d[2]|length > 35 %}
+            <p>{{d[2][:35]}}...</p>
+            {% else %}
+            <p>{{d[2]}}</p>
+            {% endif %}
           </div>
-          <p>02.04.2024</p>
-          <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
-        </div>
-        <div class="ai-recipe-share" style="visibility: hidden">
-          <img src="/static/images/ai_banana.png" alt="">
-          <div class="title">
-            <img src="/static/images/userImage/Joey1.png" alt="">
-            <h3>Banana營養師</h3>
-          </div>
-          <p>02.04.2024</p>
-          <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
-        </div>
-      {% endif %}
+        </button>
+      </form>
+      {% endfor %}
     </section>
 
     <dialog id="loginDialog">
@@ -144,6 +150,7 @@
         document.getElementById("loginDialog").showModal();
       }
     };
+
     function showModal() {
       document.getElementById("loginModal").style.display = "flex";
     }

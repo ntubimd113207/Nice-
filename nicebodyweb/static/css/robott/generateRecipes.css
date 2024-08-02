@@ -38,7 +38,12 @@ article {
   display: grid;
   grid-gap: 50px;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  margin-top: 2%;
+}
+
+.fewcontent {
+  display: grid;
+  grid-gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
 }
 
 /* AI */
@@ -46,13 +51,26 @@ article {
 .AI {
   border: #D4A373 1px solid;
   border-radius: 10px;
-  padding: 10%;
+  padding: 10% 5%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   cursor: pointer;
   text-decoration: none;
+  transition: all 0.3s;
+}
+
+.AI .title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 15% 0;
+}
+
+.AI p {
+  color: #495057;
+  line-height: 25px;
 }
 
 /* ai-recipe-share */
@@ -63,7 +81,8 @@ article {
   margin-bottom: 5%;
 }
 
-.ai-recipe-share img {
+.addcricle,
+.ai-recipe-share > .recipe-img {
   max-width: 100%;
   width: 100%;
   border-radius: 10px;
@@ -77,18 +96,38 @@ article {
   justify-content: flex-start;
   align-items: center;
   margin: 5% 0;
+  gap: 10px;
 }
 
-.title img {
+.recipe-avatarFrame {
+  background-image: url(/static/images/nutritionistFrame.png);
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recipe-profile {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+}
+
+.aibanana,
+.noAvatarFrame-recipe-profile {
   max-width: 100%;
   max-height: 100%;
   width: 12%;
   height: auto;
-  margin-right: 5%;
 }
 
 .title h3 {
-  font-size: 1.563em;
+  font-size: 25px;
   font-weight: bold;
   color: #0B1A2F;
 }
@@ -116,7 +155,7 @@ article {
   align-items: center;
 }
 
-.dietname {
+.diet .dietname {
   padding: 2%;
   border-radius: 30px;
   display: flex;
@@ -162,11 +201,78 @@ article {
   background-color: #D4A373;
 }
 
+/* rwdrecipe */
+
+.rwdrecipe {
+  display: none;
+}
+
+.rwdrecipe button {
+  border: #D4A373 1px solid;
+  border-radius: 10px;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  gap: 30px;
+  padding: 5%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.AI:hover,
+.rwdrecipe button:hover {
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.rwdrecipe .recipe-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 20%;
+  height: 20%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.rwdrecipe .forrwd {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rwdrecipe .title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 12% 15% 5%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  article {
+    padding: 13% 15% 5%;
+  }
+}
+
 /* Medium 1024px */
 
 @media screen and (max-width:1024px) {
   article {
     padding: 15% 15% 5%;
+  }
+
+  .switch {
+    margin-bottom: 8%;
   }
 }
 
@@ -177,12 +283,69 @@ article {
     padding: 20% 15% 5%;
   }
 
+  .switch {
+    margin-bottom: 10%;
+  }
+
   .content {
-    display: grid;
-    grid-gap: 50px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .AI {
+    display: flex;
     justify-content: space-between;
-    margin-top: 5%;
+    align-items: center;
+    flex-direction: row;
+    gap: 30px;
+    padding: 5%;
+  }
+
+  .add {
+    width: 50%;
+    height: auto;
+  }
+
+  .addcricle {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .AI .forrwd {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .AI .title {
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .title h3 {
+    font-size: 20px;
+  }
+
+  .AI p,
+  .rwdrecipe p {
+    font-size: 15px;
+    line-height: 20px;
+    text-align: left;
+  }
+
+  .ai-recipe-share {
+    display: none;
+  }
+
+  .rwdrecipe {
+    display: block;
   }
 }
 
