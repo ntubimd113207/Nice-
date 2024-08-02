@@ -18,7 +18,7 @@
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <title>題問...</title>
+  <title>提問...</title>
 </head>
 <body>
   <div id="myCursor"></div>
@@ -83,10 +83,6 @@
       }
     }
 
-    document.querySelectorAll('.fa-trash-can').forEach(icon => {
-      icon.addEventListener('click', removeUploadSection);
-    });
-
     document.getElementById('addFile').addEventListener('click', function() {
       event.preventDefault();
       const fileUploads = document.getElementById('fileUploads');
@@ -100,12 +96,7 @@
           <i class="fa-solid fa-folder"></i>
         `;
         fileUploads.appendChild(newUpload);
-
-        newUpload.querySelector('.fa-trash-can').addEventListener('click', removeUploadSection);
-
         newUpload.querySelector(`#file${uploadCount}`).addEventListener('change', handleFileChange);
-      } else {
-        alert('You can only upload up to 5 files.');
       }
     });
 
@@ -127,21 +118,6 @@
 
     document.querySelectorAll('.a-upload input[type="file"]').forEach(input => {
       input.addEventListener('change', handleFileChange);
-    });
-
-    $("body").on("change", ".a-upload input[type='file']", function(){
-      var filePath = $(this).val();
-      var $pen = $(this).closest(".pen");
-      if (filePath.indexOf("jpg") != -1 || filePath.indexOf("png") != -1) {
-        $pen.find(".fileerrorTip").html("").hide();
-        var arr = filePath.split('\\');
-        var fileName = arr[arr.length-1];
-        $pen.find(".showFileName").html("文件名：" + fileName);
-      } else {
-        $pen.find(".showFileName").html("");
-        $pen.find(".fileerrorTip").html("非jpg,png格式：您未上傳文件，或者您上傳文件類型有誤！").show();
-        return false;
-      }
     });
   </script>
 </body>
