@@ -553,6 +553,9 @@
         document.getElementById('deleteDetailDialog').showModal();
         document.getElementById('savedeleteDetail').setAttribute('data-detailId', event.target.getAttribute('data-detailId'));
         document.getElementById('savedeleteDetail').setAttribute('data-list', event.target.getAttribute('data-list'));
+
+        let currentSectionName = event.target.closest('section').querySelector('h2').textContent;
+        document.getElementById('deleteDetailDialog').setAttribute('data-currentSection', currentSectionName);
       }
     });
 
@@ -565,6 +568,7 @@
     document.getElementById('savedeleteDetail').addEventListener('click', function() {
       let detailId = this.getAttribute('data-detailId');
       let item = this.getAttribute('data-list');
+      let currentSectionName = document.getElementById('deleteDetailDialog').getAttribute('data-currentSection');
 
       $.ajax({
         type: 'POST',
@@ -584,19 +588,19 @@
 
       let sections = document.querySelectorAll('article > section');
       sections.forEach(section => {
-        let details = section.querySelectorAll('.eachcollect');
-        details.forEach(detail => {
-          if (detail.querySelector('.fa-pen').getAttribute('data-detailId') === detailId) {
-            detail.remove();
-          }
-        });
+        let sectionTitle = section.querySelector('h2').textContent;
+        if (sectionTitle === currentSectionName) {
+          let details = section.querySelectorAll('.eachcollect');
+          details.forEach(detail => {
+            if (detail.querySelector('.fa-pen').getAttribute('data-detailId') === detailId) {
+              detail.remove();
+            }
+          });
+        }
       });
-
       document.getElementById('deleteDetailDialog').close();
 
     });
-  
-
 
  </script>
 </body>
