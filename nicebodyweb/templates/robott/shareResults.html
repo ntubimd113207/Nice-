@@ -46,7 +46,7 @@
 						<div class="left">
 							<h1>{{data[0]}}</h1>
 							<div class="like" id="like-button">
-								{% if data[12] == 1 %}
+								{% if data[12] != 0 %}
 									<i class="fa-solid fa-thumbs-up"></i>
 								{% else %}
 									<i class="fa-regular fa-thumbs-up"></i>
@@ -62,39 +62,24 @@
 								<span>{{data[15]}}</span>
 							</div>
 							<div class="bookmark">
-								<i class="fa-regular fa-bookmark" id="opencollect"></i>
+								{% if has_non_zero %}
+									<i class="fa-solid fa-bookmark" id="opencollect"></i>
+								{% else %}
+									<i class="fa-regular fa-bookmark" id="opencollect"></i>
+								{% endif %}
 							</div>
 							<dialog id="collect">
 								<h1>編輯分類</h1>
 								<div class="content">
+									{% for d in data3 %}
 									<div class="eachclass">
 										<div class="left">
-											<input type="checkbox" id="scales" name="scales" checked />
-											<label for="scales">我的最愛</label>
+											<input type="checkbox" id="scales" name="scales" {% if d[2] != 0 %}checked{% endif %} />
+											<label for="scales" data-id="{{ d[0] }}">{{ d[1] }}</label>
 										</div>
-										<div class="num">(2篇)</div>
+										<div class="num">({{ d[3] }}篇)</div>
 									</div>
-									<div class="eachclass">
-										<div class="left">
-											<input type="checkbox" id="scales" name="scales" />
-											<label for="scales">總有一天會用到</label>
-										</div>
-										<div class="num">(2篇)</div>
-									</div>
-									<div class="eachclass">
-										<div class="left">
-											<input type="checkbox" id="scales" name="scales" />
-											<label for="scales">蔬食天堂</label>
-										</div>
-										<div class="num">(2篇)</div>
-									</div>
-									<div class="eachclass">
-										<div class="left">
-											<input type="checkbox" id="scales" name="scales" />
-											<label for="scales">高蛋白飲食</label>
-										</div>
-										<div class="num">(2篇)</div>
-									</div>
+									{% endfor %}
 								</div>
 								<div class="save">
 									<button id="closecollect" class="closebtn closecollect">close</button>
@@ -260,8 +245,8 @@
 			};
 
 			function showModal() {
-        document.getElementById("loginModal").style.display = "flex";
-    	}
+				document.getElementById("loginModal").style.display = "flex";
+			}
 
 			function renderChart() {
 				var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
@@ -332,33 +317,6 @@
 				infor.close();
 			})
 
-			// 彈跳視窗 收藏
-			let opencollect=document.getElementById('opencollect');
-			let collect=document.getElementById('collect');
-			let closecollect=document.getElementById('closecollect');
-			opencollect.addEventListener("click", function(){
-				collect.showModal();
-			})
-			closecollect.addEventListener("click", function(){
-				collect.close();
-			})
-
-			// 改變收藏icon
-			function handleCollectSave() {
-				const openCollectButton = document.querySelector('.fa-regular.fa-bookmark, .fa-solid.fa-bookmark');
-				if (openCollectButton) {
-					if (openCollectButton.classList.contains('fa-regular')) {
-						openCollectButton.classList.remove('fa-regular');
-						openCollectButton.classList.add('fa-solid');
-						openCollectButton.id = 'opencollect';
-					} else {
-						openCollectButton.classList.remove('fa-solid');
-						openCollectButton.classList.add('fa-regular');
-						openCollectButton.id = ''; 
-					}
-				}
-			}
-
 			// 按讚
 			document.addEventListener('DOMContentLoaded', function() {
 				const likeButton = document.getElementById('like-button');
@@ -379,7 +337,7 @@
 							},
 							error: function(xhr, status, error) {
 								console.error(error);
-								alert(error, '出現錯誤，請稍後再試！');
+								//alert(error, '出現錯誤，請稍後再試！');
 							}
 						});
 
@@ -398,7 +356,7 @@
 							},
 							error: function(xhr, status, error) {
 								console.error(error);
-								alert(error, '出現錯誤，請稍後再試！');
+								//alert(error, '出現錯誤，請稍後再試！');
 							}
 						});
 
@@ -491,6 +449,122 @@
 					window.open('https://twitter.com/intent/tweet?url=' + window.location.href, '_blank');
 				});
 			});
+
+			// 收藏
+			document.addEventListener('DOMContentLoaded', function() {
+				const collect = document.getElementById('collect');
+				const openCollectButton = document.getElementById('opencollect');
+				const saveCollectButton = document.getElementById('savecollect');
+				const closeCollectButton = document.getElementById('closecollect');
+				const bookmarkIcon = document.getElementById('opencollect');
+
+				let oldSelect = [];
+				let newSelect = [];
+
+				// 當打開 dialog 時，記錄當前的勾選狀態
+				openCollectButton.addEventListener('click', function() {
+					collect.showModal();
+					// 清空 previous selections
+					oldSelect = [];
+					document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+						if (checkbox.checked) {
+							oldSelect.push(checkbox.parentElement.querySelector('label').textContent);
+						}
+					});
+				});
+
+				// 當點擊 save 按鈕時，執行以下操作
+				saveCollectButton.addEventListener('click', function() {
+					newSelect = [];
+					const itemsToUpdate = {};
+
+					document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+						const label = checkbox.parentElement.querySelector('label').textContent;
+						if (checkbox.checked) {
+							newSelect.push(label);
+							// 記錄需要增加計數的項目
+							itemsToUpdate[label] = (itemsToUpdate[label] || 0) + 1;
+						}
+					});
+
+					const addedItems = newSelect.filter(item => !oldSelect.includes(item));
+					const removedItems = oldSelect.filter(item => !newSelect.includes(item));
+
+					console.log('addedItems', addedItems);
+					console.log('removedItems', removedItems);
+
+					// 更新收藏符號的樣式
+					if (newSelect.length > 0) {
+						bookmarkIcon.classList.remove('fa-regular');
+						bookmarkIcon.classList.add('fa-solid');
+					} else {
+						bookmarkIcon.classList.remove('fa-solid');
+						bookmarkIcon.classList.add('fa-regular');
+					}
+
+					// 更新 num 數字
+					addedItems.forEach(item => {
+						const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+							.find(div => div.querySelector('label').textContent === item)
+							.querySelector('.num');
+						const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+						numElement.textContent = `(${currentCount + 1}篇)`;
+
+						$.ajax({
+							type: "POST",
+							url: "/robott/addCollect",
+							data: {
+								recipe_id: "{{ data[10] }}",
+								category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+					});
+
+					removedItems.forEach(item => {
+						const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+							.find(div => div.querySelector('label').textContent === item)
+							.querySelector('.num');
+						const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+						numElement.textContent = `(${currentCount - 1}篇)`;
+
+						console.log(numElement.previousElementSibling.querySelector('label').dataset.id);
+						console.log("{{ data[10] }}");
+
+						$.ajax({
+							type: "POST",
+							url: "/robott/subCollect",
+							data: {
+								recipe_id: "{{ data[10] }}",
+								category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+					});
+
+					collect.close();
+				});
+
+				// 當關閉 dialog 時，保留勾選狀態
+				closeCollectButton.addEventListener('click', function() {
+					collect.close();
+				});
+			});
+
+
+
 		</script>
 	</body>
 </html>
