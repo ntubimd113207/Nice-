@@ -58,7 +58,7 @@
         <p onclick="sortContent('likecount')" unselectable="on">最熱門</p>
         <p onclick="sortContent('messagecount')" unselectable="on">分享最多</p>
       </div>
-      <div class="content" id="content">
+      <section class="{% if data|length == 2 or data|length == 0 %}fewcontent{% else %}content{% endif %}" id="content">
         {% for d in data %}
         <div class="ai-recipe-share" data-likecount="{{ d[4] }}" data-messagecount="{{ d[5] }}" data-timestamp="{{ loop.index }}">
           <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
@@ -70,8 +70,8 @@
             <h3>{{d[0]}}</h3>
           </div>
           <p>{{d[1]}}</p>
-          {% if d[2]|length > 60 %}
-          <p>{{d[2][:60]}}...</p>
+          {% if d[2]|length > 55 %}
+          <p>{{d[2][:55]}}...</p>
           {% else %}
           <p>{{d[2]}}</p>
           {% endif %}
@@ -126,15 +126,39 @@
           </form>
         </div>
         {% endfor %}
-      </div>
-      </section>
 
-      <dialog id="loginDialog">
-        <h1>請先登入</h1>
-        <div class="contentsave">
-          <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
-        </div>
-      </dialog>
+        {% for d in data %}
+        <form class="rwdrecipe" action="/robott/detailedRecipe" method="get">
+          <input type="hidden" name="recipe_id" value="{{ d[6] }}">
+          <button type="submit">
+            <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
+            <div class="forrwd">
+              <div class="title">
+                <div class="recipe-avatarFrame" style="display: none;">
+                  <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+                </div>
+                <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+                <h3>{{d[0]}}</h3>
+              </div>
+              <p>{{d[1]}}</p>
+              {% if d[2]|length > 35 %}
+              <p>{{d[2][:35]}}...</p>
+              {% else %}
+              <p>{{d[2]}}</p>
+              {% endif %}
+            </div>
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </section>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
   </article>
 
   <footer id="footer-container"></footer>
