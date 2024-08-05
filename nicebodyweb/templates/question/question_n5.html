@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
   <link rel="stylesheet" href="/static/css/components/loading.css">
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
   <script src="/static/js/question/question_n5.js" async></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -96,10 +97,18 @@
     </div>
     <div class="loader"></div>
   </div>
+
+  <dialog id="loginDialog">
+    <h1>請先登入</h1>
+    <div class="contentsave">
+      <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+    </div>
+  </dialog>
   
   <script>
     let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
   </script>
 </body>
 </html>

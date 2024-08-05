@@ -1,7 +1,8 @@
 import os
 import requests
 import pathlib
-from flask import Flask, session, abort, redirect, request, url_for, Blueprint, render_template
+import shutil
+from flask import Flask, session, abort, redirect, request, url_for, Blueprint, render_template, current_app
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
@@ -39,9 +40,9 @@ def login_is_required(function):
 @login_bp.route('/loginPage')
 def login_page(): 
     if "google_id" in session:
-        return render_template('/home/login.html', name=session['name'], userImage=session['user_image'], logged_in=True)
+        return render_template('/home/login.html', name=session['name'], userImage=session['user_image'], uid=session[uid], logged_in=True)
     else: 
-        return render_template('/home/login.html', name='0', logged_in=False)
+        return render_template('/home/login.html', name='0', uid='0', logged_in=False)
 
 # Google 登入
 @login_bp.route('/googlelogin')
@@ -102,6 +103,21 @@ def callback():
             result = cursor.fetchone()
             uid = result[0]
             user_image = result[1]
+
+            # 獲取應用程序的根目錄
+            app_root = current_app.root_path
+
+            # 設置用戶圖片資料夾的絕對路徑
+            user_image_folder = os.path.join(app_root, 'static', 'images', 'userImage', str(uid))
+            default_image_path = os.path.join(app_root, 'static', 'images', 'userImage', 'default.jpg')
+
+            # 檢查資料夾是否存在
+            if not os.path.exists(user_image_folder):
+                # 如果不存在，則創建資料夾
+                os.makedirs(user_image_folder)
+                
+                # 複製預設圖片到新創建的資料夾
+                shutil.copy(default_image_path, os.path.join(user_image_folder, 'default.jpg'))
 
             cursor.execute(
                 """

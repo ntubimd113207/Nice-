@@ -189,7 +189,7 @@ def check_list():
     cursor.execute('SELECT "ChCategoryid", "checkName", "Iconid" FROM body."checkCategory" where "Uid" = %s order by create_time;', (uid,))
     data = cursor.fetchall()
     connection.close()   
-    return render_template('/goal/checkList.html', data=data, name=name, userImage=userImage)
+    return render_template('/goal/checkList.html', data=data, name=name, userImage=userImage, uid=uid)
 
 #體重紀錄列表
 @goal_bp.route('/weightList')
@@ -208,7 +208,7 @@ def weight_list():
     cursor.execute('SELECT "Wid", weight, TO_CHAR(create_time, \'YYYY/MM/DD\') FROM body.weight where "Uid"  = %s order by create_time desc;', (uid,))
     data = cursor.fetchall()
     connection.close() 
-    return render_template('/goal/weightList.html', data=data, name=name, userImage=userImage)
+    return render_template('/goal/weightList.html', data=data, name=name, userImage=userImage, uid=uid)
 
 #新增 - 今日體重
 @goal_bp.route('/saveTodayWeight', methods=['POST'])

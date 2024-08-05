@@ -212,7 +212,7 @@
 							<div class="right">
 								<p>{{d[6]}}</p>
 								<div class="photostickers">
-									<img src="{{ user_image_path }}/{{ d[2] }}" alt="">
+									<img src="{{ user_image_path }}/{{ d[1] }}/{{ d[2] }}" alt="">
 								</div>
 							</div>
 						</a>
@@ -233,6 +233,7 @@
 		<script>
 			let messageText = "{{name}}";
 			let userImage = "{{userImage}}"
+			let uid = "{{uid}}"
 
 			window.onload = function() {
 				renderNav();

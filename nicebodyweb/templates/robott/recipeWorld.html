@@ -64,9 +64,9 @@
           <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
           <div class="title">
             <div class="recipe-avatarFrame" style="display: none;">
-              <img class="recipe-profile" src="{{ user_image_path }}/{{ d[6] }}" alt="ProfilePicture">
+              <img class="recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
             </div>
-            <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{ d[6] }}" alt="ProfilePicture">
+            <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
             <h3>{{d[0]}}</h3>
           </div>
           <p>{{d[1]}}</p>
@@ -166,6 +166,7 @@
   <script>
     let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
 
     window.onload = function() {
       renderNav();

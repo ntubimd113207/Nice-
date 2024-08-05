@@ -26,11 +26,13 @@ def question1_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/question/question_n1.html', name=name, userImage=userImage)
+    return render_template('/question/question_n1.html', name=name, userImage=userImage, uid=uid)
 
 #問題二
 @question_bp.route('/question_n2')
@@ -38,11 +40,13 @@ def question2_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
     
-    return render_template('/question/question_n2.html', name=name, userImage=userImage)
+    return render_template('/question/question_n2.html', name=name, userImage=userImage, uid=uid)
 
 #問題三-一
 @question_bp.route('/question_n2_1')
@@ -50,11 +54,13 @@ def question2_1_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/question/question_n2_1.html', name=name, userImage=userImage)
+    return render_template('/question/question_n2_1.html', name=name, userImage=userImage, uid=uid)
 
 #問題三
 @question_bp.route('/question_n3')
@@ -62,11 +68,13 @@ def question3_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/question/question_n3.html', name=name, userImage=userImage)
+    return render_template('/question/question_n3.html', name=name, userImage=userImage, uid=uid)
 
 #問題四
 @question_bp.route('/question_n4')
@@ -74,11 +82,13 @@ def question4_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/question/question_n4.html', name=name, userImage=userImage)
+    return render_template('/question/question_n4.html', name=name, userImage=userImage, uid=uid)
 
 #問題五
 @question_bp.route('/question_n5')
@@ -86,11 +96,13 @@ def question5_selfList():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/question/question_n5.html', name=name, userImage=userImage)
+    return render_template('/question/question_n5.html', name=name, userImage=userImage, uid=uid)
 
 # #結果(money)
 # @question_bp.route('/resultRecipe', methods=['GET', 'POST'])
@@ -310,7 +322,7 @@ def resultRecipe_selfList():
 
             threading.Thread(target=db_insert).start()
 
-            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage)
+            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage, uid=uid)
 
         except Exception as e:
             # 印出錯誤原因
@@ -323,7 +335,7 @@ def resultRecipe_selfList():
             # 渲染錯誤畫面並返回錯誤信息
             return render_template('/question/error.html', error_message=str(e))
 
-    return render_template('/question/resultRecipe.html', name=name, userImage=userImage)
+    return render_template('/question/resultRecipe.html', name=name, userImage=userImage, uid=uid)
 
 
 # #結果測試(free)

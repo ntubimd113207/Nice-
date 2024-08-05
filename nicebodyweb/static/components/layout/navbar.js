@@ -31,9 +31,9 @@ let renderNav = function() {
       <div class="alreadyLogin" id="alreadyLogin" style="display: none;">
         <a href="/profile/profilePage" class="toprofile">
           <div class="nav-avatarFrame" style="display: none;">
-            <img class="nav-profile" src="/static/images/userImage/${userImage}" alt="ProfilePicture">
+            <img class="nav-profile" src="/static/images/userImage/${uid}/${userImage}" alt="ProfilePicture">
           </div>
-          <img src="/static/images/userImage/${userImage}" class="noAvatarFrame-nav-profile" alt="ProfilePicture">
+          <img id="userImage" src="/static/images/userImage/${uid}/${userImage}" class="noAvatarFrame-nav-profile" alt="ProfilePicture">
           <h3 id="messageText">${messageText}</h3>
         </a>
         <a href="/login/logout">

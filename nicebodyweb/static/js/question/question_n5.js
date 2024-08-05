@@ -2,6 +2,10 @@ window.onload = function() {
     // Navbar
     renderNav();
 
+    if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+    }
+
     // 變數
     let tags = [];
 
