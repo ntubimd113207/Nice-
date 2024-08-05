@@ -117,16 +117,28 @@
 			</div>
 	</article>
 
+	<dialog id="loginDialog">
+		<h1>請先登入</h1>
+		<div class="contentsave">
+		  <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+		</div>
+	</dialog>
+
 	<footer id="footer-container"></footer>
 
 	<script>
 		let messageText = "{{name}}";
 		let userImage = "{{userImage}}"
+		let uid = "{{uid}}"
 		
 		window.onload = function() {
 			renderNav();
 			renderFooter();
 			renderChart();
+
+			if (messageText == "0") {
+				document.getElementById("loginDialog").showModal();
+			}
 		};
 
 		function renderChart() {

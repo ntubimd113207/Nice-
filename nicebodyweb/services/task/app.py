@@ -74,7 +74,7 @@ def task_page():
     
     connection.close()
 
-    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data, milestone=milestone)
+    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data, milestone=milestone, uid=uid)
 
 #taskPage - 領取獎勵
 @task_bp.route('/receiveTask', methods=['POST'])

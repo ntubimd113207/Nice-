@@ -143,11 +143,16 @@
 		<script>
 			let messageText = "{{name}}";
 			let userImage = "{{userImage}}"
+			let uid = "{{uid}}"
 			
 			window.onload = function() {
 				renderNav();
 				renderFooter();
 				renderChart();
+
+				if (messageText == "0") {
+					document.getElementById("loginDialog").showModal();
+				}
 			};
 
 			function renderChart() {

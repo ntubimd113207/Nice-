@@ -70,7 +70,7 @@
           <div class="recipe-avatarFrame" style="display: none;">
             <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
           </div>
-          <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+          <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
           <h3>{{d[0]}}</h3>
         </div>
         <p>{{d[1]}}</p>
@@ -149,6 +149,7 @@
   <script>
     let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
 
     window.onload = function() {
       const continueBtn = document.getElementById('generate-btn');
@@ -165,6 +166,8 @@
       if (messageText === '0') {
         event.preventDefault();
         document.getElementById("loginDialog").showModal();
+      }else{
+        document.getElementById('howToGenerate').showModal();
       }
     };
 
@@ -176,9 +179,6 @@
     let openhowToGenerate=document.getElementById('generate-btn');
     let howToGenerate=document.getElementById('howToGenerate');
     let closehowToGenerate=document.getElementById('closehowToGenerate');
-    openhowToGenerate.addEventListener("click", function(){
-      howToGenerate.showModal();
-    })
     closehowToGenerate.addEventListener("click", function(){
       howToGenerate.close();
     })

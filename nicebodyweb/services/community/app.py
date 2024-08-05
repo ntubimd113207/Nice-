@@ -14,11 +14,13 @@ def community_Main():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/community/communityMain.html', name=name, userImage=userImage)
+    return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid)
 
 
 #單一貼文(子畫面)
@@ -27,11 +29,13 @@ def detailed_post():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/community/detailedPost.html', name=name, userImage=userImage)
+    return render_template('/community/detailedPost.html', name=name, userImage=userImage, uid=uid)
 
 
 #AI食譜發布
@@ -40,8 +44,10 @@ def airecipe_post():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
-    return render_template('/community/airecipePost.html', name=name, userImage=userImage)
+    return render_template('/community/airecipePost.html', name=name, userImage=userImage, uid=uid)

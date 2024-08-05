@@ -31,18 +31,21 @@
   <article>
     <section class="sectionwrap">
       <section class="profile">
-        <div class="avatarFrame">
-          <img class="profile-picture" src="/static/images/userImage/{{userImage}}" alt="Profile Picture">
-          <div class="editAvatar">
+        {% if profile_data[5] == '2' %}
+        <div class="avatarFrame" >
+          <img class="profile-picture" id="profilePicture" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="Profile Picture">
+          <div class="editAvatar" id="editAvatar">
             <i class="fa-solid fa-pen"></i> Edit
           </div>
         </div>
-        <div class="noAvatarFrame" style="display: none;">
-          <img class="profile-picture" src="/static/images/userImage/{{userImage}}" alt="Profile Picture">
-          <div class="editAvatar">
+        {% else %}
+        <div class="noAvatarFrame">
+          <img class="profile-picture" id="profilePicture" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="Profile Picture">
+          <div class="editAvatar" id="editAvatar">
             <i class="fa-solid fa-pen"></i> Edit
           </div>
         </div>
+        {% endif %}
         <input type="file" id="upload-picture" accept="image/*" style="display: none;">
         <div class="title">
           <input type="text" id="name" placeholder="輸入暱稱" value="{{ name }}">
@@ -129,6 +132,13 @@
               <button id="saveapplynutritionist" class="savebtn">confirm</button>
             </div>
           </dialog>
+
+          <dialog id="loginDialog">
+            <h1>請先登入</h1>
+            <div class="contentsave">
+              <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+            </div>
+          </dialog>
         </div>
       </section>
     </section>
@@ -139,10 +149,15 @@
   <script>
 		let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
 
     window.onload = function() {
       renderNav();
       renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
 
     document.getElementById('file1').addEventListener('change', function() {
@@ -173,6 +188,50 @@
         return false;
       }
     });
+
+    // 修改頭像
+    document.addEventListener('DOMContentLoaded', function() {
+        const editAvatar = document.getElementById('editAvatar');
+        const uploadPicture = document.getElementById('upload-picture');
+        const profilePicture = document.getElementById('profilePicture');
+
+        // 當點選「Edit」按鈕時，觸發檔案選擇對話框
+        editAvatar.addEventListener('click', function() {
+            uploadPicture.click();
+        });
+
+        // 當選擇檔案後，顯示新圖片
+        uploadPicture.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePicture.src = e.target.result;
+                    document.getElementById('userImage').src = e.target.result;
+                    
+                    // 上傳圖片
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    $.ajax({
+                        url: '/profile/uploadImage',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
   </script>
 </body>
 </html>

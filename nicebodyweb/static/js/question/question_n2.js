@@ -2,6 +2,10 @@ window.onload = function() {
     // Navbar
     renderNav();
 
+    if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+    }
+
     const continueBtn = document.getElementById('continue-btn');
 
     const inputField = document.getElementById('tag-ip');

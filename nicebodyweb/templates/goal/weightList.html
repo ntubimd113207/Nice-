@@ -74,15 +74,27 @@
             <button id="savedelete" class="savebtn">confirm</button>
         </div>
     </dialog>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
     </main>
   </article>
 
   <script>
     let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}";
 
     window.onload = function() {
       renderNav();
+      
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
 
     document.querySelectorAll('.openweight').forEach(button => {

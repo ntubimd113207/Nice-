@@ -63,7 +63,7 @@
         <div class="eachcollect">
           <a class="wrap" href="/robott/shareResults?recipe_id={{ item[1] }}">
             <p>{{ item[4] }}</p>
-            <img src="/static/images/userImage/{{ item[5] }}" alt="">
+            <img src="/static/images/userImage/{{ item[6] }}/{{ item[5] }}" alt="">
           </a>
           <i class="fa-solid fa-pen opencollect" data-list="{{ collection[1] }}" data-detailId="{{ item[1] }}"></i>
           <i class="fa-regular fa-trash-can opendelete"  data-list="{{ collection[1] }}" data-detailId="{{ item[1] }}"></i>
@@ -125,6 +125,13 @@
     </div>
   </dialog>
 
+  <dialog id="loginDialog">
+    <h1>請先登入</h1>
+    <div class="contentsave">
+      <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+    </div>
+  </dialog>
+
   <div id="loading" style="display: none;">
     <div class="loader2"></div>
   </div>
@@ -134,10 +141,15 @@
   <script>
     let messageText = "{{name}}";
     let userImage = "{{userImage}}"
+    let uid = "{{uid}}";
 
     window.onload = function() {
       renderNav();
       renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+      }
     };
 
     // 查詢分類

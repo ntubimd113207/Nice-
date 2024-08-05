@@ -39,7 +39,7 @@ def robott_selfList():
     data = cursor.fetchall()
 
     connection.close()
-    return render_template('/robott/generateRecipes.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage)
+    return render_template('/robott/generateRecipes.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid)
 
 
 
@@ -63,7 +63,7 @@ def robott_everyList():
     data = cursor.fetchall()
 
     connection.close()
-    return render_template('/robott/recipeWorld.html', data=data, Recipes_image_path=Recipes_image_path, user_image_path = user_image_path, name=name, userImage=userImage)
+    return render_template('/robott/recipeWorld.html', data=data, Recipes_image_path=Recipes_image_path, user_image_path = user_image_path, name=name, userImage=userImage, uid=uid)
 
 
 #生成食譜 > 了解更多 & 食譜天地 > 了解更多
@@ -72,9 +72,11 @@ def robott_selfList_more():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
     if request.method == 'POST':
         try:
@@ -102,7 +104,7 @@ def robott_selfList_more():
             data = cursor.fetchone()
             connection.close()
 
-            return render_template('/robott/detailedRecipe.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage)
+            return render_template('/robott/detailedRecipe.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
         
@@ -147,7 +149,7 @@ def robott_share():
 
     has_non_zero = any(d[2] != 0 for d in data3)
 
-    return render_template('/robott/shareResults.html', data=data, data2=data2, data3=data3, Recipes_image_path=Recipes_image_path, user_image_path=user_image_path, name=name, userImage=userImage, has_non_zero=has_non_zero)
+    return render_template('/robott/shareResults.html', data=data, data2=data2, data3=data3, Recipes_image_path=Recipes_image_path, user_image_path=user_image_path, name=name, userImage=userImage, has_non_zero=has_non_zero, uid=uid)
 
 #發佈食譜 - 按讚
 @robott_bp.route('/likeAdd', methods=['POST'])

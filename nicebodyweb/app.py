@@ -39,9 +39,11 @@ def index():
     if "google_id" in session:
         name=session['name']
         userImage=session['user_image']
+        uid=session['uid']
     else:
         name='0'
         userImage='0'
+        uid='0'
 
     connection = db.get_connection()
     cursor = connection.cursor()
@@ -56,7 +58,7 @@ def index():
 
     connection.close()
 
-    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage)
+    return render_template('/home/home.html', knowledge_data=knowledge_data, recipe_data=recipe_data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid)
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "openai-api-key"))
 
