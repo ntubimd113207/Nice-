@@ -169,7 +169,7 @@
 
           </label>
           <div class="edit" style="visibility: visible;">
-            <div class="right" id="currentDate1">{{ contrast[0][:8]|replace(".", "-")|replace(".", "-") }}</div>
+            <div class="right" id="currentDate1">{{ contrast[0][:4] + '-' + contrast[0][4:6] + '-' + contrast[0][6:8] }}</div>
             <div class="left">
               <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
@@ -186,7 +186,7 @@
           <div class="edit">
             <div class="right" id="currentDate1"></div>
             <div class="left">
-              <button onclick="enableEditing('before')"><i class="fa-solid fa-upload"></i></button>
+              <button onclick="uploadImage('before')"><i class="fa-solid fa-upload"></i></button>
               <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
@@ -209,9 +209,9 @@
             <img id="afterpreviewImage" src="{{ contrast_image_path }}/{{uid}}/{{ contrast[1] }}" alt="" style="display: block">
           </label>
           <div class="edit" style="visibility: visible;">
-            <div class="right" id="currentDate2">{{ contrast[1][:8]|replace(".", "-")|replace(".", "-") }}</div>
+            <div class="right" id="currentDate2">{{ contrast[1][:4] + '-' + contrast[1][4:6] + '-' + contrast[1][6:8] }}</div>
             <div class="left">
-              <button onclick="uploadImage('after')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="enableEditing('after')"><i class="fa-solid fa-pen"></i></button>
               <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
@@ -265,6 +265,7 @@
 
       if (weight_list[6]>0) {
         document.getElementById('weightInput').style.backgroundColor = "#CCC5B9";
+        document.getElementById('weightInput').value = weight_list[6];
         document.getElementById('weightInput').disabled = true;
         document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
         document.getElementById('submitButton').disabled = true;
@@ -474,14 +475,6 @@
       previewImage(event, 'after');
     }
 
-    // 上傳對比照日期
-    var currentDate = new Date();
-
-    var formattedDate = currentDate.getFullYear() + '.' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '.' + currentDate.getDate().toString().padStart(2, '0');
-
-    document.getElementById('currentDate1').innerHTML = formattedDate;
-    document.getElementById('currentDate2').innerHTML = formattedDate;
-
     // 彈跳視窗 新增打卡目標
     let opencheck=document.getElementById('opencheck');
     let check=document.getElementById('check');
@@ -578,6 +571,14 @@
           uploadImage.disabled = false;
         }
       });
+
+      // 上傳對比照日期
+      var currentDate = new Date();
+
+      var formattedDate = currentDate.getFullYear() + '.' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '.' + currentDate.getDate().toString().padStart(2, '0');
+
+      document.getElementById('currentDate1').innerHTML = formattedDate;
+      document.getElementById('currentDate2').innerHTML = formattedDate;
     }
 
     // 新增體重紀錄

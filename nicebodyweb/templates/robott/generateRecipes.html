@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/robott/generateRecipes.css">
   <link rel="stylesheet" href="/static/css/components/dialog.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -53,10 +54,14 @@
             <i class="fa-solid fa-hand-pointer"></i>
             <h3>手動</h3>
           </a>
-          <div class="selectbtn">
+          <a class="selectbtn" id="randomRecipe">
             <i class="fa-solid fa-shuffle"></i>
             <h3>隨機</h3>
-          </div>
+          </a>
+
+          <form id="randomForm" action="/robott/randomRecipe" method="post" onsubmit="showLoading()" style="display: none;">
+            <button type="submit" hidden>提交</button>
+          </form>        
         </div>
         <div class="save">
           <button id="closehowToGenerate" class="closebtn">close</button>
@@ -144,6 +149,22 @@
     </dialog>
   </article>
 
+  <div id="loading" style="display: none;">
+    <div class="jumping">
+      <span class="letter">l</span>
+      <span class="letter">o</span>
+      <span class="letter">a</span>
+      <span class="letter">d</span>
+      <span class="letter">i</span>
+      <span class="letter">n</span>
+      <span class="letter">g</span>
+      <span class="letter">.</span>
+      <span class="letter">.</span>
+      <span class="letter">.</span>
+    </div>
+    <div class="loader"></div>
+  </div>
+
   <footer id="footer-container"></footer>
 
   <script>
@@ -182,6 +203,14 @@
     closehowToGenerate.addEventListener("click", function(){
       howToGenerate.close();
     })
+
+    // 隨機生成食譜
+    document.getElementById('randomRecipe').addEventListener('click', function() {
+      howToGenerate.close();
+      document.getElementById('randomForm').submit();
+      document.getElementById('loading').style.display = 'flex';
+    });
+
   </script>
 </body>
 </html>

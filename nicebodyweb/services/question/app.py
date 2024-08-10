@@ -5,9 +5,9 @@ import threading
 import time
 import json
 import urllib.request
-from flask import logging, render_template, Blueprint, request, session
+from flask import render_template, Blueprint, request, session
 from openai import OpenAI
-from datetime import date, datetime
+from datetime import datetime
 from utils import db
 
 # 產生問題服務藍圖
