@@ -72,10 +72,14 @@
       <div class="ai-recipe-share">
         <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
         <div class="title">
-          <div class="recipe-avatarFrame" style="display: none;">
-            <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+          {% if d[7] == '2' %}
+          <div class="recipe-avatarFrame">
+            <img class="recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
           </div>
+          {% else %}
           <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
+          {% endif %}
+
           <h3>{{d[0]}}</h3>
         </div>
         <p>{{d[1]}}</p>

@@ -40,7 +40,13 @@ def robott_selfList():
     connection = db.get_connection() 
 
     cursor = connection.cursor()     
-    cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\') as "create_time", summary, "cookImage", "isPublish", diet, "Cookid" FROM body."cookbook" where "Uid" =%s order by "Cookid" desc;', (uid,))
+    cursor.execute('''
+        SELECT title, TO_CHAR(a.create_time, \'MM.DD.YYYY\') as "create_time", summary, "cookImage", "isPublish", a.diet, "Cookid", b."isNutritionist" 
+        FROM body."cookbook" as a
+        left join body.user_profile as b 
+        on a."Uid"  = b."Uid" 
+        where a."Uid" =%s order by "Cookid" desc;
+        ''', (uid,))
 
     data = cursor.fetchall()
 
@@ -64,7 +70,7 @@ def robott_everyList():
     connection = db.get_connection() 
 
     cursor = connection.cursor()     
-    cursor.execute('select title, a.update_time, summary, "cookImage", likecount, messagecount, "userImage", diet, a."Cookid", "cookTime", "prepareMoney", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, cookbookStar from body."v_recipeWorld" as a left join (SELECT * FROM body."cookbookLike" where "Uid"=%s) as b on a."Cookid" = b."Cookid" order by a.update_time desc, a."Cookid" desc;', (uid,))
+    cursor.execute('select title, a.update_time, summary, "cookImage", likecount, messagecount, "userImage", diet, a."Cookid", "cookTime", "prepareMoney", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, cookbookStar, "isNutritionist" from body."v_recipeWorld" as a left join (SELECT * FROM body."cookbookLike" where "Uid"=%s) as b on a."Cookid" = b."Cookid" order by a.update_time desc, a."Cookid" desc;', (uid,))
 
     data = cursor.fetchall()
 

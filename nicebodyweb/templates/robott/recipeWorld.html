@@ -63,10 +63,14 @@
         <div class="ai-recipe-share" data-likecount="{{ d[4] }}" data-messagecount="{{ d[5] }}" data-timestamp="{{ loop.index }}">
           <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
           <div class="title">
-            <div class="recipe-avatarFrame" style="display: none;">
+            {% if d[14] == '2' %}
+            <div class="recipe-avatarFrame">
               <img class="recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
             </div>
+            {% else %}
             <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+            {% endif %}
+
             <h3>{{d[0]}}</h3>
           </div>
           <p>{{d[1]}}</p>
@@ -134,10 +138,14 @@
             <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
             <div class="forrwd">
               <div class="title">
-                <div class="recipe-avatarFrame" style="display: none;">
-                  <img class="recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+                {% if d[14] == '2' %}
+                <div class="recipe-avatarFrame">
+                  <img class="recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
                 </div>
-                <img class="noAvatarFrame-recipe-profile" src="/static/images/userImage/{{userImage}}" alt="ProfilePicture">
+                {% else %}
+                <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+                {% endif %}
+
                 <h3>{{d[0]}}</h3>
               </div>
               <p>{{d[1]}}</p>

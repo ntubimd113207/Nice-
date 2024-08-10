@@ -95,7 +95,8 @@ dialog .content select {
 .a-upload {
   width: 100%;
   padding: 4px 10px;
-  height: 40px;
+  min-height: 40px;
+  min-height: 40px;
   line-height: 20px;
   position: relative;
   cursor: pointer;
@@ -106,6 +107,7 @@ dialog .content select {
   display: inline-block;
   box-sizing: border-box;
   border: #86BAA1 1px solid;
+  overflow: auto;
 }
 
 .a-upload input {
@@ -120,7 +122,7 @@ dialog .content select {
 .a-upload i {
   position: absolute; 
   right: 10px;
-  top: 10px;
+  bottom: 10px;
   transition: color 0.3s ease;
 }
 
