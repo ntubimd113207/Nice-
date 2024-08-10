@@ -2,6 +2,8 @@
 import re
 import os
 import uuid
+import random
+import string
 from flask import render_template, Blueprint, request, session, jsonify
 from utils import db
 from werkzeug.utils import secure_filename
@@ -101,13 +103,61 @@ def upload_image():
                 cursor.execute('UPDATE body.user_profile SET "userImage" = %s WHERE "Uid" = %s;', (unique_filename, uid))
                 response = {'message': f'uploadImage successfully.'}
 
-                session['user_image'] = image_path
+                session['user_image'] = unique_filename
 
                 connection.commit()
                 connection.close()
 
                 return jsonify(response)
                 
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+#申請營養師
+@profile_bp.route('/applynutritionist', methods=['POST'])
+def apply_nutritionist():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            union = request.form.get('union')
+            files = request.files.getlist('files[]')
+
+            # 檢查資料夾是否存在，若不存在則創建
+            base_path = "static/files/nutritionist_certificate/"
+            uid_folders = [d for d in os.listdir(base_path) if d.startswith(str(uid))]
+            
+            print(uid_folders)
+            if uid_folders:
+                folder_path = os.path.join(base_path, uid_folders[0])  # 返回找到的第一個資料夾
+                folder_name = uid_folders[0]
+            else:
+                # 創建唯一的資料夾
+                random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+                folder_name = f"{uid}_{random_str}"
+                folder_path = os.path.join(base_path, folder_name)
+                os.makedirs(folder_path)
+
+                connection = db.get_connection()
+                cursor = connection.cursor()
+
+                cursor.execute('''INSERT INTO body.nutritionist_apply
+                        ("Uid", area_id, certificate, create_time, update_time)
+                        VALUES(%s, %s, %s, now(), now());''', (uid, union, folder_name))
+                
+                cursor.execute('UPDATE body.user_profile SET "isNutritionist" = 1 WHERE "Uid" = %s;', (uid,))
+
+                response = {'message': f'applyNutritionist successfully.'}
+
+                connection.commit()
+                connection.close()
+
+            for file in files:
+                if file and file.filename:
+                    file.save(os.path.join(folder_path, file.filename))
+
+            return jsonify(response)
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500

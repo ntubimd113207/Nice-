@@ -1,13 +1,5 @@
+//編輯個資
 document.addEventListener("DOMContentLoaded", function () {
-  //彈跳視窗 申請營養師身分
-  let openapplynutritionist = document.getElementById('openapplynutritionist');
-  let applynutritionist = document.getElementById('applynutritionist');
-  let closeapplynutritionist = document.getElementById('closeapplynutritionist');
-
-  openapplynutritionist.addEventListener("click", () => applynutritionist.showModal());
-  closeapplynutritionist.addEventListener("click", () => applynutritionist.close());
-
-  //編輯個資
   let changeButton = document.getElementById("changeButton");
   let inputs = [
     document.getElementById("name"),
@@ -119,3 +111,4 @@ document.addEventListener("DOMContentLoaded", function () {
     updateButtonStyles(femaleButton);
   });
 });
+  

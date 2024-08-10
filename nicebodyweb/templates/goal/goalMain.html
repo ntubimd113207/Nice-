@@ -536,7 +536,7 @@
       }
     }
 
-    // 上傳before照片
+    // 上傳照片
     function uploadImage(type) {
       const isBefore = type === 'before';
       const inputId = isBefore ? 'beforefileInput' : 'afterfileInput';
@@ -561,6 +561,9 @@
           console.log(response);
           icon.classList.remove('fa-upload');
           icon.classList.add('fa-pen');
+
+          const button = icon.parentElement;
+          button.setAttribute('onclick', "enableEditing('" + type + "')");
         },
         error: function(xhr, status, error) {
           console.error(error);

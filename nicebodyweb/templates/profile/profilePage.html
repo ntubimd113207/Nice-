@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/profile/profilepage.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -31,21 +32,13 @@
   <article>
     <section class="sectionwrap">
       <section class="profile">
-        {% if profile_data[5] == '2' %}
-        <div class="avatarFrame" >
+        <div class="{{ 'avatarFrame' if profile_data[5] == '2' else 'noAvatarFrame' }}">
           <img class="profile-picture" id="profilePicture" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="Profile Picture">
           <div class="editAvatar" id="editAvatar">
             <i class="fa-solid fa-pen"></i> Edit
           </div>
         </div>
-        {% else %}
-        <div class="noAvatarFrame">
-          <img class="profile-picture" id="profilePicture" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="Profile Picture">
-          <div class="editAvatar" id="editAvatar">
-            <i class="fa-solid fa-pen"></i> Edit
-          </div>
-        </div>
-        {% endif %}
+        
         <input type="file" id="upload-picture" accept="image/*" style="display: none;">
         <div class="title">
           <input type="text" id="name" placeholder="輸入暱稱" value="{{ name }}">
@@ -96,7 +89,16 @@
           </div>
 
           <div class="closesetting">
-            <button id="openapplynutritionist">申請營養師身分</button>
+            {% if profile_data[5] == '0' %}
+                <button id="openapplynutritionist">申請營養師身分</button>
+            {% elif profile_data[5] == '1' %}
+                <button>申請審核中</button>
+            {% elif profile_data[5] == '2' %}
+                <button>申請營養師成功</button>
+            {% elif profile_data[5] == '3' %}
+                <button>申請營養師失敗</button>
+            {% endif %}
+
             <button id="changeButton">變更個資</button>
           </div>
 
@@ -104,28 +106,30 @@
             <h1>申請營養師身分</h1>
             <div class="content">
               <h2>所屬工會</h2>
-              <select name="" id="">
-                <option value="">中華民國營養師公會全國聯合會 - 臺北市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 新北市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 桃園市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 新竹市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 臺中市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 彰化縣</option>
-                <option value="">中華民國營養師公會全國聯合會 - 南投縣</option>
-                <option value="">中華民國營養師公會全國聯合會 - 雲林縣</option>
-                <option value="">中華民國營養師公會全國聯合會 - 嘉義市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 臺南市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 高雄市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 屏東縣</option>
-                <option value="">中華民國營養師公會全國聯合會 - 基隆市</option>
-                <option value="">中華民國營養師公會全國聯合會 - 宜蘭縣</option>
-                <option value="">中華民國營養師公會全國聯合會 - 花蓮縣</option>
+              <select name="union" id="unionSelect">
+                <option value="1">中華民國營養師公會全國聯合會 - 臺北市</option>
+                <option value="2">中華民國營養師公會全國聯合會 - 新北市</option>
+                <option value="3">中華民國營養師公會全國聯合會 - 桃園市</option>
+                <option value="4">中華民國營養師公會全國聯合會 - 新竹市</option>
+                <option value="5">中華民國營養師公會全國聯合會 - 臺中市</option>
+                <option value="6">中華民國營養師公會全國聯合會 - 彰化縣</option>
+                <option value="7">中華民國營養師公會全國聯合會 - 南投縣</option>
+                <option value="8">中華民國營養師公會全國聯合會 - 雲林縣</option>
+                <option value="9">中華民國營養師公會全國聯合會 - 嘉義市</option>
+                <option value="10">中華民國營養師公會全國聯合會 - 臺南市</option>
+                <option value="11">中華民國營養師公會全國聯合會 - 高雄市</option>
+                <option value="12">中華民國營養師公會全國聯合會 - 屏東縣</option>
+                <option value="13">中華民國營養師公會全國聯合會 - 基隆市</option>
+                <option value="14">中華民國營養師公會全國聯合會 - 宜蘭縣</option>
+                <option value="15">中華民國營養師公會全國聯合會 - 花蓮縣</option>
               </select>
               <h2>上傳證照</h2>
               <div class="a-upload" id="fileNames">
-                <input type="file" name="file" id="file1">
+                <input type="file" name="file" id="fileInput" multiple style="display: none;">
                 <i class="fa-solid fa-folder"></i>
+                <div id="fileList"></div>
               </div>
+              
             </div>
             <div class="save">
               <button id="closeapplynutritionist" class="closebtn">cancel</button>
@@ -139,6 +143,10 @@
               <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
             </div>
           </dialog>
+
+          <div id="loading" style="display: none;">
+            <div class="loader2"></div>
+          </div>
         </div>
       </section>
     </section>
@@ -159,35 +167,6 @@
         document.getElementById("loginDialog").showModal();
       }
     };
-
-    document.getElementById('file1').addEventListener('change', function() {
-      var fileInput = this;
-      var files = fileInput.files;
-      var fileNames = document.getElementById('fileNames');
-      fileNames.innerHTML = ""; // 清空之前的文件名
-
-      for (var i = 0; i < files.length; i++) {
-        var fileName = files[i].name;
-        var div = document.createElement('div');
-        div.textContent = "文件名：" + fileName;
-        fileNames.appendChild(div);
-      }
-    });
-
-    $("body").on("change", ".a-upload input[type='file']", function(){
-      var filePath = $(this).val();
-      var $pen = $(this).closest(".pen");
-      if (filePath.indexOf("jpg") != -1 || filePath.indexOf("png") != -1) {
-        $pen.find(".fileerrorTip").html("").hide();
-        var arr = filePath.split('\\');
-        var fileName = arr[arr.length-1];
-        $pen.find(".showFileName").html("文件名：" + fileName);
-      } else {
-        $pen.find(".showFileName").html("");
-        $pen.find(".fileerrorTip").html("非jpg,png格式：您未上傳文件，或者您上傳文件類型有誤！").show();
-        return false;
-      }
-    });
 
     // 修改頭像
     document.addEventListener('DOMContentLoaded', function() {
@@ -232,6 +211,89 @@
         });
     });
 
+    // 申請營養師身分
+    document.addEventListener("DOMContentLoaded", function () {
+      const fileInput = document.getElementById("fileInput");
+      const fileList = document.getElementById("fileList");
+      const fileNamesDiv = document.getElementById("fileNames");
+      const loadingDiv = document.getElementById("loading");
+
+      document.getElementById("openapplynutritionist").addEventListener("click", function () {
+        document.getElementById("applynutritionist").showModal();
+      });
+
+      document.getElementById("closeapplynutritionist").addEventListener("click", function () {
+        document.getElementById("applynutritionist").close();
+      });
+
+      document.getElementById("saveapplynutritionist").addEventListener("click", function () {
+        const selectElement = document.querySelector("#unionSelect");
+        const selectedUnion = selectElement.value;
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+          alert("請上傳證照");
+          return;
+        }
+
+        // 顯示 Loading 畫面
+        loadingDiv.style.display = "flex";
+
+        // 準備 FormData 物件
+        const formData = new FormData();
+        formData.append("union", selectedUnion);
+        Array.from(files).forEach(file => formData.append("files[]", file));
+
+        // 發送 AJAX 請求
+        $.ajax({
+          url: '/profile/applynutritionist', 
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            console.log(response);
+          },
+          error: function (xhr, status, error) {
+            alert("上傳失敗: " + error);
+          },
+          complete: function () {
+            loadingDiv.style.display = "none";
+          }
+        });
+        
+        applybutton = document.getElementById("openapplynutritionist")
+        applybutton.textContent = "申請審核中";
+        applybutton.disabled = true;
+        
+        document.getElementById("applynutritionist").close();
+      });
+
+      // 上傳證照
+      fileNamesDiv.addEventListener("click", function () {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", function (event) {
+        const files = event.target.files;
+        const fileNames = Array.from(files).map(file => file.name);
+
+        // 檢查檔案數量，超過五個則限制
+        if (fileList.children.length + fileNames.length > 5) {
+          alert("最多只能上傳五個檔案");
+          return;
+        }
+
+        // 顯示檔名
+        fileNames.forEach(name => {
+          if (fileList.children.length < 5) { // 限制最多顯示五個檔案
+            const div = document.createElement("div");
+            div.textContent = name;
+            fileList.appendChild(div);
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>
