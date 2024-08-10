@@ -18,11 +18,12 @@ window.onload = function() {
     continueBtn.addEventListener('click', function () {
         if (checkbox1.checked) {
             sessionStorage.setItem('checkbox1Checked', 'true');
+            sessionStorage.setItem('tagInputValue4_1', '無需求');
         } else if (checkbox2.checked) {
             sessionStorage.setItem('checkbox2Checked', 'true');
+            sessionStorage.setItem('tagInputValue4_1', min1.value);
         }
         
-        sessionStorage.setItem('tagInputValue4_1', min1.value);
         sessionStorage.removeItem('tagInputValue5');
     });
 

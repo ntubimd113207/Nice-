@@ -1,7 +1,13 @@
 # 匯入Blueprint模組
-import logging
+from concurrent.futures import ThreadPoolExecutor
+import os
+import threading
+import time
+import json
+import urllib.request
 from flask import jsonify, render_template, session, Blueprint, request
-
+from datetime import datetime
+from openai import OpenAI
 from utils import db
 
 #檢查上傳檔案類型
@@ -266,3 +272,119 @@ def robott_comment():
             return jsonify(1)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+        
+#生成食譜 - 隨機生成
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
+Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
+@robott_bp.route('/randomRecipe', methods=['GET', 'POST'])
+def robott_randomRecipe():
+    name=session['name']
+    uid=session['uid']
+    userImage=session['user_image']
+
+    if request.method == 'POST':
+        try:
+            content = f"飲食法:隨機; 主要食材:隨機; 營養需求:隨機; 烹調時間:隨機; 過敏成分或不吃的食物:隨機"
+
+            def wait_on_run(run, thread):
+                while run.status == "queued" or run.status == "in_progress":
+                    run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+                    time.sleep(0.5)
+                return run
+            
+            # 食譜助理執行緒
+            def recipe_assistant():
+                thread = client.beta.threads.create()
+                message = client.beta.threads.messages.create(thread_id=thread.id, role="user", content=content)
+                run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id='asst_uq2gPIFYGBn1gCda10ExVyj1')
+                run = wait_on_run(run, thread)
+                messages = client.beta.threads.messages.list(thread_id=thread.id)
+                for message in reversed(messages.data):
+                    data = message.content[0].text.value
+                print(json.loads(data))
+                return json.loads(data)
+
+            # 估價助理執行緒
+            def pricing_assistant(prepare_str):
+                thread = client.beta.threads.create()
+                message = client.beta.threads.messages.create(thread_id=thread.id, role="user", content=prepare_str)
+                run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id='asst_g2WebXcfXJBxfFP9VzMbBKQd')
+                run = wait_on_run(run, thread)
+                messages = client.beta.threads.messages.list(thread_id=thread.id)
+                for message in reversed(messages.data):
+                    data2 = message.content[0].text.value
+                print(json.loads(data2))
+                return json.loads(data2)
+
+            # 生成圖片執行緒
+            def generate_image(imagedescribe):
+                response = client.images.generate(
+                    model="dall-e-3",
+                    prompt="食物在畫面的正中心，不能出現未說明的食材" + imagedescribe,
+                    n=1,
+                    quality="standard",
+                    size="1024x1024",
+                )
+                image_url = response.data[0].url
+                current_time = datetime.now()
+                image_name = "image" + current_time.strftime('%Y-%m-%d-%H-%M-%S') + ".png"
+                file_name = "static/images/openai/" + image_name
+                urllib.request.urlretrieve(image_url, file_name)
+                return image_name
+
+            with ThreadPoolExecutor() as executor:
+                # 同時執行多個任務
+                recipe_future = executor.submit(recipe_assistant)
+                recipe_data = recipe_future.result()
+
+                title = recipe_data["recipe"]["title"]
+                summary = recipe_data["recipe"]["summary"]
+                prepare = recipe_data["recipe"]["prepare"]
+                cookTime = recipe_data["recipe"]["cookTime"]
+                cookStep = recipe_data["recipe"]["cookStep"]
+                nutrition = recipe_data["recipe"]["nutrition"]
+                diet = recipe_data["recipe"]["diet"]
+                imagedescribe = recipe_data["imagedescribe"]
+
+                prepare_str = ', '.join(prepare)
+                cookStep_str = ', '.join(cookStep)
+                nutrition_str = ', '.join(nutrition)
+                diet_str = ', '.join(diet)
+
+                pricing_future = executor.submit(pricing_assistant, prepare_str)
+                pricing_data = pricing_future.result()
+
+                prepareMoney = pricing_data["prepareMoney"]
+                prepareMoney_str = ', '.join(prepareMoney)
+                total = pricing_data["total"]
+
+                image_future = executor.submit(generate_image, imagedescribe)
+                image_name = image_future.result()
+
+            current_date = datetime.now().strftime("%Y-%m-%d")
+            
+
+            # DB
+            def db_insert():
+                conn = db.get_connection()
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
+                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, '隨機', '隨機', '隨機', '隨機', '隨機'))
+                conn.commit()
+                conn.close()
+            
+            threading.Thread(target=db_insert).start()
+            
+            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage, uid=uid)
+        except Exception as e:
+            # 印出錯誤原因
+            print('-'*30)
+            print(e)
+            print('-'*30)
+            # 渲染失敗畫面
+            # logging.error("Error occurred", exc_info=True)
+            # logging.basicConfig(filename='../error.log', level=logging.ERROR)
+            # 渲染錯誤畫面並返回錯誤信息
+            return render_template('/question/error.html', error_message=str(e))
+        
+    return render_template('/question/resultRecipe.html', name=name, userImage=userImage, uid=uid)
