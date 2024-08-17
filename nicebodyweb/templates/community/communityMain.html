@@ -32,9 +32,9 @@
   <article>
     <div class="filter">
       <div class="select">
-        <span>My</span>
+        <span class="filter-option" data-filter="my">My</span>
         <div class="line"></div>
-        <span>All</span>
+        <span class="filter-option" data-filter="all">All</span>
       </div>
       <label class="keyword-query">
         <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
@@ -51,7 +51,7 @@
 
     {% for question in question %}
     <form id="QnADetailForm" action="/community/detailedPost" method="get">
-    <section>
+    <section class="question-item" data-uid="{{ question[1] }}">
       <div class="eachpo">
         <div class="photostickers">
           <img src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
@@ -240,13 +240,30 @@
     }
 
     // detail頁面
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.pocontent').forEach(po => {
-            po.addEventListener('click', function(event) {
-                event.currentTarget.closest('form').submit();
-            });
-        });
+    document.addEventListener('DOMContentLoaded', () => {
+      // 定義一個通用的事件處理函數
+      const handleClick = (event) => {
+          event.stopPropagation(); // 阻止事件傳播
+          event.preventDefault();  // 阻止事件的默認行為
+      };
+
+      // 對指定的圖示添加點擊事件處理
+      const icons = document.querySelectorAll('.fa-trash-can, .fa-pen-to-square, .fa-bookmark, .fa-triangle-exclamation');
+      icons.forEach(icon => icon.addEventListener('click', handleClick));
+
+      // 對 Flickity 按鈕和 dot 添加點擊事件處理
+      const flickityButtons = document.querySelectorAll('.flickity-button');
+      const dots = document.querySelectorAll('.dot');
+      [...flickityButtons, ...dots].forEach(element => element.addEventListener('click', handleClick));
+
+      // 點擊內容時提交表單
+      document.querySelectorAll('.pocontent').forEach(po => {
+          po.addEventListener('click', (event) => {
+              event.currentTarget.closest('form')?.submit(); // 使用可選鏈接運算符防止 null 錯誤
+          });
+      });
     });
+
 
 
     // filter按鈕變化
@@ -260,40 +277,6 @@
         });
       });
     });
-
-    // 彈跳視窗
-    function setupModal(openBtnId, modalId, closeBtnId, saveBtnId, onSaved) {
-      const openBtn = document.getElementById(openBtnId);
-      const modal = document.getElementById(modalId);
-      const closeBtn = document.getElementById(closeBtnId);
-      const saveBtn = document.getElementById(saveBtnId);
-
-      openBtn.addEventListener("click", () => {
-        if (openBtnId === 'opencollect') {
-          if (openBtn.classList.contains('fa-regular')) {
-            modal.showModal();
-          } else {
-            handleCollectSave();
-          }
-        } else {
-          modal.showModal(); 
-        }
-      });
-
-      closeBtn.addEventListener("click", () => modal.close());
-      saveBtn.addEventListener("click", () => {
-        onSaved();
-        modal.close();
-      });
-    }
-
-    const modals = [
-      ['opendelete', 'delete', 'closedelete', 'savedelete', () => {}],
-      ['openreport', 'report', 'closereport', 'savereport', () => {}],
-      ['opencollect', 'collect', 'closecollect', 'savecollect', handleCollectSave],
-    ];
-
-    modals.forEach(modal => setupModal(...modal));
 
     // 改變收藏icon
     function handleCollectSave() {
@@ -321,6 +304,82 @@
         circlePo.classList.remove('show');
       }
     });
+
+    // 關鍵字查詢
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterOptions = document.querySelectorAll('.filter-option');
+      const questionItems = document.querySelectorAll('.question-item');
+      const keywordQuery = document.getElementById('keywordQuery');
+      
+      let filter = 'all'; // 初始篩選狀態為 'all'
+
+      // Flickity 變數
+      let flickityInstances = [];
+
+      // 初始化 Flickity
+      function initializeFlickity() {
+        // 停止所有 Flickity 實例
+        flickityInstances.forEach(instance => instance.destroy());
+        flickityInstances = [];
+        
+        // 尋找每個輪播並初始化 Flickity
+        document.querySelectorAll('.carousel').forEach(carousel => {
+          const flickity = new Flickity(carousel, {
+            cellAlign: 'left',
+            contain: true
+          });
+          flickityInstances.push(flickity);
+        });
+      }
+
+      // 更新 Flickity 位置
+      function updateFlickity() {
+        flickityInstances.forEach(instance => {
+          instance.resize(); // 確保 Flickity 重新計算其顯示內容
+          instance.reposition(); // 更新 Flickity 顯示位置
+        });
+      }
+
+      // 點擊篩選選項
+      filterOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          filter = option.getAttribute('data-filter');
+          updateQuestions();
+        });
+      });
+
+      // 關鍵字查詢
+      keywordQuery.addEventListener('input', () => {
+        updateQuestions();
+      });
+
+      // 更新問題顯示
+      function updateQuestions() {
+        const query = keywordQuery.value.toLowerCase();
+
+        questionItems.forEach(item => {
+          const uidMatch = filter === 'all' || item.getAttribute('data-uid') === uid;
+          const textMatch = [item.querySelector('.middle h1').textContent, item.querySelector('.textcontent p').textContent, item.querySelector('.bottom').textContent]
+            .some(text => text.toLowerCase().includes(query));
+
+          if (uidMatch && textMatch) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // 更新 Flickity
+        initializeFlickity();
+        updateFlickity();
+      }
+
+      // 初始載入時顯示所有問題並初始化 Flickity
+      updateQuestions();
+    });
+
+
+
 	</script>
 </body>
 </html>
