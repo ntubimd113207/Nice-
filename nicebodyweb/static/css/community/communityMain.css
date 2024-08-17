@@ -188,6 +188,8 @@ section {
   text-overflow: ellipsis;
   margin: 0;
   color: #495057;
+  /* Define standard property for compatibility */
+  line-clamp: 6;
 }
 
 .pocontent > .line {
@@ -195,6 +197,7 @@ section {
   height: 1px;
   background-color: #CCC5B9;
   margin-bottom: 2%;
+  margin-top: 4%;
 }
 
 .each {
@@ -303,4 +306,29 @@ section {
 
 .circlepo.show {
   opacity: 1;
+}
+
+/* Flickity Carousel */
+.carousel {
+  width: 100%;
+  height: 320px;
+  padding: 10px;
+  border: hsl(48, 50%, 88%);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.carousel-cell {
+  width: 50%;
+  height: 300px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.carousel-cell img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }

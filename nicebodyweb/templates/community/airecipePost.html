@@ -13,56 +13,56 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/community/airecipePost.css">
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <title>提問...</title>
 </head>
 <body>
   <div id="myCursor"></div>
   <div id="circle"></div>
 
-	<nav id="nav-container"></nav>
+  <nav id="nav-container"></nav>
 
-    <article>
-      <section>
-        <div class="title">
-          <i class="fa-solid fa-paper-plane"></i>
-          <h1>提問</h1>
+  <article>
+    <section>
+      <div class="title">
+        <i class="fa-solid fa-paper-plane"></i>
+        <h1>提問</h1>
+      </div>
+
+      <form action="/submit_answers" method="post" enctype="multipart/form-data">
+        <div class="pen">
+          <h3>標題(30字以內)</h3>
+          <input type="text" required>
         </div>
-  
-        <form action="/submit_answers" method="post">
-          <div class="pen">
-            <h3>標題(30字以內)</h3>
-            <input type="text" required>
-          </div>
 
-          <div class="pen">
-            <h3>內文</h3>
-            <textarea type="text" cols="30" rows="10" required></textarea>
-          </div>
-          
-          <div class="pen">
-            <div class="title">
-              <h3>圖片(最多五張)</h3>
-              <button id="addFile"><i class="fa-solid fa-plus"></i></button>
-            </div>
-            <div class="uploads" id="fileUploads">
-              <div class="a-upload" id="fileNames1">
-                <input type="file" name="file" id="file1">
-                <i class="fa-solid fa-folder"></i>
-              </div>
-            </div>
-          </div>
+        <div class="pen">
+          <h3>內文</h3>
+          <textarea type="text" cols="30" rows="10" required></textarea>
+        </div>
 
-          <div class="btn">
-            <input type="submit" value="發佈" class="submit-btn">
+        <div class="pen">
+          <div class="title">
+            <h3>圖片(最多五張)</h3>
+            <label for="fileInput" class="add-file-btn"><i class="fa-solid fa-plus"></i></label>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
           </div>
-        </form>
-      </section>
-    </article>
+          <div class="carousel" id="carousel">
+            <!-- 圖片預覽會顯示在這裡 -->
+          </div>
+        </div>
+
+        <div class="btn">
+          <input type="submit" value="發佈" class="submit-btn">
+        </div>
+      </form>
+    </section>
+  </article>
 
   <footer id="footer-container"></footer>
 
@@ -77,49 +77,126 @@
       renderFooter();
     };
 
-    function removeUploadSection(event) {
-      const uploadSection = event.target.closest('.a-upload');
-      if (uploadSection) {
-        uploadSection.remove();
-      }
-    }
+    // function removeUploadSection(event) {
+    //   const uploadSection = event.target.closest('.a-upload');
+    //   if (uploadSection) {
+    //     uploadSection.remove();
+    //   }
+    // }
 
-    document.getElementById('addFile').addEventListener('click', function() {
-      event.preventDefault();
-      const fileUploads = document.getElementById('fileUploads');
-      if (fileUploads.children.length < 5) {
-        uploadCount++;
-        const newUpload = document.createElement('div');
-        newUpload.className = 'a-upload';
-        newUpload.id = `fileNames${uploadCount}`;
-        newUpload.innerHTML = `
-          <input type="file" name="file" id="file${uploadCount}">
-          <i class="fa-solid fa-folder"></i>
-        `;
-        fileUploads.appendChild(newUpload);
-        newUpload.querySelector(`#file${uploadCount}`).addEventListener('change', handleFileChange);
-      }
-    });
+    // document.getElementById('addFile').addEventListener('click', function() {
+    //   event.preventDefault();
+    //   const fileUploads = document.getElementById('fileUploads');
+    //   if (fileUploads.children.length < 5) {
+    //     uploadCount++;
+    //     const newUpload = document.createElement('div');
+    //     newUpload.className = 'a-upload';
+    //     newUpload.id = `fileNames${uploadCount}`;
+    //     newUpload.innerHTML = `
+    //       <input type="file" name="file" id="file${uploadCount}">
+    //       <i class="fa-solid fa-folder"></i>
+    //     `;
+    //     fileUploads.appendChild(newUpload);
+    //     newUpload.querySelector(`#file${uploadCount}`).addEventListener('change', handleFileChange);
+    //   }
+    // });
 
-    function handleFileChange(event) {
-      const fileInput = event.target;
-      const files = fileInput.files;
-      const fileNamesContainer = fileInput.closest('.a-upload');
+    // function handleFileChange(event) {
+    //   const fileInput = event.target;
+    //   const files = fileInput.files;
+    //   const fileNamesContainer = fileInput.closest('.a-upload');
       
-      if (files.length > 0) {
-        const fileName = files[0].name;
-        fileNamesContainer.innerHTML = `
-          <div class="fileNameContent">文件名：${fileName}</div>
-          <i class="fa-regular fa-trash-can"></i>
-        `;
-        fileNamesContainer.querySelector('.fa-trash-can').addEventListener('click', removeUploadSection);
-        fileInput.disabled = true;
-      }
-    }
+    //   if (files.length > 0) {
+    //     const fileName = files[0].name;
+    //     fileNamesContainer.innerHTML = `
+    //       <div class="fileNameContent">文件名：${fileName}</div>
+    //       <i class="fa-regular fa-trash-can"></i>
+    //     `;
+    //     fileNamesContainer.querySelector('.fa-trash-can').addEventListener('click', removeUploadSection);
+    //     fileInput.disabled = true;
+    //   }
+    // }
 
-    document.querySelectorAll('.a-upload input[type="file"]').forEach(input => {
-      input.addEventListener('change', handleFileChange);
+    // document.querySelectorAll('.a-upload input[type="file"]').forEach(input => {
+    //   input.addEventListener('change', handleFileChange);
+    // });
+
+    // 圖片處理
+    document.addEventListener('DOMContentLoaded', function() {
+      const carouselElement = document.getElementById('carousel');
+      const maxFiles = 5;
+
+      const flkty = new Flickity(carouselElement, {
+        cellAlign: 'left',
+        contain: true,
+        pageDots: true,
+        wrapAround: false,
+        imagesLoaded: true
+      });
+
+      document.getElementById('fileInput').addEventListener('change', function(event) {
+        const files = event.target.files;
+        if (flkty.cells.length + files.length > maxFiles) {
+          alert('最多只能上傳五張照片');
+          return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const reader = new FileReader();
+
+          reader.onload = function(e) {
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('carousel-cell');
+
+            const imgElement = document.createElement('img');
+            imgElement.src = e.target.result;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.classList.add('remove-btn');
+            removeBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            removeBtn.addEventListener('click', () => {
+              flkty.remove(cellDiv);
+              flkty.reloadCells();
+            });
+
+            const editBtn = document.createElement('button');
+            editBtn.classList.add('edit-btn');
+            editBtn.innerHTML = '<i class="fa-solid fa-edit"></i>';
+            editBtn.type = 'button';
+            editBtn.addEventListener('click', () => {
+              const newFileInput = document.createElement('input');
+              newFileInput.type = 'file';
+              newFileInput.accept = 'image/*';
+              newFileInput.style.display = 'none';
+              document.body.appendChild(newFileInput);
+
+              newFileInput.addEventListener('change', (e) => {
+                const newFile = e.target.files[0];
+                const newReader = new FileReader();
+
+                newReader.onload = function(ev) {
+                  imgElement.src = ev.target.result;
+                };
+
+                newReader.readAsDataURL(newFile);
+                document.body.removeChild(newFileInput);
+              });
+
+              newFileInput.click();
+            });
+
+            cellDiv.appendChild(imgElement);
+            cellDiv.appendChild(editBtn);
+            cellDiv.appendChild(removeBtn);
+            flkty.append(cellDiv);
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
     });
+
   </script>
 </body>
 </html>

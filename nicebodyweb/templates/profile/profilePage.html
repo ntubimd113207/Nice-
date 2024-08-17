@@ -220,6 +220,9 @@
 
       document.getElementById("openapplynutritionist").addEventListener("click", function () {
         document.getElementById("applynutritionist").showModal();
+
+        // 清空檔案列表
+        fileList.innerHTML = "";
       });
 
       document.getElementById("closeapplynutritionist").addEventListener("click", function () {

@@ -145,7 +145,7 @@ def callback():
         
             cursor.execute(
                 """
-                SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
+                SELECT "Uid", "userImage", "isNutritionist" FROM body.user_profile WHERE "googleId" = %s
                 """,
                 (id_info.get("sub"),)
             )
@@ -153,6 +153,7 @@ def callback():
             result = cursor.fetchone()
             uid = result[0]
             user_image = result[1]
+            is_nutritionist = result[2]
         
 
         connection.commit()
@@ -164,7 +165,8 @@ def callback():
         session["email"] = id_info.get("email")
         session["uid"] = uid
         session["user_image"] = user_image
-
+        session["is_nutritionist"] = is_nutritionist
+        
         return redirect('/')
     else:
         return redirect('/')

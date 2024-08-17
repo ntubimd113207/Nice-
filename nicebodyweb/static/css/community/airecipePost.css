@@ -135,6 +135,78 @@ form {
   cursor: pointer;
 }
 
+/* Flickity Carousel */
+.carousel {
+  width: 100%;
+  height: 320px;
+  background: #FFF;
+  padding: 10px;
+  border: hsl(48, 50%, 88%);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.carousel-cell {
+  width: 50%;
+  height: 300px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.carousel-cell img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.add-file-btn {
+  display: inline-block;
+  background-color: #BC6C25;
+  color: white;
+  padding: 10px 10px;
+  cursor: pointer;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.add-file-btn:hover {
+  background-color: #874912;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.remove-btn i {
+  pointer-events: none;
+}
+
+.edit-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.edit-btn i {
+  pointer-events: none;
+}
+
 /* Medium 1024px */
 
 @media screen and (max-width:1024px) {
