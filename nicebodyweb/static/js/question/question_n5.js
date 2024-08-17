@@ -109,6 +109,12 @@ window.onload = function() {
             document.getElementById('questionForm').submit();  
 
             document.getElementById('loading').style.display = 'flex';
+
+            sessionStorage.removeItem('tagInputValue');
+            sessionStorage.removeItem('tagInputValue2');
+            sessionStorage.removeItem('tagInputValue3');
+            sessionStorage.removeItem('tagInputValue4_1');
+            sessionStorage.removeItem('tagInputValue5');
         }
     });
 };
