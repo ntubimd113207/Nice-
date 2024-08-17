@@ -15,10 +15,12 @@
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/community/communityMain.css">
   <link rel="stylesheet" href="/static/css/components/dialog.css">
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <title>Q&A</title>
 </head>
 <body>
@@ -42,96 +44,79 @@
 
     <a class="po" href="/community/airecipePost">
       <div class="photostickers">
-        <img src="/static/images/userImage/Joey1.png" alt="">
+        <img src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
       </div>
       <div class="say">我有疑問...</div>
     </a>
 
+    {% for question in question %}
     <section>
       <div class="eachpo">
         <div class="photostickers">
-          <img src="/static/images/userImage/Joey1.png" alt="">
+          <img src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
         </div>
         <div class="pocontent">
           <div class="top">
             <div class="left">
-              <h1>烤焦羊</h1>
-              <span>2024/2/4 22:00</span>
+              <h1>{{ question[9] }}</h1>
+              <span>{{ question[7].strftime('%Y/%m/%d %H:%M') }}</span>
             </div>
             <div class="right">
-              <i class="fa-regular fa-trash-can" id="opendelete"></i>
-              <a href="/community/airecipePost">
-                <i class="fa-regular fa-pen-to-square"></i>
-              </a>
+              {% if question[1] == uid %}
+                <i class="fa-regular fa-trash-can" id="opendelete"></i>
+                <a href="/community/airecipePost">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+              {% else %}
+                <i class="fa-regular fa-bookmark" id="opencollect"></i>
+                <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
+              {% endif %}
             </div>
           </div>
-          <a class="middle" href="/community/detailedPost">
-            <h1>我的實作合理嗎?</h1>
+          <a class="middle">
+            <h1>{{ question[2] }}</h1>
             <div class="textcontent">
-              <p>我在實作時加入了其他菜，請問這樣還符合得舒飲食嗎?</p>
+              <p>{{ question[3] }}</p>
             </div>
-            <div class="imgcontent">
-              <img src="/static/images/food/food1.jpg" alt="">
-              <img src="/static/images/food/food2.jpg" alt="">
-              <img src="/static/images/food/food3.jpg" alt="">
+            {% if question[4] %}
+            <div class="carousel" data-flickity='{ "cellAlign": "left" }'>
+              {% for image in question[14] %}
+              <div class="carousel-cell">
+                <img src="/static/images/community/{{question[1]}}/{{question[4]}}/{{image}}" alt="">
+              </div>
+              {% endfor %}
             </div>
+            {% endif %}
           </a>
           <div class="line"></div>
-          <div class="bottom">
-            <input type="text" placeholder="我來解說吧!">
-            <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="eachpo">
-        <div class="photostickers">
-          <img src="/static/images/userImage/Agnes1.png" alt="">
-        </div>
-        <div class="pocontent">
-          <div class="top">
-            <div class="left">
-              <h1>煙燻雞</h1>
-              <span>2024/2/4 22:00</span>
-            </div>
-            <div class="right">
-              <i class="fa-regular fa-bookmark" id="opencollect"></i>
-              <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
-            </div>
-          </div>
-          <a class="middle" href="/community/detailedPost">
-            <h1>理想減重速度？</h1>
-            <div class="textcontent" >
-              <p>有人可以告訴我100公斤要減到50公斤要花多久時間才合理嗎?</p>
-            </div>
-          </a>
-          <div class="line"></div>
+          {% if question[5] %}
           <div class="each">
             <div class="top">
               <div class="optimal">
                 <i class="fa-solid fa-crown"></i>最佳解
               </div>
               <div class="right">
-                <p>2024.3.2</p>
+                <p>{{ question[11].strftime('%Y/%m/%d') }}</p>
                 <div class="photostickers">
-                  <img src="/static/images/userImage/woman1.png" alt="">
+                  <img src="/static/images/userImage/{{question[12]}}/{{question[13]}}" alt="">
                 </div>
               </div>
             </div>
             <div class="bottom">
-              減重目標設定最好是每週減0.5~1.0 公斤，以此速率減重，則每月期望能夠減重的目標為2~4 公斤，2 至3 個月的理想減重目標為8 公斤或減掉初始體重的10%（如90 公斤的人約減9公斤），此種減重速率也較不會引起身體負擔。
-              資料來源:衛生福利部國民健康署
+              {{ question[10] }}
             </div>
           </div>
+          {% endif %}
+          {% if question[1] != uid and is_nutritionist == '2' %}
           <div class="bottom">
             <input type="text" placeholder="我來解說吧!">
             <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
           </div>
+          {% endif %}
         </div>
       </div>
     </section>
+    {% endfor %}
   </article>
 
   <a class="circlepo" href="/community/airecipePost">
