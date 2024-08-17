@@ -332,3 +332,8 @@ section {
   object-fit: cover;
   border-radius: 10px;
 }
+
+/* 關鍵字搜尋 */
+.question-item {
+  display: none;
+}
