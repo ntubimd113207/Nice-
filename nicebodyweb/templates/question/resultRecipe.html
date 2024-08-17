@@ -142,14 +142,31 @@
 		};
 
 		function renderChart() {
-			var nutritionString = JSON.stringify("{{data['recipe']['nutrition']}}");
-			var nutritionData = nutritionString.split(', ').map(function(item) {
+			var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
 				var parts = item.match(/(\D+)(\d+)%/);
 				return {
 					label: parts[1],
 					value: parseInt(parts[2])
 				};
 			});
+
+			// 顏色映射表，對應每個標籤
+			var colorMap = {
+				'蛋白質': '#efebce', 
+				'纖維': '#C1CCC7', 
+				'維生素C': '#E4B69E', 
+				'礦物質': '#A98978', 
+				'澱粉': '#BFD1C4',
+				'脂肪': '#a3a380',
+				'糖': '#B3CAD8',
+				'澱粉':'#DBB89C',
+				'碳水化合物':'#d6ce93',
+				'纖維素': '#D3AC73',
+				'鈉': '#D09075',
+				'其他': '#F1D09D',
+				'維生素與礦物質': '#F4D4BE',
+				'維生素': '#CEA77E',
+			};
 
 			var labels = nutritionData.map(function(item) {
 				return item.label;
@@ -159,6 +176,13 @@
 				return item.value;
 			});
 
+			// 為每個標籤分配顏色
+			var backgroundColor = labels.map(function(label) {
+				return colorMap[label] || '#d8a48f'; // 默認顏色為黑色
+			});
+
+			var borderColor = backgroundColor; // 使用相同的邊框顏色
+
 			var ctx = document.getElementById('nutritionChart').getContext('2d');
 			var chart = new Chart(ctx, {
 				type: 'pie',
@@ -167,20 +191,8 @@
 					datasets: [{
 						label: '營養配比',
 						data: data,
-						backgroundColor: [
-							'#a3a380', 
-							'#d6ce93', 
-							'#efebce', 
-							'#d8a48f', 
-							'#bb8588'
-						],
-						borderColor: [
-							'#a3a380', 
-							'#d6ce93', 
-							'#efebce', 
-							'#d8a48f', 
-							'#bb8588'
-						],
+						backgroundColor: backgroundColor,
+						borderColor: borderColor,
 						borderWidth: 1
 					}]
 				},
@@ -190,6 +202,9 @@
 					plugins: {
 						legend: {
 							position: 'top',
+							onClick: function(e, legendItem, legend) {
+								e.stopPropagation(); // 阻止點擊事件
+							}
 						},
 						title: {
 							display: false,
