@@ -50,6 +50,7 @@
     </a>
 
     {% for question in question %}
+    <form id="QnADetailForm" action="/community/detailedPost" method="get">
     <section>
       <div class="eachpo">
         <div class="photostickers">
@@ -110,12 +111,16 @@
           {% if question[1] != uid and is_nutritionist == '2' %}
           <div class="bottom">
             <input type="text" placeholder="我來解說吧!">
-            <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+            <button><i class="fa-regular fa-paper-plane"></i></button>
           </div>
           {% endif %}
         </div>
+
+        <button type="submit" hidden>提交</button>
+        <input type="hidden" name="question_id" value="{{ question[0] }}">
       </div>
     </section>
+    </form>
     {% endfor %}
   </article>
 
@@ -233,6 +238,16 @@
     function showModal() {
       document.getElementById("loginModal").style.display = "flex";
     }
+
+    // detail頁面
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.pocontent').forEach(po => {
+            po.addEventListener('click', function(event) {
+                event.currentTarget.closest('form').submit();
+            });
+        });
+    });
+
 
     // filter按鈕變化
     document.addEventListener("DOMContentLoaded", () => {

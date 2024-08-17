@@ -14,10 +14,12 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/community/detailedPost.css">
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <title>單一貼文</title>
 </head>
 <body>
@@ -32,57 +34,68 @@
         <div class="top">
           <div class="left">
             <div class="photostickers">
-              <img src="/static/images/userImage/Joey1.png" alt="">
+              <img src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
             </div>
-            <h1>烤焦羊</h1>
-            <span>2024/2/4 22:00</span>
+            <h1>{{ question[9] }}</h1>
+            <span>{{ question[7].strftime('%Y/%m/%d %H:%M') }}</span>
           </div>
           <div class="right">
-            <i class="fa-solid fa-user-plus"></i>
-            <i class="fa-regular fa-bookmark" id="opencollect"></i>
-            <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
+            {% if question[1] == uid %}
+              <i class="fa-regular fa-trash-can" id="opendelete"></i>
+              <a href="/community/airecipePost">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </a>
+            {% else %}
+              <i class="fa-regular fa-bookmark" id="opencollect"></i>
+              <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
+            {% endif %}
           </div>
         </div>
         <div class="middle">
-          <h1>理想減重速度？</h1>
+          <h1>{{ question[2] }}</h1>
           <div class="textcontent">
-            <p>有人可以告訴我100公斤要減到50公斤要花多久時間才合理嗎?</p>
+            <p>{{ question[3] }}</p>
           </div>
         </div>
+        {% if question[4] %}
+        <div class="carousel" data-flickity='{ "cellAlign": "left" }'>
+          {% for image in question[10] %}
+          <div class="carousel-cell">
+            <img src="/static/images/community/{{question[1]}}/{{question[4]}}/{{image}}" alt="">
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
         <div class="line"></div>
+        {% if question[1] != uid and is_nutritionist == '2' %}
         <div class="bottom">
           <input type="text" placeholder="說點什麼吧！">
           <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
         </div>
+        {% endif %}
         <div class="comment">
+          {% for answer in answer %}
           <div class="each">
             <div class="top">
+              {% if loop.first and question[5] is not none %}
+              <div class="bestoptimal">
+                <i class="fa-solid fa-crown"></i>最佳解
+              </div>
+              {% elif question[1] == uid %}
               <button class="optimal">設為最佳解</button>
+              {% endif %}
               <div class="right">
-                <p>2024.3.2</p>
+                <p>{{ answer[5].strftime('%Y/%m/%d') }}</p>
                 <div class="photostickers">
-                  <img src="/static/images/userImage/woman1.png" alt="">
+                  <img src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
                 </div>
               </div>
             </div>
             <div class="bottom">
-              減重目標設定最好是每週減0.5~1.0 公斤，以此速率減重，則每月期望能夠減重的目標為2~4 公斤，2 至3 個月的理想減重目標為8 公斤或減掉初始體重的10%（如90 公斤的人約減9公斤），此種減重速率也較不會引起身體負擔。
-              資料來源:衛生福利部國民健康署
+              {{ answer[3] }}
             </div>
           </div>
-          <div class="each">
-            <div class="top">
-              <button class="optimal">設為最佳解</button>
-              <div class="right">
-                <p>2024.3.2</p>
-                <div class="photostickers">
-                  <img src="/static/images/userImage/Belle1.png" alt="">
-                </div>
-              </div>
-            </div>
-            <div class="bottom">
-              我跟你說，就是呢，hgaleiurhbvpq3y4pvhalfvbpq98y43tvhfuha3pv9113213213213t8y3q4haliur。
-            </div>
+          {% endfor %}
           </div>
         </div>
       </div>

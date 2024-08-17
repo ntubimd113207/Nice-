@@ -209,7 +209,6 @@ def collection_list():
 
     connection.close()
 
-    print(collection_details)
     return render_template('/profile/collectionList.html', name=name, userImage=userImage, collection_list=collection_list, collection_details=collection_details, uid=uid)
 
 #addCollection
@@ -342,5 +341,124 @@ def QA_collection():
         name='0'
         userImage='0'
         uid='0'
+    
+    connection = db.get_connection()
+    cursor = connection.cursor()
 
-    return render_template('/profile/QAcollection.html', name=name, userImage=userImage, uid=uid)
+    cursor.execute('select * from body."QnAKeepCategory" where "Uid" = %s order by create_time;', (uid,))
+    collection_list = cursor.fetchall()
+
+    collection_details = {} 
+    for collection in collection_list:
+        Qkid = collection[0]
+        cursor.execute('''
+            SELECT a.*, b.title, c."userImage" , c."Uid"
+            FROM body."QnAKeep" a
+            LEFT JOIN body.question b ON a."Qid" = b."Qid"
+            LEFT JOIN body.user_profile c ON b."Uid" = c."Uid"
+            WHERE a."QKid" = %s 
+            ORDER BY a.update_time;
+            ''', (Qkid,))
+        
+        collection_details[Qkid] = cursor.fetchall()
+
+    connection.close()
+
+    return render_template('/profile/QAcollection.html', name=name, userImage=userImage, collection_list=collection_list, collection_details=collection_details, uid=uid)
+
+#updateQnACollection
+@profile_bp.route('/updateQnACollection', methods=['POST'])
+def update_QnAcollection():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            collection_name = request.form.get('collectionName')
+            old_collection_name = request.form.get('oldcollectionName')
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('UPDATE body."QnAKeepCategory" SET "categoryName" = %s, update_time = now() WHERE "Uid" = %s and "categoryName" = %s;', (collection_name, uid, old_collection_name))
+            response = {'message': f'updateCollection successfully.'}
+
+            connection.commit()
+            connection.close()
+          
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+#deleteQnACollection
+@profile_bp.route('/deleteQnACollection', methods=['POST'])
+def delete_QnAcollection():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            collection_name = request.form.get('collectionName')
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('DELETE FROM body."QnAKeep" WHERE "CKid" IN (SELECT "CKid" FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s);', (uid, collection_name))
+
+            cursor.execute('DELETE FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s;', (uid, collection_name))
+            response = {'message': f'deleteQnACollection successfully.'}
+
+            connection.commit()
+            connection.close()
+          
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+#addQnACollectionDetail
+@profile_bp.route('/addQnACollectionDetail', methods=['POST'])
+def add_QnAcollection_detail():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            item = request.form.get('item')
+            Qid = request.form.get('detailId')
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body."QnAKeep"("QKid", "Qid", create_time, update_time) VALUES ((SELECT "QKid" FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s), %s, now(), now());', (uid, item, Qid))
+            response = {'message': f'addCollectionDetail successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
+#deleteQnACollectionDetail
+@profile_bp.route('/deleteQnACollectionDetail', methods=['POST'])
+def delete_QnAcollection_detail():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            item = request.form.get('item')
+            Qid = request.form.get('detailId')
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('DELETE FROM body."QnAKeep" WHERE "Qid" = %s and "QKid" = (SELECT "QKid" FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s);', (Qid, uid, item))
+            response = {'message': f'deleteCollectionDetail successfully.'}
+
+            connection.commit()
+            connection.close()
+          
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
