@@ -629,25 +629,26 @@
             alert('出現錯誤，請稍後再試！');
           },
         });
-            // 更新已存在日期的體重數據
-            chart.data.datasets[0].data[index] = parseFloat(weight);
-            chart.data.datasets[0].pointRadius[index] = 3;
-            chart.data.datasets[0].pointBackgroundColor[index] = 'blue';
+        
+        // 更新已存在日期的體重數據
+        chart.data.datasets[0].data[index] = parseFloat(weight);
+        chart.data.datasets[0].pointRadius[index] = 3;
+        chart.data.datasets[0].pointBackgroundColor[index] = 'blue';
 
-            // // 重新排序日期和數據
-            let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
-              .sort((a, b) => new Date(a.label) - new Date(b.label));
+        // // 重新排序日期和數據
+        let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+          .sort((a, b) => new Date(a.label) - new Date(b.label));
 
-            chart.data.labels = combined.map(item => item.label);
-            chart.data.datasets[0].data = combined.map(item => item.data);
+        chart.data.labels = combined.map(item => item.label);
+        chart.data.datasets[0].data = combined.map(item => item.data);
 
-            // // 更新圖表
-            chart.update();
+        // // 更新圖表
+        chart.update();
 
-            document.getElementById('weight').close();
+        document.getElementById('weight').close();
 
-            document.getElementById('inputDate').value = "";
-            document.getElementById('inputWeight').value = "";
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
       }else if (formattedDateStr < sevenDaysAgoStr) {
         $.ajax({
           type: 'POST',
@@ -664,10 +665,10 @@
             alert('出現錯誤，請稍後再試！');
           }
         });
-            document.getElementById('weight').close();
+        document.getElementById('weight').close();
 
-            document.getElementById('inputDate').value = "";
-            document.getElementById('inputWeight').value = "";
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
       } else {
         $.ajax({
           type: 'POST',
@@ -684,27 +685,35 @@
             alert('出現錯誤，請稍後再試！');
           }
         });
-            // 添加新的日期和體重數據
-            chart.data.labels.push(formattedDateDisplay);
-            chart.data.datasets[0].data.push(parseFloat(weight));
-            chart.data.datasets[0].pointRadius.push(3);
-            chart.data.datasets[0].pointBackgroundColor.push('blue');
 
-            // 重新排序日期和數據
-            let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
-              .sort((a, b) => new Date(a.label) - new Date(b.label));
+        // 添加新的日期和體重數據
+        chart.data.labels.push(formattedDateDisplay);
+        chart.data.datasets[0].data.push(parseFloat(weight));
+        chart.data.datasets[0].pointRadius.push(3);
+        chart.data.datasets[0].pointBackgroundColor.push('blue');
 
-            chart.data.labels = combined.map(item => item.label);
-            chart.data.datasets[0].data = combined.map(item => item.data);
+        // 重新排序日期和數據
+        let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+          .sort((a, b) => new Date(a.label) - new Date(b.label));
 
-            // 更新圖表
-            chart.update();
-            
-            document.getElementById('weight').close();
+        chart.data.labels = combined.map(item => item.label);
+        chart.data.datasets[0].data = combined.map(item => item.data);
 
-            document.getElementById('inputDate').value = "";
-            document.getElementById('inputWeight').value = "";
+        // 更新圖表
+        chart.update();
+        
+        document.getElementById('weight').close();
 
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
+      }
+    
+      if (formattedDateStr == todayStr){
+        document.getElementById('weightInput').style.backgroundColor = "#CCC5B9";
+        document.getElementById('weightInput').value = weight;
+        document.getElementById('weightInput').disabled = true;
+        document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
+        document.getElementById('submitButton').disabled = true;
       }
     });
 
