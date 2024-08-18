@@ -366,6 +366,28 @@ def QA_collection():
 
     return render_template('/profile/QAcollection.html', name=name, userImage=userImage, collection_list=collection_list, collection_details=collection_details, uid=uid)
 
+#addQnACollection
+@profile_bp.route('/addQnACollection', methods=['POST'])
+def add_QnAcollection():
+    uid = session['uid']
+
+    if request.method == 'POST':
+        try:
+            collection_name = request.form.get('collectionName')
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body."QnAKeepCategory"("Uid", "categoryName", create_time, update_time) VALUES (%s, %s, now(), now());', (uid, collection_name))
+            response = {'message': f'addQnACollection successfully.'}
+
+            connection.commit()
+            connection.close()
+          
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
 #updateQnACollection
 @profile_bp.route('/updateQnACollection', methods=['POST'])
 def update_QnAcollection():
