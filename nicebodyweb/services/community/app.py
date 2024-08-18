@@ -1,6 +1,7 @@
 # 匯入Blueprint模組
 import os
-from flask import render_template, session, Blueprint, request
+from urllib import response
+from flask import render_template, session, Blueprint, request, jsonify
 from utils import db
 
 # 產生目標服務藍圖
@@ -44,6 +45,15 @@ def community_Main():
     )
 
     question = cursor.fetchall()
+
+    cursor.execute('''
+        select a."QKid", a."categoryName", b."Qid", COALESCE(keepCount, 0) from body."QnAKeepCategory" as a
+        left join (select "QKid", STRING_AGG("Qid"::TEXT, ',') as"Qid", count(*) as keepCount from body."QnAKeep" group by "QKid" ) as b on a."QKid" = b."QKid" 
+        where "Uid" = 10
+        order by a.create_time
+                   ''', (uid))
+    
+    keep = cursor.fetchall()
     connection.close()
 
     for i, q in enumerate(question):
@@ -60,8 +70,18 @@ def community_Main():
                 # 資料夾不存在，則附加空清單
                 question[i] = q + ([],)
 
+    combined = []
+    for _, _, numbers, _, in keep:
+        if numbers:
+            combined.extend(numbers.split(','))
+    
+    combined = list(dict.fromkeys(combined))
 
-    return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid, question=question, is_nutritionist=is_nutritionist)
+    keepCombined = ','.join(combined)
+
+    print(keepCombined)
+
+    return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid, question=question, is_nutritionist=is_nutritionist, keep=keep, keepCombined=keepCombined)
 
 
 #單一貼文(子畫面)
@@ -143,3 +163,90 @@ def airecipe_post():
         uid='0'
 
     return render_template('/community/airecipePost.html', name=name, userImage=userImage, uid=uid)
+
+#檢舉
+@community_bp.route('/report', methods=['POST'])
+def report(): 
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            report_type = request.form.get('reasons')
+            otherType = request.form.get('otherReason')
+            qid = request.form.get('question_id')
+
+            # 如果report_content是空的，則將其設為NULL
+            if not otherType:
+                otherType = None
+
+
+            cursor.execute('''
+                    INSERT INTO body.question_report ("Uid", "Qid", "reportType", "otherType", create_time)
+                    VALUES (%s, %s, %s, %s, now());
+                    ''', (uid, qid, report_type, otherType)
+                )
+
+            response = {'message': 'Reported successfully'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# 收藏
+@community_bp.route('/addCollect', methods=['POST'])
+def add_collect(): 
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            qid = request.form.get('question_id')
+            category_id = request.form.get('category_id')
+
+            cursor.execute('INSERT INTO body."QnAKeep" ("Qid", "QKid", create_time, update_time) VALUES (%s, %s, now(), now());', (qid, category_id))
+            response = {'message': f'addCollect successfully.'}
+
+            response = {'message': 'Collected successfully'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# 取消收藏
+@community_bp.route('/subCollect', methods=['POST'])
+def sub_collect(): 
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            qid = request.form.get('question_id')
+            category_id = request.form.get('category_id')
+
+            cursor.execute('DELETE FROM body."QnAKeep" WHERE "Qid" = %s AND "QKid" = %s;', (qid, category_id))
+            response = {'message': f'subCollect successfully.'}
+
+            response = {'message': 'UnCollected successfully'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500

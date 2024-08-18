@@ -220,7 +220,6 @@ def robott_addCollect():
             connection = db.get_connection() 
             cursor = connection.cursor()
 
-            print(recipe_id, category_id)
             cursor.execute('INSERT INTO body."CookKeep" ("Cookid", "CKid", create_time, update_time) VALUES (%s, %s, now(), now());', (recipe_id, category_id))
             response = {'message': f'addCollect successfully.'}
 
