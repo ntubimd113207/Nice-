@@ -148,7 +148,7 @@
       {% for d in keep %}
       <div class="eachclass">
         <div class="left">
-          <input type="checkbox" id="scales" name="scales"/>
+          <input type="checkbox" id="scales" name="scales" data-id="2"/>
           <label for="scales" data-id="{{ d[0] }}" data-keepid="{{ d[2] }}">{{ d[1] }}</label>
         </div>
         <div class="num">({{ d[3] }}篇)</div>
@@ -457,27 +457,7 @@
             }
           });
 
-          // 當點擊checkbox時，即時的將data-keepid的值加入或移除
-          collectDialog.querySelectorAll('.eachclass input').forEach(input => {
-            input.addEventListener('click', () => {
-              const label = input.nextElementSibling;
-              const keepId = label.getAttribute('data-keepid').split(',');
-
-              // 如果checkbox被勾選，則將data-keepid的值加入
-              if (input.checked) {
-                keepId.push(button.closest('.question-item').getAttribute('data-uid'));
-              } else {
-                // 如果checkbox被取消勾選，則將data-keepid的值移除
-                const index = keepId.indexOf(button.closest('.question-item').getAttribute('data-uid'));
-                keepId.splice(index, 1);
-              }
-
-              // 更新data-keepid的值
-              label.setAttribute('data-keepid', keepId.join(','));
-
-              collectDialog.setAttribute('data-uid', button.closest('.question-item').getAttribute('data-uid'));
-            });
-          });
+          collectDialog.setAttribute('data-uid', button.closest('.question-item').getAttribute('data-uid'));
 
           // 清空oldSelect
           oldSelect = [];
@@ -514,8 +494,13 @@
         console.log('Added items:', addedItems);
         console.log('Removed items:', removedItems);
 
-        // jquery ajax
-        addedItems.forEach(item => {
+        if (addedItems.length === 0 && removedItems.length === 0) {
+          collectDialog.close();
+          return;
+        }
+
+        if (addedItems.length !== 0) {
+          addedItems.forEach(item => {
           $.ajax({
             type: 'POST',
             url: '/community/addCollect',
@@ -531,8 +516,10 @@
             }
           });
         });
+        }
 
-        removedItems.forEach(item => {
+        if (removedItems.length !== 0) {
+          removedItems.forEach(item => {
           $.ajax({
             type: 'POST',
             url: '/community/subCollect',
@@ -548,18 +535,16 @@
             }
           });
         });
+        }
 
-        // 如果newSelect長度為0，則變更此openCollectButton的icon
+        // 如果對應的newSelect長度為0，則將該篇文章的icon改為空心
         if (newSelect.length === 0) {
-          openCollectButtons.forEach(button => {
-            button.classList.remove('fa-solid');
-            button.classList.add('fa-regular');
-          });
-        } else {
-          openCollectButtons.forEach(button => {
-            button.classList.remove('fa-regular');
-            button.classList.add('fa-solid');
-          });
+          document.querySelector(`.question-item[data-uid="${collectDialog.getAttribute('data-uid')}"] .fa-solid.fa-bookmark`)?.classList.replace('fa-solid', 'fa-regular');
+        }
+
+        // 如果對應的newSelect長度不為0，則將該篇文章的icon改為實心，但是如果原本是空心的話，就不改變
+        if (newSelect.length !== 0) {
+          document.querySelector(`.question-item[data-uid="${collectDialog.getAttribute('data-uid')}"] .fa-regular.fa-bookmark`)?.classList.replace('fa-regular', 'fa-solid');
         }
 
         // 更新加減num的數量，透過整數不是+1就是-1
@@ -573,6 +558,21 @@
           } else if (removedItems.includes(label)) {
             num.textContent = `(${currentNum - 1}篇)`;
           }
+
+          // 如果removeitems裡面有的話，就將data-id從data-keepid裡面移除
+          if (removedItems.includes(label)) {
+            const keepId = eachclass.querySelector('label').getAttribute('data-keepid').split(',');
+            const newKeepId = keepId.filter(id => id !== collectDialog.getAttribute('data-uid'));
+            eachclass.querySelector('label').setAttribute('data-keepid', newKeepId.join(','));
+          }
+
+          // 如果addedItems裡面有的話，就將data-id加入data-keepid裡面
+          if (addedItems.includes(label)) {
+            const keepId = eachclass.querySelector('label').getAttribute('data-keepid').split(',');
+            keepId.push(collectDialog.getAttribute('data-uid'));
+            eachclass.querySelector('label').setAttribute('data-keepid', keepId.join(','));
+          }
+
         });
 
         collectDialog.close();
