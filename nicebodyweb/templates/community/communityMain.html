@@ -324,8 +324,11 @@
 
         questionItems.forEach(item => {
           const uidMatch = filter === 'all' || item.getAttribute('data-uid2') === uid;
-          const textMatch = [item.querySelector('.middle h1').textContent, item.querySelector('.textcontent p').textContent, item.querySelector('.bottom').textContent]
-            .some(text => text.toLowerCase().includes(query));
+          const textMatch = [
+              item.querySelector('.middle h1').textContent, 
+              item.querySelector('.textcontent p').textContent, 
+              item.querySelector('.bottom') ? item.querySelector('.bottom').textContent : ''
+          ].some(text => text.toLowerCase().includes(query));
 
           if (uidMatch && textMatch) {
             item.style.display = 'block';

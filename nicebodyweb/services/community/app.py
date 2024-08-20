@@ -1,5 +1,8 @@
 # 匯入Blueprint模組
+from datetime import datetime
 import os
+import random
+import string
 from urllib import response
 from flask import render_template, session, Blueprint, request, jsonify
 from utils import db
@@ -59,7 +62,7 @@ def community_Main():
     for i, q in enumerate(question):
         # 構建資料夾的完整路徑
         if q[4]:
-            base_folder = os.path.join('static/images/community', str(q[1])) + '/' + q[4]
+            base_folder = os.path.join('static/images/community', str(q[1]), q[4]) 
         
             # 如果資料夾存在，獲取所有的檔案名稱
             if os.path.exists(base_folder):
@@ -79,7 +82,7 @@ def community_Main():
 
     keepCombined = ','.join(combined)
 
-    print(keepCombined)
+    print(question)
 
     return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid, question=question, is_nutritionist=is_nutritionist, keep=keep, keepCombined=keepCombined)
 
@@ -247,6 +250,72 @@ def sub_collect():
             connection.close()
 
             return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+        
+# 發佈
+@community_bp.route('/postQuestion', methods=['POST'])
+def post_question():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            title = request.form.get('title')
+            content = request.form.get('content')
+            files = request.files.getlist('files[]')
+
+            nowtime = datetime.now()
+            create_time = nowtime.strftime("%Y-%m-%d %H:%M:%S")
+            create_time_str = create_time.replace(" ", "_").replace(":", "-")
+
+            if files != []:
+                # 檢查資料夾是否存在，若不存在則創建
+                base_path = "static/images/community/"
+                uid_folders = [d for d in os.listdir(base_path) if d.startswith(str(uid))]
+                
+                if uid_folders:
+                    folder_path_uid = os.path.join(base_path, uid_folders[0])  # 返回找到的第一個資料夾
+                    folder_name = uid_folders[0]
+                else:
+                    # 創建唯一的資料夾
+                    folder_path_uid = os.path.join(base_path, str(uid))
+                    os.makedirs(folder_path_uid)
+                
+                random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+                folder_name = f"{uid}_{create_time_str}_{random_str}"
+                folder_path = os.path.join(base_path, str(uid), folder_name)
+                os.makedirs(folder_path)
+
+                for index, file in enumerate(files, start=1):
+                    if file and file.filename:
+                        # 在檔案名稱前面加上迴圈數，並用 "_" 分隔
+                        new_filename = f"{index}_{file.filename}"
+                        file.save(os.path.join(folder_path, new_filename))
+            else:
+                folder_name = None
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('''
+                INSERT INTO body.question
+                ("Uid", title, "content", question_image, "BestAid", create_time, update_time)
+                VALUES(%s, %s, %s, %s, null, %s, %s);
+                ''', (uid, title, content, folder_name, create_time, create_time))
+            
+            # cursor.execute('''
+            #     SELECT "Qid" FROM body.question 
+            #     where "Uid" = %s and create_time = %s
+            #     LIMIT 1;''', (uid, create_time))
+            
+            # Qid = cursor.fetchone()[0]
+
+            response = {'message': 'Question posted successfully.'}
+            connection.commit()
+            connection.close()
+
+            return jsonify(response )
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
