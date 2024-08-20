@@ -66,7 +66,7 @@
             <div class="right">
               {% if question[1] == uid %}
                 <i class="fa-regular fa-trash-can" id="opendelete"></i>
-                <a href="/community/airecipePost">
+                <a>
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
               {% else %}
@@ -578,6 +578,55 @@
         collectDialog.close();
       });
     });
-	</script>
+	
+    // 刪除
+    document.addEventListener('DOMContentLoaded', () => {
+      const openDeleteButtons = document.querySelectorAll('.fa-regular.fa-trash-can');
+      const deleteDialog = document.getElementById('delete');
+      const closeDeleteButton = document.getElementById('closedelete');
+      const saveDeleteButton = document.getElementById('savedelete');
+
+      openDeleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          deleteDialog.showModal();
+
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+
+          deleteDialog.setAttribute('data-uid', questionId);
+        });
+      });
+
+      closeDeleteButton.addEventListener('click', () => {
+        deleteDialog.close();
+      });
+
+      saveDeleteButton.addEventListener('click', () => {
+        // 取得檢舉的data-uid
+        const questionId = deleteDialog.getAttribute('data-uid');
+        
+        // jquery ajax
+        $.ajax({
+          type: 'POST',
+          url: '/community/deleteQuestion',
+          data: {
+            question_id: questionId
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+
+        deleteDialog.close();
+
+        // 刪除該篇文章
+        const questionItem = document.querySelector(`.question-item[data-uid="${questionId}"]`);
+        questionItem.remove();
+
+      });
+    });
+  </script>
 </body>
 </html>
