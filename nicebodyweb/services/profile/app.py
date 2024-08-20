@@ -484,3 +484,4 @@ def delete_QnAcollection_detail():
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
+        

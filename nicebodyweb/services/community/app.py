@@ -319,3 +319,29 @@ def post_question():
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
+        
+# 刪除
+@community_bp.route('/deleteQuestion', methods=['POST'])
+def delete_question():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            qid = request.form.get('question_id')
+
+            cursor.execute('''
+                DELETE FROM body.question
+                WHERE "Qid" = %s;
+                ''', (qid, ))
+            
+            response = {'message': 'Question deleted successfully.'}
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
