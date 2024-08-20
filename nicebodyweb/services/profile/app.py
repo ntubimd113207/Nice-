@@ -424,7 +424,7 @@ def delete_QnAcollection():
             connection = db.get_connection()
             cursor = connection.cursor()
 
-            cursor.execute('DELETE FROM body."QnAKeep" WHERE "CKid" IN (SELECT "CKid" FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s);', (uid, collection_name))
+            cursor.execute('DELETE FROM body."QnAKeep" WHERE "QKid" IN (SELECT "QKid" FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s);', (uid, collection_name))
 
             cursor.execute('DELETE FROM body."QnAKeepCategory" WHERE "Uid" = %s and "categoryName" = %s;', (uid, collection_name))
             response = {'message': f'deleteQnACollection successfully.'}
