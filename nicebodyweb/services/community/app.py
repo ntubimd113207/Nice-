@@ -52,9 +52,9 @@ def community_Main():
     cursor.execute('''
         select a."QKid", a."categoryName", b."Qid", COALESCE(keepCount, 0) from body."QnAKeepCategory" as a
         left join (select "QKid", STRING_AGG("Qid"::TEXT, ',') as"Qid", count(*) as keepCount from body."QnAKeep" group by "QKid" ) as b on a."QKid" = b."QKid" 
-        where "Uid" = 10
-        order by a.create_time
-                   ''', (uid))
+        where "Uid" = %s
+        order by a.create_time''', (uid, )           
+        )
     
     keep = cursor.fetchall()
     connection.close()
