@@ -49,7 +49,12 @@ let renderNav = function() {
       <a href="/robott/generateRecipes" class="nav-link">Robot</a>
       <a href="/goal/goalMain" class="nav-link">Record</a>
       <a href="/task/taskPage" class="nav-link">Task</a>
-      <a href="/community/communityMain" class="nav-link">Q&A</a>
+      <a href="/community/communityMain" class="nav-link">
+        Q&A
+        <div class="pro">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+      </a>
     </div>
   </div>
   `;

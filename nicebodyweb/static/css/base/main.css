@@ -165,10 +165,6 @@ input, select, textarea {
 		margin-bottom: 1em;
 	}
 
-	p {
-		text-align: justify;
-	}
-
 	br.clear {
 		clear: both;
 	}
@@ -2155,7 +2151,6 @@ input, select, textarea {
 		background-attachment: fixed;
 		color: #fff;
 		text-align: center;
-		padding: 7.5em 0 2em 0;
 		cursor: default;
 		display: flex;
 		justify-content: center;
@@ -2210,10 +2205,6 @@ input, select, textarea {
 			#header hr:before, #header hr:after {
 				background: rgba(192, 192, 192, 0.35);
 			}
-
-		#header {
-			margin: 1em 0 0 0;
-		}
 
 	body.homepage #header {
 		height: 100vh;
@@ -2564,14 +2555,6 @@ input, select, textarea {
 /* Normal */
 
 	@media screen and (max-width: 1280px) {
-
-		/* Basic */
-
-			body, input, textarea, select {
-				font-size: 12pt;
-				line-height: 1.5em;
-			}
-
 		/* Wrapper */
 
 			.wrapper {
@@ -2605,13 +2588,6 @@ input, select, textarea {
 /* Narrower */
 
 	@media screen and (max-width: 840px) {
-
-		/* Basic */
-
-			body, input, textarea, select {
-				font-size: 13pt;
-				line-height: 1.65em;
-			}
 
 			.tweet {
 				text-align: center;
@@ -2666,12 +2642,6 @@ input, select, textarea {
 			hr {
 				top: 3em;
 				margin-bottom: 6em;
-			}
-
-		/* Section/Article */
-
-			section, article {
-				margin-bottom: 2em;
 			}
 
 				section:last-child, article:last-child {
@@ -2754,7 +2724,6 @@ input, select, textarea {
 				display: block;
 				padding: 0;
 				line-height: 3em;
-				width: 100%;
 			}
 
 		/* Nav */
