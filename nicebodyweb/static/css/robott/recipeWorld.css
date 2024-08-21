@@ -173,7 +173,9 @@ article {
   max-width: 100%;
   max-height: 100%;
   width: 12%;
-  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .title h3 {

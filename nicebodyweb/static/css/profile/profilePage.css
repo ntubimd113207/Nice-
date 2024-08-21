@@ -49,6 +49,8 @@ article {
   align-items: center;
   margin-bottom: 5%;
   position: relative;
+  box-shadow: 2px 2px 10px 2px #be987149;
+  border-radius: 50%;
 }
 
 .noAvatarFrame > .profile-picture {
