@@ -7,7 +7,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-    	<link rel="stylesheet" href="/static/css/base/reset.css">
+		<link rel="stylesheet" href="/static/css/base/reset.css">
 		<link rel="stylesheet" href="/static/css/base/global.css">
 		<link rel="stylesheet" href="/static/css/components/mousemove.css">
 		<link rel="stylesheet" href="/static/css/components/dialog.css">
@@ -24,7 +24,7 @@
 		<script src="/static/components/jquery.fancybox.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<title>食譜</title>
+		<title>生成食譜 > 詳細食譜</title>
 	</head>
 
 	<body>
@@ -39,8 +39,13 @@
           <img src="{{ Recipes_image_path }}/{{ data[7] }}" alt="">
         </a>
 			</div>
-			
+
 			<section class="receipe">
+				<div class="sidetitle" id="sidetitle">
+					<a href="/robott/generateRecipes">生成食譜</a>
+					<i class="fa-solid fa-caret-down"></i>
+					<p>{{data[0]}}</p>
+				</div>
 				<div class="wrap">
 					<div class="title">
 						<div class="left">
@@ -111,7 +116,6 @@
 								<canvas id="nutritionChart" width="400" height="400"></canvas>
 							{% endif %}
 						</div>
-						
 					</div>
 
 					<div class="button">
@@ -136,7 +140,6 @@
 				<div class="loader2"></div>
 			</div>	
 		</dialog>
-
 
 		<footer id="footer-container"></footer>
 
@@ -276,7 +279,6 @@
 					}
 				});
 			})
-
 		</script>
 	</body>
 </html>
