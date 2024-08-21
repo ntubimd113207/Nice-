@@ -201,11 +201,10 @@ section {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-left:3%;
+  gap: 10px;
 }
 
 .each > .top > .right > p {
-  margin-right: 10px;
   font-size: 12px;
 }
 
