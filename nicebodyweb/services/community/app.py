@@ -82,8 +82,6 @@ def community_Main():
 
     keepCombined = ','.join(combined)
 
-    print(question)
-
     return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid, question=question, is_nutritionist=is_nutritionist, keep=keep, keepCombined=keepCombined)
 
 

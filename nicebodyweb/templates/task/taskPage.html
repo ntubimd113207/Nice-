@@ -526,6 +526,17 @@
       setupModal(openBtnId, modalId, 'closebtn');
     });
 
+    // 彈跳視窗 飲食法簡介
+    let openinfor=document.getElementById('openinfor');
+    let infor=document.getElementById('infor');
+    let closeinfor=document.getElementById('closeinfor');
+    openinfor.addEventListener("click", function(){
+      infor.showModal();
+    })
+    closeinfor.addEventListener("click", function(){
+      infor.close();
+    })
+
     // 任務按鈕
     document.addEventListener('DOMContentLoaded', function() {
       const rewardButtons = document.querySelectorAll('.rewardButton');

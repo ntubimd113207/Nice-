@@ -33,9 +33,7 @@
       <div class="pocontent">
         <div class="top">
           <div class="left">
-            <div class="photostickers">
-              <img src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
-            </div>
+            <img class="photostickers" src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
             <h1>{{ question[9] }}</h1>
             <span>{{ question[7].strftime('%Y/%m/%d %H:%M') }}</span>
           </div>
@@ -86,9 +84,7 @@
               {% endif %}
               <div class="right">
                 <p>{{ answer[5].strftime('%Y/%m/%d') }}</p>
-                <div class="photostickers">
-                  <img src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
-                </div>
+                <img class="photostickers" src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
               </div>
             </div>
             <div class="bottom">

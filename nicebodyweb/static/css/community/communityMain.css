@@ -73,14 +73,12 @@ article {
 }
 
 .photostickers {
-  flex-shrink: 0;
-  width: 35px;
-  height: 35px;
-}
-
-.photostickers img {
   max-width: 100%;
   max-height: 100%;
+  width: 35px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .po .say {
@@ -247,16 +245,6 @@ section {
   word-wrap: break-word;
   white-space: normal;
   line-height: 25px;
-}
-
-.photostickers {
-  width: 35px;
-  height: 35px;
-}
-
-.photostickers img{
-  max-width: 100%;
-  max-height: 100%;
 }
 
 .pocontent > .bottom {

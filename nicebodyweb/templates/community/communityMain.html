@@ -44,9 +44,7 @@
     </div>
 
     <a class="po" href="/community/airecipePost">
-      <div class="photostickers">
-        <img src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
-      </div>
+      <img class="photostickers" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
       <div class="say">我有疑問...</div>
     </a>
 
@@ -54,9 +52,7 @@
     <form id="QnADetailForm" action="/community/detailedPost" method="get">
     <section class="question-item" data-uid="{{ question[0] }}" data-uid2="{{ question[1] }}">
       <div class="eachpo">
-        <div class="photostickers">
-          <img src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
-        </div>
+        <img class="photostickers" src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
         <div class="pocontent">
           <div class="top">
             <div class="left">
@@ -104,9 +100,7 @@
               </div>
               <div class="right">
                 <p>{{ question[11].strftime('%Y/%m/%d') }}</p>
-                <div class="photostickers">
-                  <img src="/static/images/userImage/{{question[12]}}/{{question[13]}}" alt="">
-                </div>
+                <img class="photostickers" src="/static/images/userImage/{{question[12]}}/{{question[13]}}" alt="">
               </div>
             </div>
             <div class="bottom">
