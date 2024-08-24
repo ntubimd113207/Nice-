@@ -5,7 +5,7 @@ import threading
 import time
 import json
 import urllib.request
-from flask import render_template, Blueprint, request, session
+from flask import render_template, Blueprint, request, session, jsonify
 from openai import OpenAI
 from datetime import datetime
 from utils import db
@@ -217,7 +217,7 @@ def question5_selfList():
 #             return render_template('/question/resultRecipe.html', name=name)
 #     return render_template('/question/resultRecipe.html', name=name)
 
-@question_bp.route('/resultRecipe', methods=['GET', 'POST'])
+@question_bp.route('/resultRecipe', methods=['POST'])
 def resultRecipe_selfList(): 
     name=session['name']
     uid=session['uid']
@@ -233,6 +233,8 @@ def resultRecipe_selfList():
 
             content = f"飲食法:{tagInputValue1}; 主要食材:{tagInputValue2}; 營養需求:{tagInputValue3}; 烹調時間:{tagInputValue4_1}分鐘以內; 過敏成分或不吃的食物:{tagInputValue5}"
 
+            print(content)
+            
             def wait_on_run(run, thread):
                 while run.status == "queued" or run.status == "in_progress":
                     run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
@@ -316,14 +318,27 @@ def resultRecipe_selfList():
                 conn = db.get_connection()
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
-                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, tagInputValue1, tagInputValue2, tagInputValue3, tagInputValue4_1, tagInputValue5))
+                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, '隨機', '隨機', '隨機', '隨機', '隨機'))
+                
+                cursor.execute('''
+                    SELECT "Cookid" 
+                    FROM body.cookbook 
+                    WHERE title = %s AND "Uid" = %s 
+                    ORDER BY "Cookid" DESC 
+                    LIMIT 1;
+                               ''', (title, uid))
+                
+                recipe_id = cursor.fetchone()[0]
+
                 conn.commit()
                 conn.close()
 
-            threading.Thread(target=db_insert).start()
+                return recipe_id
 
-            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage, uid=uid)
+            recipe_id = db_insert()
 
+            return jsonify({'recipe_id': recipe_id})
+        
         except Exception as e:
             # 印出錯誤原因
             print('-'*30)
@@ -334,8 +349,6 @@ def resultRecipe_selfList():
             # logging.basicConfig(filename='../error.log', level=logging.ERROR)
             # 渲染錯誤畫面並返回錯誤信息
             return render_template('/question/error.html', error_message=str(e))
-
-    return render_template('/question/resultRecipe.html', name=name, userImage=userImage, uid=uid)
 
 
 # #結果測試(free)

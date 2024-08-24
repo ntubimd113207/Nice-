@@ -177,16 +177,35 @@
 
         const title = form.querySelector('input[type="text"]').value;
         const content = form.querySelector('textarea').value;
-        const fileInput = document.getElementById("fileInput");
+        
+        // 取得carousel-cell 裡面的 img src
+        const imgElements = document.querySelectorAll('.carousel-cell img');
 
         const formData = new FormData();
 
         formData.append('title', title);
         formData.append('content', content);
-        
-        Array.from(fileInput.files).forEach(file => formData.append("files[]", file));
 
+        imgElements.forEach(imgElement => {
+          const imgSrc = imgElement.src;
+          const imgFile = dataURLtoFile(imgSrc, 'image.jpg');
+          formData.append('files[]', imgFile);
+        });
 
+        function dataURLtoFile(dataURI) {
+          var byteString = atob(dataURI.split(',')[1]);
+
+          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+          var ab = new ArrayBuffer(byteString.length);
+          var ia = new Uint8Array(ab);
+          for (var i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+          }
+
+          return new Blob([ab], {type: mimeString});
+        }
+      
         $.ajax({
           url: '/community/postQuestion',
           type: 'POST',

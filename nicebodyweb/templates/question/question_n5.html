@@ -18,6 +18,7 @@
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="https://kit.fontawesome.com/ff1f69f5b7.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
   <div id="myCursor"></div>
@@ -70,15 +71,6 @@
           <a id="continue-btn" class = "continue-btn">確認</a>
         </div>
       </div>
-
-      <form id="questionForm" action="/question/resultRecipe" method="post" onsubmit="showLoading()">
-        <input type="hidden" id="tagInputValue1" name="tagInputValue1">
-        <input type="hidden" id="tagInputValue2" name="tagInputValue2">
-        <input type="hidden" id="tagInputValue3" name="tagInputValue3">
-        <input type="hidden" id="tagInputValue4_1" name="tagInputValue4_1">
-        <input type="hidden" id="tagInputValue5" name="tagInputValue5">
-        <button type="submit" hidden>提交</button>
-      </form>
     </section>
   </article>
 

@@ -77,8 +77,8 @@
             </div>
           </div>
           <a class="middle">
-            <h1>{{ question[2] }}</h1>
-            <div class="textcontent">
+            <h1 class="detailQnA">{{ question[2] }}</h1>
+            <div class="textcontent detailQnA">
               <p>{{ question[3] }}</p>
             </div>
             {% if question[4] %}
@@ -234,7 +234,7 @@
       [...flickityButtons, ...dots].forEach(element => element.addEventListener('click', handleClick));
 
       // 點擊內容時提交表單
-      document.querySelectorAll('.pocontent').forEach(po => {
+      document.querySelectorAll('.detailQnA').forEach(po => {
           po.addEventListener('click', (event) => {
               event.currentTarget.closest('form')?.submit(); // 使用可選鏈接運算符防止 null 錯誤
           });

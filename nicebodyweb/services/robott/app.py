@@ -53,8 +53,6 @@ def robott_selfList():
     connection.close()
     return render_template('/robott/generateRecipes.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid)
 
-
-
 #食譜天地
 @robott_bp.route('/recipeWorld')
 def robott_everyList():
@@ -280,8 +278,7 @@ def robott_comment():
         
 #生成食譜 - 隨機生成
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
-Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
-@robott_bp.route('/randomRecipe', methods=['GET', 'POST'])
+@robott_bp.route('/randomRecipe', methods=['POST'])
 def robott_randomRecipe():
     name=session['name']
     uid=session['uid']
@@ -375,12 +372,25 @@ def robott_randomRecipe():
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
                     (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, '隨機', '隨機', '隨機', '隨機', '隨機'))
+                
+                cursor.execute('''
+                    SELECT "Cookid" 
+                    FROM body.cookbook 
+                    WHERE title = %s AND "Uid" = %s 
+                    ORDER BY "Cookid" DESC 
+                    LIMIT 1;
+                               ''', (title, uid))
+                
+                recipe_id = cursor.fetchone()[0]
+
                 conn.commit()
                 conn.close()
+
+                return recipe_id
             
-            threading.Thread(target=db_insert).start()
-            
-            return render_template('/question/resultRecipe.html', data=recipe_data, data2=pricing_data, image_name=image_name, Recipes_image_path=Recipes_image_path, current_time=current_date, name=name, userImage=userImage, uid=uid)
+            recipe_id = db_insert()
+
+            return jsonify({'recipe_id': recipe_id})
         except Exception as e:
             # 印出錯誤原因
             print('-'*30)
@@ -391,5 +401,4 @@ def robott_randomRecipe():
             # logging.basicConfig(filename='../error.log', level=logging.ERROR)
             # 渲染錯誤畫面並返回錯誤信息
             return render_template('/question/error.html', error_message=str(e))
-        
-    return render_template('/question/resultRecipe.html', name=name, userImage=userImage, uid=uid)
+
