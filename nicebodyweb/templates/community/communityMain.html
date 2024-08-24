@@ -124,6 +124,11 @@
     {% endfor %}
   </article>
 
+  <form id="updatePostForm" action="/community/updatePost" method="get">
+    <input type="hidden" name="question_id" value="{{ question[0] }}">
+    <button type="submit" hidden></button>
+  </form>
+
   <a class="circlepo" href="/community/airecipePost">
     <i class="fa-solid fa-feather"></i>
   </a>
@@ -218,11 +223,32 @@
 
     // detail頁面
     document.addEventListener('DOMContentLoaded', () => {
-      // 定義一個通用的事件處理函數
-      const handleClick = (event) => {
-          event.stopPropagation(); // 阻止事件傳播
-          event.preventDefault();  // 阻止事件的默認行為
-      };
+
+      // 點擊事件處理
+      function handleClick(event) {
+        const questionId = event.target.closest('.question-item').getAttribute('data-uid');
+        const action = event.target.classList[1].replace('fa-', '');
+
+        switch (action) {
+          case 'trash-can':
+            document.getElementById('delete').showModal();
+            document.getElementById('delete').setAttribute('data-uid', questionId);
+            break;
+          case 'pen-to-square':
+            document.getElementById('updatePostForm').submit();
+            break;
+          case 'bookmark':
+            document.getElementById('collect').showModal();
+            document.getElementById('collect').setAttribute('data-uid', questionId);
+            break;
+          case 'triangle-exclamation':
+            document.getElementById('report').showModal();
+            document.getElementById('report').setAttribute('data-uid', questionId);
+            break;
+          default:
+            break;
+        }
+      }
 
       // 對指定的圖示添加點擊事件處理
       const icons = document.querySelectorAll('.fa-trash-can, .fa-pen-to-square, .fa-bookmark, .fa-triangle-exclamation');
@@ -236,8 +262,23 @@
       // 點擊內容時提交表單
       document.querySelectorAll('.detailQnA').forEach(po => {
           po.addEventListener('click', (event) => {
-              event.currentTarget.closest('form')?.submit(); // 使用可選鏈接運算符防止 null 錯誤
+            //尋找最近的form，id為QnADetailForm，並提交
+            event.target.closest('form').submit();
           });
+      });
+    });
+
+    // 當點選fa-pen-to-square後，將該篇文章的data-uid放入upddatePostForm的input裡面，並提交
+    document.addEventListener('DOMContentLoaded', () => {
+      const updatePostButtons = document.querySelectorAll('.fa-regular.fa-pen-to-square');
+      const updatePostForm = document.getElementById('updatePostForm');
+
+      updatePostButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+          updatePostForm.querySelector('input[name="question_id"]').value = questionId;
+          updatePostForm.submit();
+        });
       });
     });
 

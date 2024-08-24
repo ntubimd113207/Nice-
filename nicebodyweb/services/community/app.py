@@ -126,6 +126,18 @@ def detailed_post():
     )
 
     answer = cursor.fetchall()
+
+    cursor.execute('''
+        select a."QKid" , a."categoryName" , COALESCE(b."Qid", 0), COALESCE(keepCount, 0) from body."QnAKeepCategory" as a
+        left join body."QnAKeep" as b
+        on a."QKid"  = b."QKid" and b."Qid" = %s
+        left join (select "QKid", count(*) as keepCount from body."QnAKeep" group by "QKid" ) as c on a."QKid"  = c."QKid" 
+        where a."Uid" = %s
+        order by a.create_time 
+                   ''', (question_id, uid))
+    
+    keep = cursor.fetchall()
+
     connection.close()
 
     if question[4]:
@@ -148,11 +160,10 @@ def detailed_post():
                 answer.insert(0, best_answer)
                 break
 
-    return render_template('/community/detailedPost.html', name=name, userImage=userImage, uid=uid, question=question, answer=answer, is_nutritionist=is_nutritionist)
+    return render_template('/community/detailedPost.html', name=name, userImage=userImage, uid=uid, question=question, answer=answer, is_nutritionist=is_nutritionist, keep=keep)
 
-
-#AI食譜發布
-@community_bp.route('/airecipePost')
+#提問
+@community_bp.route('/airecipePost', methods=['GET'])
 def airecipe_post(): 
     if "google_id" in session:
         name=session['name']
@@ -164,6 +175,48 @@ def airecipe_post():
         uid='0'
 
     return render_template('/community/airecipePost.html', name=name, userImage=userImage, uid=uid)
+
+#提問編輯
+@community_bp.route('/updatePost', methods=['GET'])
+def update_post(): 
+    if "google_id" in session:
+        name=session['name']
+        userImage=session['user_image']
+        uid=session['uid']
+    else:
+        name='0'
+        userImage='0'
+        uid='0'
+    
+    connection = db.get_connection() 
+    
+    cursor = connection.cursor()     
+
+    question_id = request.args.get('question_id')
+
+    cursor.execute('''
+        select a.* from body.question as a
+        where a."Qid" = %s and a."Uid" = %s;
+        ''', (question_id, uid)
+    )
+
+    question = cursor.fetchone()
+
+    if question[4]:
+        base_folder = os.path.join('static/images/community', str(question[1])) + '/' + question[4]
+    
+        # 如果資料夾存在，獲取所有的檔案名稱
+        if os.path.exists(base_folder):
+            image_files = os.listdir(base_folder)
+            # 將檔案名稱清單加入到 question 中
+            question = question + (image_files,)
+        else:
+            # 資料夾不存在，則附加空清單
+            question = question + ([],)
+
+    connection.close()
+                   
+    return render_template('/community/updatePost.html', name=name, userImage=userImage, uid=uid, question=question)
 
 #檢舉
 @community_bp.route('/report', methods=['POST'])
@@ -342,4 +395,50 @@ def delete_question():
             return jsonify(response)
         except Exception as e:
             print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
+# 收藏
+@community_bp.route('addCollect', methods=['POST'])
+def robott_addCollect():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            question_id = request.form.get('question_id')
+            category_id = request.form.get('category_id')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body."QnAKeep" ("Qid", "QKid", create_time, update_time) VALUES (%s, %s, now(), now());', (question_id, category_id))
+            response = {'message': f'addCollect successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+# 取消收藏
+@community_bp.route('subCollect', methods=['POST'])
+def robott_subCollect():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            question_id = request.form.get('question_id')
+            category_id = request.form.get('category_id')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('DELETE FROM body."QnAKeep" WHERE "Qid"=%s and "QKid"=%s;', (question_id, category_id))
+            response = {'message': f'subCollect successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
             return jsonify({'error': str(e)}), 500
