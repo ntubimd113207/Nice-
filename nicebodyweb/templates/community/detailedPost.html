@@ -15,11 +15,13 @@
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/community/detailedPost.css">
   <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
   <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>單一貼文</title>
 </head>
 <body>
@@ -96,6 +98,10 @@
         </div>
       </div>
     </section>
+
+    <div id="loading" style="display: none;">
+      <div class="loader2"></div>
+    </div>
   </article>
 
   <a class="circlepo" href="/community/airecipePost">
@@ -113,34 +119,15 @@
   <dialog id="collect">
     <h1>編輯分類</h1>
     <div class="content">
+      {% for d in keep %}
       <div class="eachclass">
         <div class="left">
-          <input type="checkbox" id="scales" name="scales" checked />
-          <label for="scales">我的最愛</label>
+          <input type="checkbox" id="scales" name="scales" {% if d[2] != 0 %}checked{% endif %} />
+          <label for="scales" data-id="{{ d[0] }}">{{ d[1] }}</label>
         </div>
-        <div class="num">(2篇)</div>
+        <div class="num">({{ d[3] }}篇)</div>
       </div>
-      <div class="eachclass">
-        <div class="left">
-          <input type="checkbox" id="scales" name="scales" />
-          <label for="scales">總有一天會用到</label>
-        </div>
-        <div class="num">(2篇)</div>
-      </div>
-      <div class="eachclass">
-        <div class="left">
-          <input type="checkbox" id="scales" name="scales" />
-          <label for="scales">蔬食天堂</label>
-        </div>
-        <div class="num">(2篇)</div>
-      </div>
-      <div class="eachclass">
-        <div class="left">
-          <input type="checkbox" id="scales" name="scales" />
-          <label for="scales">高蛋白飲食</label>
-        </div>
-        <div class="num">(2篇)</div>
-      </div>
+      {% endfor %}
     </div>
     <div class="save">
       <button id="closecollect" class="closebtn closecollect">close</button>
@@ -154,27 +141,23 @@
       <h2>檢舉原因</h2>
       <div class="reasons">
         <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" checked />
+          <input type="checkbox" id="scales" name="1" checked />
           <label for="scales">不實資訊</label>
         </div>
         <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" />
+          <input type="checkbox" id="scales" name="2" />
           <label for="scales">違反公共秩序善良風俗</label>
         </div>
         <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" />
+          <input type="checkbox" id="scales" name="3" />
           <label for="scales">違反法律</label>
         </div>
         <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" />
-          <label for="scales">違反法律</label>
+          <input type="checkbox" id="scales" name="4" />
+          <label for="scales">垃圾信息或廣告</label>
         </div>
         <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" />
-          <label for="scales">賭博詐騙</label>
-        </div>
-        <div class="eachreason">
-          <input type="checkbox" id="scales" name="scales" />
+          <input type="checkbox" id="scales" name="otherScales" />
           <label for="scales">其他(請填在下方空格)</label>
         </div>
       </div>
@@ -197,84 +180,235 @@
       renderNav();
       renderFooter();
     };
-
-    // 彈跳視窗
-    function setupModal(openBtnId, modalId, closeBtnId, saveBtnId, onSaved) {
-      const openBtn = document.getElementById(openBtnId);
-      const modal = document.getElementById(modalId);
-      const closeBtn = document.getElementById(closeBtnId);
-      const saveBtn = document.getElementById(saveBtnId);
-
-      openBtn.addEventListener("click", () => {
-        if (openBtnId === 'opencollect') {
-          if (openBtn.classList.contains('fa-regular')) {
-            modal.showModal();
-          } else {
-            handleCollectSave();
-          }
-        } else {
-          modal.showModal(); 
-        }
-      });
-
-      closeBtn.addEventListener("click", () => modal.close());
-      saveBtn.addEventListener("click", () => {
-        onSaved();
-        modal.close();
-      });
-    }
-
-    const modals = [
-      ['openreport', 'report', 'closereport', 'savereport', () => {}],
-      ['opencollect', 'collect', 'closecollect', 'savecollect', handleCollectSave],
-    ];
-
-    modals.forEach(modal => setupModal(...modal));
-
-    // 改變收藏icon
-    function handleCollectSave() {
-      const openCollectButton = document.querySelector('.fa-regular.fa-bookmark, .fa-solid.fa-bookmark');
-      if (openCollectButton) {
-        if (openCollectButton.classList.contains('fa-regular')) {
-          openCollectButton.classList.remove('fa-regular');
-          openCollectButton.classList.add('fa-solid');
-          openCollectButton.id = 'opencollect';
-        } else {
-          openCollectButton.classList.remove('fa-solid');
-          openCollectButton.classList.add('fa-regular');
-          openCollectButton.id = ''; 
-        }
-      }
-    }
-
-    // 改變按讚icon、數字
+	
+    // 收藏
     document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.fa-regular.fa-heart').forEach(function(element) {
-        element.addEventListener('click', function() {
-          let isRegular = this.classList.contains('fa-regular');
-          let countElement = this.closest('section').querySelector('.right span');
-          this.classList.toggle('fa-regular', !isRegular);
-          this.classList.toggle('fa-solid', isRegular);
-          countElement.textContent = parseInt(countElement.textContent) + (isRegular ? 1 : -1);
-        });
-      });
-    });
+      const collect = document.getElementById('collect');
+      const openCollectButton = document.getElementById('opencollect');
+      const saveCollectButton = document.getElementById('savecollect');
+      const closeCollectButton = document.getElementById('closecollect');
+      const bookmarkIcon = document.getElementById('opencollect');
 
-    // 改變關注icon樣式
-    document.addEventListener('DOMContentLoaded', function() {
-      const userIcons = document.querySelectorAll('.fa-solid.fa-user-plus');
-      userIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-          if (this.classList.contains('fa-user-plus')) {
-            this.classList.remove('fa-user-plus');
-            this.classList.add('fa-user-check');
-          } else {
-            this.classList.remove('fa-user-check');
-            this.classList.add('fa-user-plus');
+      let oldSelect = [];
+      let newSelect = [];
+
+      // 當打開 dialog 時，記錄當前的勾選狀態
+      openCollectButton.addEventListener('click', function() {
+        collect.showModal();
+        // 清空 previous selections
+        oldSelect = [];
+        document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+          if (checkbox.checked) {
+            oldSelect.push(checkbox.parentElement.querySelector('label').textContent);
           }
         });
       });
+
+      // 當點擊 save 按鈕時，執行以下操作
+      saveCollectButton.addEventListener('click', function() {
+        newSelect = [];
+        const itemsToUpdate = {};
+
+        document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+          const label = checkbox.parentElement.querySelector('label').textContent;
+          if (checkbox.checked) {
+            newSelect.push(label);
+            // 記錄需要增加計數的項目
+            itemsToUpdate[label] = (itemsToUpdate[label] || 0) + 1;
+          }
+        });
+
+        const addedItems = newSelect.filter(item => !oldSelect.includes(item));
+        const removedItems = oldSelect.filter(item => !newSelect.includes(item));
+
+        console.log('addedItems', addedItems);
+        console.log('removedItems', removedItems);
+
+        // 更新收藏符號的樣式
+        if (newSelect.length > 0) {
+          bookmarkIcon.classList.remove('fa-regular');
+          bookmarkIcon.classList.add('fa-solid');
+        } else {
+          bookmarkIcon.classList.remove('fa-solid');
+          bookmarkIcon.classList.add('fa-regular');
+        }
+
+        // 更新 num 數字
+        addedItems.forEach(item => {
+          const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+            .find(div => div.querySelector('label').textContent === item)
+            .querySelector('.num');
+          const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+          numElement.textContent = `(${currentCount + 1}篇)`;
+
+          $.ajax({
+            type: "POST",
+            url: "/community/addCollect",
+            data: {
+              question_id: "{{ question[0] }}",
+              category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+              //alert(error, '出現錯誤，請稍後再試！');
+            }
+          });
+        });
+
+        removedItems.forEach(item => {
+          const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+            .find(div => div.querySelector('label').textContent === item)
+            .querySelector('.num');
+          const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+          numElement.textContent = `(${currentCount - 1}篇)`;
+
+          console.log(numElement.previousElementSibling.querySelector('label').dataset.id);
+          console.log("{{ question[0] }}");
+
+          $.ajax({
+            type: "POST",
+            url: "/community/subCollect",
+            data: {
+              question_id: "{{ question[0] }}",
+              category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+              //alert(error, '出現錯誤，請稍後再試！');
+            }
+          });
+        });
+
+        collect.close();
+      });
+
+      // 當關閉 dialog 時，保留勾選狀態
+      closeCollectButton.addEventListener('click', function() {
+        collect.close();
+      });
     });
-	</script>
+  
+    // 檢舉
+    document.addEventListener('DOMContentLoaded', function() {
+      const reportDialog = document.getElementById('report');
+      const openReportButton = document.getElementById('openreport');
+      const saveReportButton = document.getElementById('savereport');
+      const closeReportButton = document.getElementById('closereport');
+
+      openReportButton.addEventListener('click', function() {
+        reportDialog.showModal();
+
+        // 將檢舉原因清空
+        reportDialog.querySelectorAll('#report .eachreason input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        reportDialog.querySelector('#report textarea').value = '';
+        
+        // 當檢舉原因textarea輸入文字時，即時的將"otherScale"的checkbox打勾
+        reportDialog.querySelector('#report textarea').addEventListener('input', function() {
+          reportDialog.querySelector('#report .eachreason input[name="otherScales"]').checked = true;
+
+          // 如果textarea為空，則取消勾選
+          if (reportDialog.querySelector('#report textarea').value === '') {
+            reportDialog.querySelector('#report .eachreason input[type="checkbox"]').checked = false;
+          }
+        });
+      });
+
+      saveReportButton.addEventListener('click', function() {
+        // 提醒未勾選檢舉原因
+        if (!reportDialog.querySelector('#report .eachreason input[type="checkbox"]:checked')) {
+          alert('請選擇檢舉原因！');
+          return;
+        }
+
+        // 如果勾選其他原因，但未填寫原因
+        if (reportDialog.querySelector('#report .eachreason input[type="checkbox"]:checked').nextElementSibling.textContent === '其他(請填在下方空格)' && reportDialog.querySelector('#report textarea').value === '') {
+          alert('請填寫檢舉原因！');
+          return;
+        }
+
+        // 取得檢舉原因的name
+        const reasons = [];
+        reportDialog.querySelectorAll('.reasons input').forEach(input => {
+          // 排除其他原因的checkbox
+          if (input.name !== 'otherScales' && input.checked) {
+            reasons.push(input.name);
+          }
+        });
+
+        // 取得其他原因，去除前後空白
+        const otherReason = reportDialog.querySelector('#report textarea').value.trim();
+
+        $.ajax({
+          type: "POST",
+          url: "/community/report",
+          data: {
+            question_id: "{{ question[0] }}",
+            reasons: reasons.join(','),
+            otherReason: otherReason
+          },
+          success: function(response) {
+            console.log(response);
+            reportDialog.close();
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            //alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        reportDialog.close();
+      });
+
+      closeReportButton.addEventListener('click', function() {
+        report.close();
+      });
+    });
+
+    // 刪除
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteDialog = document.getElementById('delete');
+      const openDeleteButton = document.getElementById('opendelete');
+      const saveDeleteButton = document.getElementById('savedelete');
+      const closeDeleteButton = document.getElementById('closedelete');
+
+      openDeleteButton.addEventListener('click', function() {
+        deleteDialog.showModal();
+      });
+
+      saveDeleteButton.addEventListener('click', function() {
+        $.ajax({
+          type: "POST",
+          url: "/community/deleteQuestion",
+          data: {
+            question_id: "{{ question[0] }}"
+          },
+          beforeSend: function() {
+            deleteDialog.close();
+            document.getElementById("loading").style.display = "flex";
+          },
+          success: function(response) {
+            console.log(response);
+            window.location.href = '/community/communityMain';
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            //alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+      });
+
+      closeDeleteButton.addEventListener('click', function() {
+        deleteDialog.close();
+      });
+    });
+  </script>
 </body>
 </html>
