@@ -132,6 +132,8 @@ def callback():
                 """,
                 (uid, uid, uid, uid, uid, uid)
             )
+
+            username = id_info.get("name")
         else:
             # googleId存在，更新last_login_time
             cursor.execute(
@@ -145,7 +147,7 @@ def callback():
         
             cursor.execute(
                 """
-                SELECT "Uid", "userImage", "isNutritionist" FROM body.user_profile WHERE "googleId" = %s
+                SELECT "Uid", "userImage", "isNutritionist", username FROM body.user_profile WHERE "googleId" = %s
                 """,
                 (id_info.get("sub"),)
             )
@@ -154,6 +156,7 @@ def callback():
             uid = result[0]
             user_image = result[1]
             is_nutritionist = result[2]
+            username = result[3]
         
 
         connection.commit()
@@ -161,7 +164,7 @@ def callback():
 
         # 保存用戶資訊到session
         session["google_id"] = id_info.get("sub")
-        session["name"] = id_info.get("name")
+        session["name"] = username
         session["email"] = id_info.get("email")
         session["uid"] = uid
         session["user_image"] = user_image
