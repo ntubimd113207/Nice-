@@ -313,7 +313,7 @@ def post_question():
             connection.commit()
             connection.close()
 
-            return jsonify(response )
+            return jsonify(response)
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500

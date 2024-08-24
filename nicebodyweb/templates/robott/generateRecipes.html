@@ -19,6 +19,7 @@
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
   <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>生成食譜</title>
 </head>
 <body>
@@ -57,11 +58,7 @@
           <a class="selectbtn" id="randomRecipe">
             <i class="fa-solid fa-shuffle"></i>
             <h3>隨機</h3>
-          </a>
-
-          <form id="randomForm" action="/robott/randomRecipe" method="post" onsubmit="showLoading()" style="display: none;">
-            <button type="submit" hidden>提交</button>
-          </form>        
+          </a>      
         </div>
         <div class="save">
           <button id="closehowToGenerate" class="closebtn">close</button>
@@ -212,8 +209,21 @@
     // 隨機生成食譜
     document.getElementById('randomRecipe').addEventListener('click', function() {
       howToGenerate.close();
-      document.getElementById('randomForm').submit();
-      document.getElementById('loading').style.display = 'flex';
+      
+      $.ajax({
+        url: '/robott/randomRecipe',
+        type: 'POST',
+        beforeSend: function() {
+          document.getElementById("loading").style.display = "flex";
+        },
+        success: function(data) {
+          const recipe_id = data.recipe_id;
+          window.location.href = `/robott/detailedRecipe?recipe_id=${recipe_id}`;
+        },
+        error: function() {
+          alert('發生錯誤，請稍後再試');
+        }
+      });
     });
 
   </script>

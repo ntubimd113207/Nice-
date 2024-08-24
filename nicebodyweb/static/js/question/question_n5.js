@@ -99,16 +99,28 @@ window.onload = function() {
             const tagInputValue3 = sessionStorage.getItem('tagInputValue3');
             const tagInputValue4_1 = sessionStorage.getItem('tagInputValue4_1');
 
-            document.getElementById('tagInputValue1').value = tagInputValue1;
-            document.getElementById('tagInputValue2').value = tagInputValue2;
-            document.getElementById('tagInputValue3').value = tagInputValue3;
-            document.getElementById('tagInputValue4_1').value = tagInputValue4_1;
-            document.getElementById('tagInputValue5').value = inputValue;
-
             // 提交表單
-            document.getElementById('questionForm').submit();  
-
-            document.getElementById('loading').style.display = 'flex';
+            $.ajax({
+                type: 'POST',
+                url: '/question/resultRecipe',
+                data: {
+                    'tagInputValue1': tagInputValue1,
+                    'tagInputValue2': tagInputValue2,
+                    'tagInputValue3': tagInputValue3,
+                    'tagInputValue4_1': tagInputValue4_1,
+                    'tagInputValue5': inputValue
+                },
+                beforeSend: function() {
+                    document.getElementById("loading").style.display = "flex";
+                },
+                success: function(data) {
+                    const recipe_id = data.recipe_id;
+                    window.location.href = `/robott/detailedRecipe?recipe_id=${recipe_id}`;
+                },
+                error: function() {
+                    alert('發生錯誤，請稍後再試');
+                }
+            });
 
             sessionStorage.removeItem('tagInputValue');
             sessionStorage.removeItem('tagInputValue2');
