@@ -91,7 +91,7 @@
             </div>
             {% endif %}
           </a>
-          <div class="line"></div>
+          {% if question[1] != uid and is_nutritionist == '2' or question[5] %}<div class="line"></div>{% endif %}
           {% if question[5] %}
           <div class="each">
             <div class="top">
