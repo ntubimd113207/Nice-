@@ -42,7 +42,7 @@
           <div class="right">
             {% if question[1] == uid %}
               <i class="fa-regular fa-trash-can" id="opendelete"></i>
-              <a href="/community/airecipePost">
+              <a href="/community/updatePost?question_id={{ question[0] }}">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
             {% else %}
@@ -103,10 +103,6 @@
       <div class="loader2"></div>
     </div>
   </article>
-
-  <a class="circlepo" href="/community/airecipePost">
-    <i class="fa-solid fa-feather"></i>
-  </a>
 
   <dialog id="delete">
     <h1>確定刪除貼文?</h1>

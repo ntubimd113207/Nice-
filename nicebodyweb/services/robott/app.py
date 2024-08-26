@@ -1,11 +1,12 @@
 # 匯入Blueprint模組
-from concurrent.futures import ThreadPoolExecutor
 import os
 import threading
 import time
 import json
 import urllib.request
+import azure.cognitiveservices.speech as speechsdk
 from flask import jsonify, render_template, session, Blueprint, request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from openai import OpenAI
 from utils import db
@@ -110,7 +111,7 @@ def robott_selfList_more():
             connection = db.get_connection() 
             cursor = connection.cursor()     
             recipe_id = request.args.get('recipe_id')
-            cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\'), summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", "isPublish", diet, "prepareMoney", "Cookid" FROM body."cookbook" where "Cookid" =%s', (recipe_id,))
+            cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\'), summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", "isPublish", diet, "prepareMoney", "Cookid", "cookStep_mp3" FROM body."cookbook" where "Cookid" =%s', (recipe_id,))
             data = cursor.fetchone()
             connection.close()
 
@@ -136,7 +137,7 @@ def robott_share():
 
     recipe_id = request.args.get('recipe_id')
 
-    cursor.execute('select title, a.create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", a."Cookid", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, likecount, messagecount, cookbookStar from (SELECT title, create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", "Cookid", "Uid", likecount, messagecount, cookbookStar FROM body."v_recipeWorld" where "Cookid" = %s) as a left join (SELECT * FROM body."cookbookLike" where "Uid" = %s) as b on a."Cookid" = b."Cookid"', (recipe_id, uid))
+    cursor.execute('select title, a.create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", a."Cookid", a."Uid", COALESCE(b."Uid", 0) as cookbookLike, likecount, messagecount, cookbookStar, "cookStep_mp3" from (SELECT title, create_time, summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", diet, "prepareMoney", "Cookid", "Uid", likecount, messagecount, cookbookStar, "cookStep_mp3" FROM body."v_recipeWorld" where "Cookid" = %s) as a left join (SELECT * FROM body."cookbookLike" where "Uid" = %s) as b on a."Cookid" = b."Cookid"', (recipe_id, uid))
 
     data = cursor.fetchone()
 
@@ -278,6 +279,14 @@ def robott_comment():
         
 #生成食譜 - 隨機生成
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
+
+speech_config = speechsdk.SpeechConfig(
+    subscription=os.environ.get("SPEECH_KEY", "SPEECH_KEY"),
+    region="southeastasia"  # 區域
+)
+
+speech_config.speech_synthesis_voice_name = "zh-TW-HsiaoChenNeural"
+
 @robott_bp.route('/randomRecipe', methods=['POST'])
 def robott_randomRecipe():
     name=session['name']
@@ -333,6 +342,47 @@ def robott_randomRecipe():
                 file_name = "static/images/openai/" + image_name
                 urllib.request.urlretrieve(image_url, file_name)
                 return image_name
+            
+            # 生成音檔執行緒
+            def generate_audio(text):
+                # 在/static/mp3/uid資料夾下生成音檔
+                audio_path = f"static/mp3/{uid}"
+
+                if not os.path.exists(audio_path):
+                    os.makedirs(audio_path)
+
+                # 檔案名稱，uid+時間戳
+                current_time = datetime.now()
+                filename = f"{uid}-{current_time.strftime('%Y-%m-%d-%H-%M-%S')}.mp3"
+                file_path = f"{audio_path}/{filename}"
+
+                # 在每個句號後面加入 3 秒的停頓
+                text_with_pause = text.replace('。', '。<break time="3000ms"/>')
+
+                # 將文本轉換為 SSML 格式
+                ssml_text = f"""
+                <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-TW">
+                    <voice name="zh-TW-HsiaoChenNeural">
+                        {text_with_pause}
+                    </voice>
+                </speak>
+                """
+
+                # 輸出配置
+                audio_config = speechsdk.audio.AudioOutputConfig(filename=file_path)
+                synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+
+                # 生成
+                result = synthesizer.speak_ssml_async(ssml_text).get()
+
+                if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+                    return filename
+                else:
+                    error_message = f"Error synthesizing speech: {result.error_details}"
+                    print(error_message)
+                    if result.cancellation_details.reason == speechsdk.CancellationReason.Error:
+                        print(f"Error details: {result.cancellation_details.error_details}")
+                    raise Exception(error_message)
 
             with ThreadPoolExecutor() as executor:
                 # 同時執行多個任務
@@ -363,6 +413,15 @@ def robott_randomRecipe():
                 image_future = executor.submit(generate_image, imagedescribe)
                 image_name = image_future.result()
 
+                # 在每一個cookStep開頭加上步驟編號
+                cookStep_audiostr = ''
+                for i, step in enumerate(cookStep, 1):
+                    cookStep_audiostr += f"步驟{i}, {step}。"
+
+                audio_future = executor.submit(generate_audio, cookStep_audiostr)
+                audio_name = audio_future.result()
+
+
             current_date = datetime.now().strftime("%Y-%m-%d")
             
 
@@ -370,8 +429,12 @@ def robott_randomRecipe():
             def db_insert():
                 conn = db.get_connection()
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())",
-                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, nutrition_str, diet_str, image_name, imagedescribe, '隨機', '隨機', '隨機', '隨機', '隨機'))
+                cursor.execute('''
+                    INSERT INTO body.cookbook (\"Uid\", title, summary, \"prepare\", \"prepareMoney\", \"cookTime\", \"cookStep\", \"cookStep_mp3\", 
+                    nutrition, diet, \"cookImage\", \"cookImageDescribe\", \"isPublish\", diet_req, main_req, nutrition_req, cook_time_req, 
+                    special_diet_req, create_time, update_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', %s, %s, %s, %s, %s, now(), now())
+                    ''',
+                    (uid, title, summary, prepareMoney_str, total, cookTime, cookStep_str, audio_name, nutrition_str, diet_str, image_name, imagedescribe, '隨機', '隨機', '隨機', '隨機', '隨機'))
                 
                 cursor.execute('''
                     SELECT "Cookid" 
