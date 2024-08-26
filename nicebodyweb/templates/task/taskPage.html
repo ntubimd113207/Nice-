@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="/static/css/layout/footer.css">
   <link rel="stylesheet" href="/static/css/task/taskpage.css">
   <link rel="stylesheet" href="/static/css/task/taskbutton.css">
-  <link rel="stylesheet" href="/static/css/components/dialog.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -306,7 +305,7 @@
         <dialog id="infor">
           <h1>如何在里程碑留言?</h1>
           <div class="content">
-            <p>在某區塊中達到10次的累積數量，就可以獲得1次在該區塊中留言的機會!加油啊各位!</p>
+            <p>每達到10次的累積數量，就可以獲得1次留言的機會!加油啊各位!</p>
           </div>
           <div class="save">
             <button id="closeinfor" class="closebtn">close</button>
@@ -337,81 +336,24 @@
         </div>
       </div>
 
+      {% if achieve_time[0] > 0 %}
       <div class="comment">
-        <div class="commentbtn" id="opencheckcmt">新增留言</div>
-        <div class="commentbtn" id="openweightcmt">新增留言</div>
-        <div class="commentbtn" id="openrecipecmt">新增留言</div>
-        <div class="commentbtn" id="openthumbscmt">新增留言</div>
+        <div class="commentbtn" id="opencheckcmt">新增留言 x {{ achieve_time[0] }}</div>
       </div>
-      
-      <template id="modal-template">
-        <dialog id="">
-          <h1>請輸入你的名言佳句~</h1>
-          <div class="content">
-            <p>(送出後無法修改，累積10次才有1次留言機會，請慎重輸入喔!)</p>
-            <textarea rows="5" placeholder="說點甚麼吧~"></textarea>
-          </div>
-          <div class="save">
-            <button class="closebtn">close</button>
-            <button class="savebtn">save</button>
-          </div>
-        </dialog>
-      </template>      
+      {% endif %}    
 
       <div class="saying">
+        {% for a in achievement %}
         <div class="eachsay">
           <div class="left">
-            <img src="/static/images/userImage/Joey1.png" alt="">
-            <h6>烤焦羊<span> - 724天:</span></h6>
-            <p>很想放棄，但看到這麼多人都成功上英雄榜了，我也不能輸給他們!</p>
+            <img src="/static/images/userImage/{{ a[2] }}/{{ a[5] }}" alt="">
+            <h6>{{ a[4] }}</h6>
+            <p>{{ a[1] }}</p>
           </div>
-          <div class="date">2020/7/24</div>
+          <div class="date">{{ a[3].strftime('%Y/%m/%d') }}</div>
         </div>
         <div class="line"></div>
-        <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/Agnes1.png" alt="">
-            <h6>煙燻雞<span> - 624天:</span></h6>
-            <p>唷囉奔~甘巴爹~fighting!</p>
-          </div>
-          <div class="date">2021/6/24</div>
-        </div>
-        <div class="line"></div>
-        <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/man1.png" alt="">
-            <h6>志明<span> - 520天:</span></h6>
-            <p>來!卡拿去~要點甚麼都可以，隨便點</p>
-          </div>
-          <div class="date">2022/5/20</div>
-        </div>
-        <div class="line"></div>
-        <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/Ping1.png" alt="">
-            <h6>春嬌<span> - 116天:</span></h6>
-            <p>><志明我來了~</p>
-          </div>
-          <div class="date">2023/11/6</div>
-        </div>
-        <div class="line"></div>
-        <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/Belle2.png" alt="">
-            <h6>朝天椒<span> - 1231天:</span></h6>
-            <p>本小姐駕到!全部人通通閃開!!!!!</p>
-          </div>
-          <div class="date">2024/5/11</div>
-        </div>
-        <div class="line"></div>
-        <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/woman2.png" alt="">
-            <h6>醜魚<span> - 217天:</span></h6>
-            <p>努估誰唷?我是誰?我在哪?</p>
-          </div>
-          <div class="date">2024/2/17</div>
-        </div>
+        {% endfor %}
       </div>
 
       <dialog id="loginDialog">
@@ -423,14 +365,19 @@
 
       <canvas class="fireworks"></canvas>
     </section>
-
-    <dialog id="loginDialog">
-      <h1>請先登入</h1>
-      <div class="contentsave">
-        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
-      </div>
-    </dialog>
   </article>
+
+  <dialog id="dialogAchieve">
+    <h1>請輸入你的名言佳句~</h1>
+    <div class="content">
+      <p>(送出後無法修改，累積10次才有1次留言機會，請慎重輸入喔!)</p>
+      <textarea rows="5" placeholder="說點甚麼吧~"></textarea>
+    </div>
+    <div class="save">
+      <button class="closebtn">close</button>
+      <button class="savebtn">save</button>
+    </div>
+  </dialog>
 
   <footer id="footer-container"></footer>
 
@@ -476,45 +423,20 @@
       });
     });
 
-    // 彈跳視窗
-    function setupModal(openBtnId, modalId, closeBtnClass) {
-      const openBtn = document.getElementById(openBtnId);
-      const modal = document.getElementById(modalId);
-      const closeBtn = modal.querySelector(`.${closeBtnClass}`);
+    // 如何在里程碑留言
+    document.addEventListener("DOMContentLoaded", function() {
+      let openinfor = document.getElementById("openinfor");
+      let infor = document.getElementById("infor");
+      let closeinfor = document.getElementById("closeinfor");
 
-      openBtn.addEventListener("click", () => modal.showModal());
-      closeBtn.addEventListener("click", () => modal.close());
-    }
+      openinfor.addEventListener("click", function() {
+        infor.showModal();
+      });
 
-    const modals = [
-      ['opencheckcmt', 'checkcmt'],     // 輸入累積打卡天數留言
-      ['openweightcmt', 'weightcmt'],   // 輸入累積記錄體重留言
-      ['openrecipecmt', 'recipecmt'],   // 輸入累積生成食譜留言
-      ['openthumbscmt', 'thumbscmt']    // 輸入食譜獲讚數量留言
-    ];
-
-    const template = document.getElementById('modal-template');
-
-    modals.forEach(([openBtnId, modalId]) => {
-      const clone = template.content.cloneNode(true);
-      const dialog = clone.querySelector('dialog');
-      dialog.id = modalId;
-      dialog.querySelector('.closebtn').id = `close${modalId}`;
-      document.body.appendChild(clone);
-      setupModal(openBtnId, modalId, 'closebtn');
+      closeinfor.addEventListener("click", function() {
+        infor.close();
+      });
     });
-
-    // 彈跳視窗 飲食法簡介
-    let openinfor=document.getElementById('openinfor');
-    let infor=document.getElementById('infor');
-    let closeinfor=document.getElementById('closeinfor');
-    openinfor.addEventListener("click", function(){
-      infor.showModal();
-    })
-    closeinfor.addEventListener("click", function(){
-      infor.close();
-    })
-
     // 任務按鈕
     document.addEventListener('DOMContentLoaded', function() {
       const rewardButtons = document.querySelectorAll('.rewardButton');
@@ -607,6 +529,193 @@
         });
       });
     });
-	</script>
+	
+    // 新增留言
+    document.addEventListener("DOMContentLoaded", function() {
+      let opencheckcmt = document.getElementById("opencheckcmt");
+      let saying = document.querySelector(".saying");
+
+      let dialog = document.getElementById("dialogAchieve");
+      let closebtn = dialog.querySelector(".closebtn");
+      let savebtn = dialog.querySelector(".savebtn");
+
+      opencheckcmt.addEventListener("click", function() {
+        // 清空
+        let textarea = dialog.querySelector("textarea");
+        textarea.value = "";
+
+        // show modal
+        dialog.showModal();
+      });
+
+      closebtn.addEventListener("click", function() {
+        dialog.close();
+      });
+
+      savebtn.addEventListener("click", function() {
+        let textarea = dialog.querySelector("textarea");
+        let text = textarea.value;
+
+        if (text === "") {
+          alert("請輸入留言");
+          return;
+        }
+
+        if (text.length > 50) {
+          alert("留言字數不可超過100字");
+          return;
+        }
+
+        // 發送留言
+        $.ajax({
+          type: "POST",
+          url: "/task/goalMessage",
+          data: {
+            message : text
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+              console.error(error);
+              alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        // 今天日期
+        let today = new Date();
+        today = `${today.getFullYear()}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getDate().toString().padStart(2, "0")}`
+
+        let newMessage = document.createElement("div");
+        newMessage.classList.add("eachsay");
+        newMessage.innerHTML = `
+          <div class="left">
+            <img src="/static/images/userImage/${uid}/${userImage}" alt="">
+            <h6>${messageText}</h6>
+            <p>${text}</p>
+          </div>
+          <div class="date">${today}</div>`
+        ;
+
+        // 每新增一次留言，留言次數-1
+        let opencheckcmt = document.getElementById("opencheckcmt");
+        let count = opencheckcmt.textContent.split("x")[1];
+        
+        console.log(count);
+
+        count = parseInt(count) - 1;
+        
+        if (count === 0) {
+          opencheckcmt.style.display = "none";
+        } else {
+          opencheckcmt.textContent = `新增留言 x ${count}`;
+        }
+        
+
+        // line
+        let line = document.createElement("div");
+        line.classList.add("line");
+
+        // 新增在最前面
+        saying.insertBefore(line, saying.firstChild);
+        saying.insertBefore(newMessage, saying.firstChild);
+        
+        dialog.close();
+      });
+    });
+    
+    // 任務按鈕
+    document.addEventListener('DOMContentLoaded', function() {
+      const rewardButtons = document.querySelectorAll('.rewardButton');
+      const levelElement = document.getElementById('level');
+      const progressElement = document.getElementById('progress');
+      const scoreElement = document.getElementById('score');
+      const levels = [10, 20, 40, 65, 90, 125, 150, 200, 300, 500];
+
+      let currentScore = "{{level_data[1]}}"
+      let currentLevel = "{{level_data[0]}}"
+
+      function updateProgress() {
+        const levelMax = levels[currentLevel - 1];
+        scoreElement.textContent = `${currentScore}/${levelMax}`;
+        progressElement.value = currentScore / levelMax;
+        levelElement.textContent = currentLevel;
+      }
+
+      function triggerFireworks() {
+        var duration = 15 * 300;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+          var timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          var particleCount = 50 * (timeLeft / duration);
+          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+        }, 250);
+      }
+    
+      rewardButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const btn = this;
+
+          $.ajax({
+            url: '/task/receiveTask',
+            type: 'POST',
+            data: {
+              task_id: btn.getAttribute('data-task-id')
+            },
+            success: function(response) {
+              const staticDiv = btn.closest('.static');
+              const firstSvg = btn.querySelector('svg:nth-child(2)');
+              const svgToToggle = btn.querySelector('svg:nth-child(3)');
+              const spinner = btn.querySelector('.spinner');
+
+              staticDiv.classList.remove('nocancel');
+              staticDiv.classList.add('cancel');
+
+              btn.classList.add("disabled");
+                    
+              firstSvg.style.display = 'none';
+              svgToToggle.style.display = '';
+              spinner.style.display = 'none';
+
+              btn.querySelector('span').textContent = '領取成功';
+
+              document.activeElement.blur();
+
+              currentScore = parseInt(currentScore);
+
+              currentScore += 5;
+              const levelMax = levels[currentLevel - 1];
+              
+              console.log(currentScore, levelMax);
+
+              if (currentScore >= levelMax) {
+                currentLevel++;
+                currentScore = 0;
+                triggerFireworks();
+              }
+
+              updateProgress();
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+              alert(xhr.responseText);
+            },
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>
