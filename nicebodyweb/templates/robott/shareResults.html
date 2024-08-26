@@ -143,7 +143,14 @@
 						<h2>烹調時間</h2>
 						<p>{{data[4]}}分</p>
 
-						<h2>料理步驟</h2>
+						<h2>料理步驟
+							{% if data[10] > 162 %}
+							<audio controls>
+								<source src="/static/mp3/{{ uid }}/{{ data[16] }}" type="audio/mpeg">
+								您的瀏覽器不支援音頻播放。
+							</audio>
+							{% endif %}
+						</h2>
 						<ol>
 							{% for item in data[5].split(', ') %}
 							<li>{{ item }}</li>
