@@ -71,10 +71,26 @@ def task_page():
                     order by num;
                     ''' % (uid, uid, uid, uid))
     milestone = cursor.fetchall()
+
+    cursor.execute('''
+                    select a.*, b.username, b."userImage" from body.achievement as a
+                    left join body.user_profile as b on a."Uid" = b."Uid" 
+                    where content is not null
+                    order by create_time desc;
+                   ''')
     
+    achievement = cursor.fetchall()
+
+    cursor.execute('''
+        select count(*) from body.achievement a 
+        where "Uid" = %s and "content" is null
+                   ''', (uid,))
+    
+    achieve_time = cursor.fetchone()
+
     connection.close()
 
-    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data, milestone=milestone, uid=uid)
+    return render_template('/task/taskPage.html', name=name, userImage=userImage, level_data=level_data, task_data=task_data, award_data=award_data, milestone=milestone, uid=uid, achievement=achievement, achieve_time=achieve_time)
 
 #taskPage - 領取獎勵
 @task_bp.route('/receiveTask', methods=['POST'])
@@ -112,5 +128,34 @@ def receive_task():
             response = {'message': f'Error: {str(e)}'}
             return jsonify(response)
 
+#里程碑留言
+@task_bp.route('/goalMessage', methods=['POST'])
+def goal_message():
+    if "google_id" in session:
+        uid=session['uid']
+    else:
+        uid='0'
 
+    if request.method == 'POST':
+        try:
+            message = request.form['message']
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('''
+                UPDATE body."achievement"
+                SET content = %s, create_time = now()
+                WHERE "Achieveid" = (SELECT "Achieveid" FROM body."achievement" WHERE "Uid" = %s AND "content" is null ORDER BY create_time LIMIT 1);
+            ''', (message, uid))
+
+            response = {'message': f'goalMessage successfully.'}
+            
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            response = {'message': f'Error: {str(e)}'}
+            return jsonify(response)
     

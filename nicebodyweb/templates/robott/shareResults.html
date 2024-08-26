@@ -466,12 +466,14 @@
 				const facebookButton = document.getElementById('fa-facebook');
 				const twitterButton = document.getElementById('twitter');
 
+				const shareText = encodeURIComponent("還在為今天的午餐所煩惱嗎？( •́ .̫ •̀ ) 我在Nice巴底生成了新食譜，一起嘗試健康新生活吧！🍽️ 美味又簡單，快來看看！(⁎⁍̴̛ᴗ⁍̴̛⁎) #食譜 #健康飲食");
+
 				facebookButton.addEventListener('click', function() {
-					window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href, '_blank');
+					window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href + '&quote=' + shareText, '_blank');
 				});
 
 				twitterButton.addEventListener('click', function() {
-					window.open('https://twitter.com/intent/tweet?url=' + window.location.href, '_blank');
+					window.open('https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + shareText, '_blank');
 				});
 			});
 
