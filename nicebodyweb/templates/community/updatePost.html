@@ -37,6 +37,7 @@
       </div>
 
       <form>
+        <!-- 表單內容 -->
         <div class="pen">
           <h3>標題(30字以內)</h3>
           <input type="text"  required value="{{ question[2] }}">
@@ -54,21 +55,23 @@
             <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
           </div>
           {% if question[4] %}
-          <div class="carousel" data-flickity='{ "cellAlign": "left" }'>
+          <div class="carousel" id="carousel">
             {% for image in question[8] %}
             <div class="carousel-cell">
                 <img src="/static/images/community/{{question[1]}}/{{question[4]}}/{{image}}" alt="">
+                <button class="edit-btn" type="button"><i class="fa-solid fa-edit" aria-hidden="true"></i></button>
+                <button class="remove-btn" type="button"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
           	</div>
           	{% endfor %}
 					{% else %}
-					<div class="carousel" data-flickity='{ "cellAlign": "left" }'></div>
+					<div class="carousel" id="carousel"></div>
 					{% endif %}
         </div>
         
         </div>
 
         <div class="btn">
-          <input type="submit" value="發佈" class="submit-btn">
+          <input type="submit" value="修改完成" class="submit-btn">
         </div>
       </form>
     </section>
@@ -97,6 +100,7 @@
       const carouselElement = document.getElementById('carousel');
       const maxFiles = 5;
 
+      // 初始化 Flickity
       const flkty = new Flickity(carouselElement, {
         cellAlign: 'left',
         contain: true,
@@ -105,6 +109,49 @@
         imagesLoaded: true
       });
 
+      // 為現有的圖片綁定編輯和刪除事件
+      function bindButtonEvents(cellDiv) {
+        const removeBtn = cellDiv.querySelector('.remove-btn');
+        const editBtn = cellDiv.querySelector('.edit-btn');
+        const imgElement = cellDiv.querySelector('img');
+
+        // 綁定刪除按鈕事件
+        removeBtn.addEventListener('click', () => {
+          flkty.remove(cellDiv);
+          flkty.reloadCells();
+        });
+
+        // 綁定編輯按鈕事件
+        editBtn.addEventListener('click', () => {
+          const newFileInput = document.createElement('input');
+          newFileInput.type = 'file';
+          newFileInput.accept = 'image/*';
+          newFileInput.style.display = 'none';
+          document.body.appendChild(newFileInput);
+
+          newFileInput.addEventListener('change', (e) => {
+            const newFile = e.target.files[0];
+            const newReader = new FileReader();
+
+            newReader.onload = function(ev) {
+              imgElement.src = ev.target.result;
+            };
+
+            newReader.readAsDataURL(newFile);
+            document.body.removeChild(newFileInput);
+          });
+
+          newFileInput.click();
+        });
+      }
+
+      // 為所有現有的圖片綁定事件
+      const existingCells = document.querySelectorAll('.carousel-cell');
+      existingCells.forEach(cellDiv => {
+        bindButtonEvents(cellDiv);
+      });
+
+      // 為新添加的圖片綁定事件
       document.getElementById('fileInput').addEventListener('change', function(event) {
         const files = event.target.files;
         if (flkty.cells.length + files.length > maxFiles) {
@@ -127,45 +174,24 @@
             const removeBtn = document.createElement('button');
             removeBtn.classList.add('remove-btn');
             removeBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
-            removeBtn.addEventListener('click', () => {
-              flkty.remove(cellDiv);
-              flkty.reloadCells();
-            });
 
             const editBtn = document.createElement('button');
             editBtn.classList.add('edit-btn');
             editBtn.innerHTML = '<i class="fa-solid fa-edit"></i>';
             editBtn.type = 'button';
-            editBtn.addEventListener('click', () => {
-              const newFileInput = document.createElement('input');
-              newFileInput.type = 'file';
-              newFileInput.accept = 'image/*';
-              newFileInput.style.display = 'none';
-              document.body.appendChild(newFileInput);
-
-              newFileInput.addEventListener('change', (e) => {
-                const newFile = e.target.files[0];
-                const newReader = new FileReader();
-
-                newReader.onload = function(ev) {
-                  imgElement.src = ev.target.result;
-                };
-
-                newReader.readAsDataURL(newFile);
-                document.body.removeChild(newFileInput);
-              });
-
-              newFileInput.click();
-            });
 
             cellDiv.appendChild(imgElement);
             cellDiv.appendChild(editBtn);
             cellDiv.appendChild(removeBtn);
+
             flkty.append(cellDiv);
 
-            // 滾動到新添加的圖片位置
-            if (i === files.length - 1) {
-              flkty.selectCell(newIndex, true); // true 參數表示平滑過渡
+            // 綁定新添加圖片的編輯和刪除按鈕事件
+            bindButtonEvents(cellDiv);
+
+            // 滾動到新添加的第一張圖片位置
+            if (i === 0) { // 只在添加第一張新圖片時進行滾動
+              flkty.selectCell(newIndex, true); // true 表示平滑過渡
             }
           };
 
@@ -182,37 +208,64 @@
 
         const title = form.querySelector('input[type="text"]').value;
         const content = form.querySelector('textarea').value;
+        const Qid = "{{ question[0] }}";
+        const folderName = "{{ question[4] }}";
         
         // 取得carousel-cell 裡面的 img src
         const imgElements = document.querySelectorAll('.carousel-cell img');
+        const newImages = Array.from(imgElements).map(img => img.src);
+
+        // 比對 title、content 和 img
+        const originalTitle = "{{ question[2] }}";
+        const originalContent = "{{ question[3] }}";
+        const originalImages = JSON.parse('{{ question[8]|tojson|safe }}');
+
+        const isTitleSame = title === originalTitle;
+        const isContentSame = content === originalContent;
+        const areImagesSame = newImages.length === originalImages.length && newImages.every((img, index) => img.includes(originalImages[index]));
+
+        if (isTitleSame && isContentSame && areImagesSame) {
+            window.history.back();
+            return;
+        }
 
         const formData = new FormData();
 
         formData.append('title', title);
         formData.append('content', content);
+        formData.append('Qid', Qid);
+        formData.append('folderName', folderName);
 
         imgElements.forEach(imgElement => {
           const imgSrc = imgElement.src;
-          const imgFile = dataURLtoFile(imgSrc, 'image.jpg');
+
+          let imgFile;
+          if (imgSrc.startsWith('data:image')) {
+            // 如果是 dataURL 格式的圖片
+            imgFile = dataURLtoFile(imgSrc);
+          }else {
+            // 如果是從伺服器取得的圖片
+            imgFile = new File([], imgSrc.split('/').pop());
+          } 
+
+
           formData.append('files[]', imgFile);
         });
 
-        function dataURLtoFile(dataURI) {
+        function dataURLtoFile(dataURI, filename) {
           var byteString = atob(dataURI.split(',')[1]);
-
           var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
           var ab = new ArrayBuffer(byteString.length);
           var ia = new Uint8Array(ab);
           for (var i = 0; i < byteString.length; i++) {
               ia[i] = byteString.charCodeAt(i);
           }
 
-          return new Blob([ab], {type: mimeString});
+          return new File([ab], filename, { type: mimeString });
         }
       
         $.ajax({
-          url: '/community/postQuestion',
+          url: '/community/updateQuestion',
           type: 'POST',
           data: formData,
           contentType: false,

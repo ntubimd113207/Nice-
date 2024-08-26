@@ -370,7 +370,66 @@ def post_question():
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return jsonify({'error': str(e)}), 500
-        
+
+#編輯發佈
+@community_bp.route('/updateQuestion', methods=['POST'])
+def update_question():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            title = request.form.get('title')
+            content = request.form.get('content')
+            qid = request.form.get('Qid')
+            folderName = request.form.get('folderName')
+            files = request.files.getlist('files[]')
+
+            print(files)
+
+            base_path = "static/images/community/"
+            folder_path = os.path.join(base_path, str(uid), folderName)
+
+            # 清空檔案，但是保留跟files裡面的檔案名稱一樣的檔案
+            for file in os.listdir(folder_path):
+                if file not in [f.filename for f in files]:
+                    os.remove(os.path.join(folder_path, file))
+
+            # 取得資料夾中的所有檔案名稱
+            existing_files = set(os.listdir(folder_path))
+            
+            print(existing_files)
+
+            # 新增新的檔案
+            for index, file in enumerate(files, start=1):
+
+                random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+
+                new_filename = f"{index}_{random_str}.jpg"
+
+                if file.filename not in existing_files:  # 檢查檔案是否已存在
+                    print(file.filename)
+                    file.save(os.path.join(folder_path, new_filename))
+                    existing_files.add(new_filename)  # 更新存在的檔案列表
+
+            connection = db.get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute('''
+                UPDATE body.question 
+                SET title = %s, "content" = %s, update_time = now()
+                WHERE "Qid" = %s and "Uid" = %s;
+                ''', (title, content, qid, uid))
+
+            response = {'message': 'Question posted successfully.'}
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+
+
 # 刪除
 @community_bp.route('/deleteQuestion', methods=['POST'])
 def delete_question():
