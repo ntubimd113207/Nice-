@@ -82,6 +82,8 @@ def community_Main():
 
     keepCombined = ','.join(combined)
 
+    print(question)
+
     return render_template('/community/communityMain.html', name=name, userImage=userImage, uid=uid, question=question, is_nutritionist=is_nutritionist, keep=keep, keepCombined=keepCombined)
 
 
@@ -494,6 +496,52 @@ def robott_subCollect():
 
             cursor.execute('DELETE FROM body."QnAKeep" WHERE "Qid"=%s and "QKid"=%s;', (question_id, category_id))
             response = {'message': f'subCollect successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+# 留言
+@community_bp.route('addAnswer', methods=['POST'])
+def robott_addAnswer():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            question_id = request.form.get('question_id')
+            content = request.form.get('message')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('INSERT INTO body.answer ("Qid", "Uid", message, create_time, update_time) VALUES (%s, %s, %s, now(), now());', (question_id, uid, content))
+            response = {'message': f'addAnswer successfully.'}
+
+            connection.commit()
+            connection.close()
+
+            return jsonify(response)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+# 設為最佳解
+@community_bp.route('setBestAnswer', methods=['POST'])
+def robott_setBestAnswer():
+    uid=session['uid']
+
+    if request.method == 'POST':
+        try:
+            question_id = request.form.get('question_id')
+            answer_id = request.form.get('answer_id')
+
+            connection = db.get_connection() 
+            cursor = connection.cursor()
+
+            cursor.execute('UPDATE body.question SET "BestAid"=%s WHERE "Qid"=%s;', (answer_id, question_id))
+            response = {'message': f'setBestAnswer successfully.'}
 
             connection.commit()
             connection.close()
