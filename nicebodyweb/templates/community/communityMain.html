@@ -111,7 +111,7 @@
           {% if question[1] != uid and is_nutritionist == '2' %}
           <div class="bottom">
             <input type="text" placeholder="我來解說吧!">
-            <button><i class="fa-regular fa-paper-plane"></i></button>
+            <button type="button"><i class="fa-regular fa-paper-plane"></i></button>
           </div>
           {% endif %}
         </div>
@@ -660,6 +660,60 @@
         const questionItem = document.querySelector(`.question-item[data-uid="${questionId}"]`);
         questionItem.remove();
 
+      });
+    });
+  
+    // 我來解說吧!
+    document.addEventListener('DOMContentLoaded', () => {
+      const explainButtons = document.querySelectorAll('.bottom button');
+      const explainInputs = document.querySelectorAll('.bottom input[type="text"]');
+
+      explainButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+          const input = explainInputs[index];
+
+          if (input.value.trim() === '') {
+            alert('請輸入解說內容');
+            return;
+          }
+
+          // jquery ajax
+          $.ajax({
+            type: 'POST',
+            url: '/community/addAnswer',
+            data: {
+              question_id: questionId,
+              message: input.value
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+
+          // 新增解說內容，不是最佳解
+          const bottom = button.closest('.bottom');
+          const newExplanation = document.createElement('div');
+          newExplanation.classList.add('each');
+          newExplanation.innerHTML = `
+            <div class="top">
+              <div class="right">
+                <img class="photostickers" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
+                <p>2021/08/01</p>
+              </div>
+            </div>
+            <div class="bottom">
+              ${input.value}
+            </div>
+          `;
+          bottom.insertAdjacentElement('beforebegin', newExplanation);
+
+          input.value = '';
+          
+        });
       });
     });
   </script>

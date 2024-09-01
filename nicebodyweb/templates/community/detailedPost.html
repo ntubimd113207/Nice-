@@ -69,25 +69,35 @@
         <div class="line"></div>
         {% if question[1] != uid and is_nutritionist == '2' %}
         <div class="bottom">
-          <input type="text" placeholder="說點什麼吧！">
+          <input type="text" placeholder="說點什麼吧！" id="messageInput">
           <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
         </div>
         {% endif %}
         <div class="comment">
           {% for answer in answer %}
-          <div class="each">
+          <div class="each" data-id="{{ answer[0] }}">
             <div class="top">
               {% if loop.first and question[5] is not none %}
               <div class="bestoptimal">
                 <i class="fa-solid fa-crown"></i>最佳解
               </div>
-              {% elif question[1] == uid %}
-              <button class="optimal">設為最佳解</button>
-              {% endif %}
+              <button class="optimal" style="display: none;">設為最佳解</button>
               <div class="right">
                 <p>{{ answer[5].strftime('%Y/%m/%d') }}</p>
                 <img class="photostickers" src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
               </div>
+              {% elif question[1] == uid %}
+              <button class="optimal">設為最佳解</button>
+              <div class="right">
+                <p>{{ answer[5].strftime('%Y/%m/%d') }}</p>
+                <img class="photostickers" src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
+              </div>
+              {% else %}
+              <div class="right">
+                <img class="photostickers" src="/static/images/userImage/{{answer[1]}}/{{answer[6]}}" alt="">
+                <p>{{ answer[5].strftime('%Y/%m/%d') }}</p>
+              </div>
+              {% endif %}
             </div>
             <div class="bottom">
               {{ answer[3] }}
@@ -405,6 +415,126 @@
         deleteDialog.close();
       });
     });
+  
+    // 說點什麼吧！
+    document.addEventListener('DOMContentLoaded', function() {
+      const messageInput = document.getElementById('messageInput');
+      const messageButton = document.querySelector('.bottom button');
+
+      messageButton.addEventListener('click', function() {
+        const message = messageInput.value;
+        if (message === '') {
+          alert('請輸入留言！');
+          return;
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/community/addAnswer",
+          data: {
+            question_id: "{{ question[0] }}",
+            message: message
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            //alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        messageInput.value = '';
+
+        // 如果有最佳解加入留言到第二個
+        if (document.querySelector('.bestoptimal')) {
+          const newComment = document.createElement('div');
+          newComment.classList.add('each');
+          newComment.innerHTML = `
+            <div class="top">
+              <div class="right">
+                <img class="photostickers" src="/static/images/userImage/${uid}/${userImage}" alt="">
+                <p>${new Date().toLocaleDateString()}</p>
+              </div>
+            </div>
+            <div class="bottom">
+              ${message}
+            </div>
+          `;
+          document.querySelector('.comment').insertBefore(newComment, document.querySelector('.comment').children[1]);
+        } else {
+          const newComment = document.createElement('div');
+          newComment.classList.add('each');
+          newComment.innerHTML = `
+            <div class="top">
+              <div class="right">
+                <img class="photostickers" src="/static/images/userImage/${uid}/${userImage}" alt="">
+                <p>${new Date().toLocaleDateString()}</p>
+              </div>
+            </div>
+            <div class="bottom">
+              ${message}
+            </div>
+          `;
+          document.querySelector('.comment').appendChild(newComment);
+        }
+        
+
+      });
+    });
+
+    // 設為最佳解
+    document.addEventListener('DOMContentLoaded', function() {
+      // 儲存最佳解的留言元素
+      let bestAnswerElement = null;
+
+      // 檢查是否已經有最佳解
+      const bestAnswer = document.querySelector('.bestoptimal');
+      if (bestAnswer) {
+        bestAnswerElement = bestAnswer.closest('.each');
+      }
+
+      // 當點選「設為最佳解」按鈕時
+      document.querySelectorAll('.optimal').forEach(button => {
+        button.addEventListener('click', function() {
+          // 獲取當前按鈕所在的留言元素
+          const answerElement = this.closest('.each');
+          const answerId = answerElement.dataset.id;
+
+          // 檢查是否已經有最佳解
+          if (bestAnswerElement) {
+            // 移除原有的最佳解標籤
+            bestAnswerElement.querySelector('.bestoptimal')?.remove();
+            // 恢復原有的按鈕
+            bestAnswerElement.querySelector('.optimal').style.display = 'inline-block';
+          }
+
+          // 設為最佳解
+          bestAnswerElement = answerElement;
+          answerElement.querySelector('.top').insertAdjacentHTML('afterbegin', '<div class="bestoptimal"><i class="fa-solid fa-crown"></i>最佳解</div>');
+          // 隱藏「設為最佳解」按鈕
+          this.style.display = 'none';
+
+          // 進行伺服器端更新
+          $.ajax({
+            type: "POST",
+            url: "/community/setBestAnswer",
+            data: {
+              question_id: "{{ question[0] }}",
+              answer_id: answerId
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+        });
+      });
+    });
+
+    
   </script>
 </body>
 </html>
