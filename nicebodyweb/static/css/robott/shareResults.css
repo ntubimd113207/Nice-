@@ -258,9 +258,9 @@
 }
 
 .comment > .wrap {
-    width: 60%;
-    margin-bottom: 50px;
-    align-items: center;
+  width: 60%;
+  margin-bottom: 50px;
+  align-items: center;
 }
 
 .comment > .wrap > .title {
