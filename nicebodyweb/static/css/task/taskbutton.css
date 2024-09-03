@@ -147,3 +147,15 @@
     transform: rotate(360deg);
   }
 }
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  .static button {
+    padding: 5px 10px;
+  }
+
+  .static button span {
+    font-size: 12px;
+  }
+}

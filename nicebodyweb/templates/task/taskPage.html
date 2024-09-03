@@ -345,12 +345,14 @@
       <div class="saying">
         {% for a in achievement %}
         <div class="eachsay">
-          <div class="left">
-            <img src="/static/images/userImage/{{ a[2] }}/{{ a[5] }}" alt="">
-            <h6>{{ a[4] }}</h6>
-            <p>{{ a[1] }}</p>
+          <div class="top">
+            <div class="left">
+              <img src="/static/images/userImage/{{ a[2] }}/{{ a[5] }}" alt="">
+              <h6>{{ a[4] }}</h6>
+            </div>
+            <div class="date">{{ a[3].strftime('%Y/%m/%d') }}</div>
           </div>
-          <div class="date">{{ a[3].strftime('%Y/%m/%d') }}</div>
+          <p>{{ a[1] }}</p>
         </div>
         <div class="line"></div>
         {% endfor %}
@@ -437,99 +439,7 @@
         infor.close();
       });
     });
-    // 任務按鈕
-    document.addEventListener('DOMContentLoaded', function() {
-      const rewardButtons = document.querySelectorAll('.rewardButton');
-      const levelElement = document.getElementById('level');
-      const progressElement = document.getElementById('progress');
-      const scoreElement = document.getElementById('score');
-      const levels = [10, 20, 40, 65, 90, 125, 150, 200, 300, 500];
 
-      let currentScore = "{{level_data[1]}}"
-      let currentLevel = "{{level_data[0]}}"
-
-      function updateProgress() {
-        const levelMax = levels[currentLevel - 1];
-        scoreElement.textContent = `${currentScore}/${levelMax}`;
-        progressElement.value = currentScore / levelMax;
-        levelElement.textContent = currentLevel;
-      }
-
-      function triggerFireworks() {
-        var duration = 15 * 300;
-        var animationEnd = Date.now() + duration;
-        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-        function randomInRange(min, max) {
-          return Math.random() * (max - min) + min;
-        }
-
-        var interval = setInterval(function() {
-          var timeLeft = animationEnd - Date.now();
-
-          if (timeLeft <= 0) {
-            return clearInterval(interval);
-          }
-
-          var particleCount = 50 * (timeLeft / duration);
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-        }, 250);
-      }
-    
-      rewardButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const btn = this;
-
-          $.ajax({
-            url: '/task/receiveTask',
-            type: 'POST',
-            data: {
-              task_id: btn.getAttribute('data-task-id')
-            },
-            success: function(response) {
-              const staticDiv = btn.closest('.static');
-              const firstSvg = btn.querySelector('svg:nth-child(2)');
-              const svgToToggle = btn.querySelector('svg:nth-child(3)');
-              const spinner = btn.querySelector('.spinner');
-
-              staticDiv.classList.remove('nocancel');
-              staticDiv.classList.add('cancel');
-
-              btn.classList.add("disabled");
-                    
-              firstSvg.style.display = 'none';
-              svgToToggle.style.display = '';
-              spinner.style.display = 'none';
-
-              btn.querySelector('span').textContent = '領取成功';
-
-              document.activeElement.blur();
-
-              currentScore = parseInt(currentScore);
-
-              currentScore += 5;
-              const levelMax = levels[currentLevel - 1];
-              
-              console.log(currentScore, levelMax);
-
-              if (currentScore >= levelMax) {
-                currentLevel++;
-                currentScore = 0;
-                triggerFireworks();
-              }
-
-              updateProgress();
-            },
-            error: function(xhr, status, error) {
-              console.error(error);
-              alert(xhr.responseText);
-            },
-          });
-        });
-      });
-    });
-	
     // 新增留言
     document.addEventListener("DOMContentLoaded", function() {
       let opencheckcmt = document.getElementById("opencheckcmt");
@@ -577,8 +487,8 @@
             console.log(response);
           },
           error: function(xhr, status, error) {
-              console.error(error);
-              alert(error, '出現錯誤，請稍後再試！');
+            console.error(error);
+            alert(error, '出現錯誤，請稍後再試！');
           }
         });
 
@@ -643,6 +553,9 @@
       }
 
       function triggerFireworks() {
+        let fireworks = document.querySelector(".fireworks");
+        fireworks.style.display = "block";
+
         var duration = 15 * 300;
         var animationEnd = Date.now() + duration;
         var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -704,6 +617,7 @@
                 currentLevel++;
                 currentScore = 0;
                 triggerFireworks();
+                fireworks.style.display = "none";
               }
 
               updateProgress();

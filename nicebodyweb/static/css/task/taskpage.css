@@ -52,8 +52,6 @@ progress::-webkit-progress-value {
   align-items: center;
 }
 
-
-
 .title {
   display: flex;
   justify-content: space-between;
@@ -246,36 +244,42 @@ progress::-webkit-progress-value {
 
 .eachsay {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eachsay .top {
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.eachsay .left {
+.eachsay .top .left {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 15px;
 }
 
-.eachsay .left img {
+.eachsay img {
   max-width: 100%;
   max-height: 100%;
   width: 35px;
-  height: 35px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.eachsay .left h6 {
-  font-size: 1.2em;
+.eachsay h6 {
   font-weight: bold;
   white-space: nowrap;
 }
 
-.eachsay .left p {
+.eachsay p {
   line-height: 25px;
   flex-grow: 1;
 }
 
-.eachsay .left > h6 > span,
 .eachsay .date {
   font-size: 0.8em;
 }
@@ -285,6 +289,10 @@ progress::-webkit-progress-value {
   height: 1px;
   background-color: #F0EAD2;
   margin: 2% 0;
+}
+
+.fireworks {
+  display: none;
 }
 
 /* Large 1200px */
@@ -315,7 +323,7 @@ progress::-webkit-progress-value {
 
 @media screen and (max-width:1024px) {
   article {
-    padding: 10%;
+    padding: 15% 10% 5%;
   }
 
   .eachtask {
@@ -328,11 +336,24 @@ progress::-webkit-progress-value {
 @media screen and (max-width:768px) {
   article {
     background-color: #F0EAD2;
-    padding: 15% 10% 5%;
+    padding: 120px 10% 5%;
   }
 
-  .title {
-    margin: 10% 0;
+  .progress-bar > .level {
+    padding: 15px 5px;
+    font-size: 1em;
+  }
+  
+  .progress-bar > .level > span {
+    font-size: 10px;
+  }
+
+  #score {
+    font-size: 12px;
+  }
+
+  .title .text {
+    font-size: 1.5em;
   }
 
   .eachtask {
@@ -360,7 +381,57 @@ progress::-webkit-progress-value {
     font-size: 5em;
   }
   
-  .accumulation:hover h1 {
+  .accumulation:hover h1, 
+  .accumulation.active h1 {
     font-size: 6em;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  .title .text {
+    font-size: 1em;
+  }
+
+  .titlecontent {
+    font-size: 12px;
+  }
+
+  .milestone {
+    grid-gap: 20px;
+  }
+
+  .accumulation > i {
+    font-size: 5em;
+  }
+
+  .accumulation h1 {
+    font-size: 3em;
+  }
+  
+  .accumulation:hover h1,
+  .accumulation.active h1 {
+    font-size: 4em;
+  }
+
+  .accumulation .label,
+  .accumulation:hover .label, 
+  .accumulation.active .label {
+    font-size: 0.5em;
+  }
+
+  .eachsay .left p,
+  .eachsay p {
+    font-size: 12px;
+  }
+
+  .eachsay .date,
+  .eachsay .date {
+    font-size: 10px;
+  }
+
+  .eachsay {
+    gap: 10px;
   }
 }
