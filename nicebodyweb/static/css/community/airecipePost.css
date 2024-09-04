@@ -1,6 +1,7 @@
 article {
-  padding: 10% 15% 5%;
+  padding: 150px 25% 5%;
   background-color: #F0EAD2;
+  min-height: 85vh;
 }
 
 .title {
@@ -22,14 +23,14 @@ article {
 /* form */
 
 form {
-  margin: 5% 15% 0;
+  margin-top: 5%;
 }
 
 .pen {
   margin-bottom: 5%;
 }
 
-.pen > h3 {
+.pen h3 {
   margin-bottom: 2%;
 }
 
@@ -126,11 +127,11 @@ form {
 }
 
 .btn input {
-  font-size: 1.250em;
+  font-size: 1em;
   border: none;
   background-color: #86BAA1;
   color: #FCFAF1;
-  padding: 1% 10%;
+  padding: 1% 8%;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -165,7 +166,7 @@ form {
   display: inline-block;
   background-color: #BC6C25;
   color: white;
-  padding: 10px 10px;
+  padding: 10px;
   cursor: pointer;
   border-radius: 50px;
   text-align: center;
@@ -207,11 +208,40 @@ form {
   pointer-events: none;
 }
 
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 150px 23% 5%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  article {
+    padding: 150px 20% 5%;
+  }
+}
+
 /* Medium 1024px */
 
 @media screen and (max-width:1024px) {
   article {
-    padding: 15% 15% 5%;
+    padding: 120px 18% 5%;
+  }
+
+  .title > i,
+  .title > h1 {
+    font-size: 25px;
+  }
+
+  .carousel {
+    height: 220px;
+  }
+
+  .carousel-cell {
+    height: 200px;
   }
 }
 
@@ -219,7 +249,35 @@ form {
 
 @media screen and (max-width:768px) {
   article {
-    padding: 20% 15% 5%;
+    padding: 120px 15% 5%;
+  }
+
+  form {
+    margin-top: 30px;
+  }
+
+  .title > i,
+  .title > h1 {
+    font-size: 20px;
+  }
+
+  .pen h3,
+  .pen > input,
+  .pen > textarea {
+    font-size: 15px;
+  }
+
+  .carousel {
+    height: 170px;
+  }
+  
+  .carousel-cell {
+    width: 60%;
+    height: 150px;
+  }
+
+  .btn input {
+    padding: 1.5% 7%;
   }
 }
 
@@ -227,6 +285,29 @@ form {
 
 @media screen and (max-width:480px) {
   article {
-    padding: 25% 15% 10%;
+    padding: 120px 10% 5%;
+  }
+
+  .pen h3,
+  .pen > textarea,
+  .fa-plus {
+    font-size: 12px;
+  }
+
+  .pen > input {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .add-file-btn {
+    padding: 6px;
+  }
+
+  .carousel-cell {
+    width: 100%;
+  }
+
+  .btn input {
+    font-size: 12px;
   }
 }

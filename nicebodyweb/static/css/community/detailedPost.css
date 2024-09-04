@@ -1,7 +1,7 @@
 article {
   background-color: #F0EAD2;
   min-height: 100vh;
-  padding: 8% 20% 5%;
+  padding: 150px 20% 5%;
   color: #495057;
   display: flex;
   flex-direction: column;
@@ -94,8 +94,7 @@ section {
   width: 100%;
   height: 1px;
   background-color: #CCC5B9;
-  margin-bottom: 2%;
-  margin-top: 4%;
+  margin: 2% 0;
 }
 
 .pocontent > .bottom {
@@ -148,7 +147,6 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 5%;
 }
 
 /* each */
@@ -160,7 +158,6 @@ section {
   padding: 2%; 
   box-sizing: border-box;
   border-radius: 10px;
-  margin-bottom: 20px;
 }
 
 .comment > .each > .top {
@@ -228,8 +225,6 @@ section {
 /* Flickity Carousel */
 .carousel {
   width: 100%;
-  height: 320px;
-  padding: 10px;
   border: hsl(48, 50%, 88%);
   border-radius: 10px;
   box-sizing: border-box;
@@ -250,17 +245,26 @@ section {
   border-radius: 10px;
 }
 
+.flickity-page-dots {
+  position: initial;
+  margin: 2% 0 0;
+}
+
 /* X-Large 1440px */
 
 @media screen and (max-width:1440px) {
   article {
-    padding: 10% 15% 5%;
+    padding: 150px 15% 5%;
   }
 }
 
 /* Large 1200px */
 
 @media screen and (max-width:1200px) {
+  article {
+    padding: 150px 10% 5%;
+  }
+
   .pocontent > .line {
     margin-top: 5%;
   }
@@ -280,6 +284,26 @@ section {
   .circlepo {
     padding: 15px;
   }
+
+  .carousel {
+    height: 220px;
+  }
+
+  .carousel-cell {
+    height: 200px;
+  }
+
+  .flickity-prev-next-button {
+    top: 45%;
+    width: 30px;
+    height: 30px;
+  }
+
+  .flickity-page-dots .dot {
+    width: 5px;
+    height: 5px;
+    margin: 0 5px;
+  }
 }
 
 /* Small 768px */
@@ -289,13 +313,106 @@ section {
     padding: 20px;
   }
 
+  .pocontent > .top > .left {
+    gap: 10px;
+  }
+
+  .pocontent > .top > .left h1,
+  .pocontent > .top > .right,
+  .pocontent > .bottom i,
+  .pocontent > .middle > .textcontent,
+  .say,
+  .each > .bottom {
+    font-size: 12px;
+  }
+
+  .pocontent > .bottom > input {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+  
+  .pocontent > .top > .left span,
+  .each > .top > .right > p {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .pocontent > .middle {
+    margin: 5% 0 3%;
+    gap: 5px;
+  }
+
+  .pocontent > .middle > h1 {
+    font-size: 15px;
+  }
+
+  .carousel {
+    height: 170px;
+  }
+  
+  .carousel-cell {
+    width: 60%;
+    height: 150px;
+  }
+
   .pocontent > .line {
-    margin-top: 40px;
+    margin: 2% 0 3%;
+  }
+
+  .optimal {
+    padding: 7px;
+    font-size: 12px;
+  }
+
+  .optimal i {
+    font-size: 20px;
+  }
+
+  .each {
+    padding: 3%;
+  }
+
+  .each > .top {
     margin-bottom: 10px;
+  }
+
+  .comment > .each {
+    padding: 10px;
+}
+
+  .comment > .each > .top {
+    margin-bottom: 10px;
+  }
+
+  .flickity-prev-next-button {
+    width: 25px;
+    height: 25px;
   }
 }
 
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  .eachpo,
+  .po {
+    gap: 10px;
+  }
+
+  .pocontent > .top {
+    margin: 0 0 5%;
+  }
+  
+  .carousel-cell {
+    width: 100%;
+  }
+
+  .optimal {
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+
+  .flickity-prev-next-button {
+    width: 20px;
+    height: 20px;
+  }
 }
