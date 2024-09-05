@@ -225,6 +225,19 @@
       });
     });
 
+    // 任務
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showDialog = urlParams.get("showDialog");
+
+        if (showDialog === "true") {
+            const dialog = document.getElementById("howToGenerate");
+            if (dialog) {
+                dialog.showModal();
+            }
+        }
+    });
+
   </script>
 </body>
 </html>

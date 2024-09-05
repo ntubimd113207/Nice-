@@ -71,6 +71,10 @@ article {
   margin-top: 10%;
 }
 
+#weight-change-chart {
+  scroll-margin-top: 120px; /* 根據你的 navbar 高度進行調整 */
+}
+
 .btn {
   display: flex;
   align-items: center;
