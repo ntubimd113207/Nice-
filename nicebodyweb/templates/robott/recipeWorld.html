@@ -64,11 +64,13 @@
           <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
           <div class="title">
             {% if d[14] == '2' %}
-            <div class="recipe-avatarFrame">
+            <div class="recipe-avatarFrame have">
               <img class="recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
             </div>
             {% else %}
-            <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+            <div class="recipe-avatarFrame">
+              <img class="noAvatarFrame recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+            </div>
             {% endif %}
 
             <h3>{{d[0]}}</h3>
@@ -139,11 +141,13 @@
             <div class="forrwd">
               <div class="title">
                 {% if d[14] == '2' %}
-                <div class="recipe-avatarFrame">
+                <div class="recipe-avatarFrame have">
                   <img class="recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
                 </div>
                 {% else %}
-                <img class="noAvatarFrame-recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+                <div class="recipe-avatarFrame">
+                  <img class="noAvatarFrame recipe-profile" src="{{ user_image_path }}/{{d[11]}}/{{ d[6] }}" alt="ProfilePicture">
+                </div>
                 {% endif %}
 
                 <h3>{{d[0]}}</h3>

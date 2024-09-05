@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="/static/css/components/dialog.css">
 		<link rel="stylesheet" href="/static/css/layout/navbar.css">
 		<link rel="stylesheet" href="/static/css/layout/footer.css">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
 		<link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
 		<link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
@@ -23,7 +24,6 @@
 		<script src="/static/components/layout/footer.js" defer></script>
 		<script src="/static/components/jquery.fancybox.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<title>生成食譜 > 詳細食譜</title>
 	</head>
 
@@ -121,7 +121,7 @@
 						<div class="chart-container">
 							<p>{{data[6]}}</p>
 							{% if data[11] > 134 %}
-								<canvas id="nutritionChart" width="400" height="400"></canvas>
+								<canvas id="nutritionChart"></canvas>
 							{% endif %}
 						</div>
 					</div>

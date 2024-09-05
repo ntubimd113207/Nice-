@@ -151,9 +151,8 @@ article {
 }
 
 .recipe-avatarFrame {
-  background-image: url(/static/images/nutritionistFrame.png);
   width: 60px;
-  height: 60px;
+  aspect-ratio: 1;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -162,20 +161,21 @@ article {
   align-items: center;
 }
 
+.have {
+  background-image: url(/static/images/nutritionistFrame.png);
+}
+
 .recipe-profile {
   border-radius: 50%;
   width: 35px;
-  height: 35px;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 
-.noAvatarFrame-recipe-profile {
+.noAvatarFrame {
   max-width: 100%;
   max-height: 100%;
-  width: 12%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 45px;
 }
 
 .title h3 {
@@ -373,5 +373,13 @@ article {
 
   .content {
     margin-top: 5%;
+  }
+
+  .rwdrecipe button {
+    gap: 20px;
+  }
+
+  .rwdrecipe .title {
+    gap: 5px;
   }
 }
