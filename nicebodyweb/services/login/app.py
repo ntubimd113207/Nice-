@@ -15,7 +15,8 @@ from dotenv import load_dotenv
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 secret_key = os.environ.get("APP_SECRET")
 GOOGLE_CLIENT_ID = "971262403572-9oh6v76h7plj7asdpj7bj5hnvroj2q7h.apps.googleusercontent.com"
-client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+# client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+client_secrets_file = "/etc/secrets/client_secret.json"
 
 # 產生目標服務藍圖
 login_bp = Blueprint('login_bp', __name__)
