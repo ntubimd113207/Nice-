@@ -19,7 +19,7 @@ question_bp = Blueprint('question_bp', __name__)
 #--------------------------
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "OPENAI_API_KEY"))
-Recipes_image_path = "http://127.0.0.1:5000/static/images/openai"
+Recipes_image_path = "/static/images/openai"
 
 speech_config = speechsdk.SpeechConfig(
     subscription=os.environ.get("SPEECH_KEY", "SPEECH_KEY"),
