@@ -201,6 +201,7 @@
       // 當打開 dialog 時，記錄當前的勾選狀態
       openCollectButton.addEventListener('click', function() {
         collect.showModal();
+        collect.scrollTop = 0;
         // 清空 previous selections
         oldSelect = [];
         document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
@@ -309,6 +310,7 @@
 
       openReportButton.addEventListener('click', function() {
         reportDialog.showModal();
+        reportDialog.scrollTop = 0;
 
         // 將檢舉原因清空
         reportDialog.querySelectorAll('#report .eachreason input[type="checkbox"]').forEach(checkbox => {
@@ -387,6 +389,7 @@
 
       openDeleteButton.addEventListener('click', function() {
         deleteDialog.showModal();
+        deleteDialog.scrollTop = 0;
       });
 
       saveDeleteButton.addEventListener('click', function() {

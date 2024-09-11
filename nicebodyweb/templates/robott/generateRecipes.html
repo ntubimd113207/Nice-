@@ -188,8 +188,10 @@
       if (messageText === '0') {
         event.preventDefault();
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }else{
         document.getElementById('howToGenerate').showModal();
+        document.getElementById('howToGenerate').scrollTop = 0;
       }
     };
 
@@ -227,17 +229,17 @@
 
     // 任務
     document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const showDialog = urlParams.get("showDialog");
+      const urlParams = new URLSearchParams(window.location.search);
+      const showDialog = urlParams.get("showDialog");
 
-        if (showDialog === "true") {
-            const dialog = document.getElementById("howToGenerate");
-            if (dialog) {
-                dialog.showModal();
-            }
+      if (showDialog === "true") {
+        const dialog = document.getElementById("howToGenerate");
+        if (dialog) {
+          dialog.showModal();
+          dialog.scrollTop = 0;
         }
+      }
     });
-
   </script>
 </body>
 </html>

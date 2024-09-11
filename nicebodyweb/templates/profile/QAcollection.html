@@ -149,6 +149,7 @@
 
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }
     };
 
@@ -182,6 +183,7 @@
     // 新增分類
     document.getElementById('addList').addEventListener('click', function() {
       document.getElementById('addcollect').showModal();
+      document.getElementById('addcollect').scrollTop = 0;
       document.getElementById('insertName').value = '';
 
       // close dialog
@@ -260,6 +262,7 @@
     document.addEventListener('click', function(event) {
       if (event.target && event.target.matches('.opencollecttitle')) {
         document.getElementById('collecttitle').showModal();
+        document.getElementById('collecttitle').scrollTop = 0;
         oldName = event.target.getAttribute('data-name');
         document.getElementById('updateName').value = oldName;
 
@@ -344,6 +347,7 @@
     document.addEventListener('click', function(event) {
       if (event.target && event.target.matches('.opencollectdelete')) {
         document.getElementById('deleteListDialog').showModal();
+        document.getElementById('deleteListDialog').scrollTop = 0;
         document.getElementById('savedeleteList').setAttribute('data-name', event.target.getAttribute('data-name'));
       }
     });
@@ -397,6 +401,7 @@
     document.addEventListener('click', function(event) {
       if (event.target && event.target.matches('.opencollect')) {
         document.getElementById('collect').showModal();
+        document.getElementById('collect').scrollTop = 0;
         const collectionName = event.target.getAttribute('data-list');
         const detailId = event.target.getAttribute('data-detailId');
         document.getElementById('savecollect').setAttribute('data-detailId', detailId);
@@ -563,6 +568,7 @@
     document.addEventListener('click', function(event) {
       if (event.target && event.target.matches('.opendelete')) {
         document.getElementById('deleteDetailDialog').showModal();
+        document.getElementById('deleteDetailDialog').scrollTop = 0;
         document.getElementById('savedeleteDetail').setAttribute('data-detailId', event.target.getAttribute('data-detailId'));
         document.getElementById('savedeleteDetail').setAttribute('data-list', event.target.getAttribute('data-list'));
 

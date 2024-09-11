@@ -13,6 +13,7 @@ window.onload = function () {
 
     if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById('loginDialog').scrollTop = 0;
     }
     
     // 检查输入框中是否有文本，并根据情况更新按钮状态和样式

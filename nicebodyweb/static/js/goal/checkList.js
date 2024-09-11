@@ -16,6 +16,7 @@ document.querySelectorAll('.opencheck').forEach(button => {
     currentRow = document.querySelector(`tr[data-id="${id}"]`);
 
     document.getElementById('check').showModal();
+    document.getElementById('check').scrollTop = 0;
   });
 });
 
@@ -32,6 +33,7 @@ document.querySelectorAll('.opencheck').forEach(button => {
       currentRow = document.querySelector(`tr[data-id="${id}"]`);
   
       document.getElementById('check').showModal();
+      document.getElementById('check').scrollTop = 0;
     });
   });
 
@@ -176,6 +178,7 @@ document.querySelectorAll('.opencheck').forEach(button => {
       currentRow = document.querySelector(`tr[data-id="${id}"]`);
   
       document.getElementById('check').showModal();
+      document.getElementById('check').scrollTop = 0;
     });
   });
 
@@ -185,6 +188,7 @@ document.querySelectorAll('.opendelete').forEach(button => {
         currentRow = document.querySelector(`tr[data-id="${id}"]`);
     
         document.getElementById('delete').showModal();
+        document.getElementById('delete').scrollTop = 0;
     });
 });
 

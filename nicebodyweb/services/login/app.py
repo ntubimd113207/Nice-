@@ -25,6 +25,7 @@ login_bp = Blueprint('login_bp', __name__)
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    # redirect_uri="http://127.0.0.1:5000/login/callback"
     redirect_uri="https://one13207.onrender.com/login/callback"
 )
 

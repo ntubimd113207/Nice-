@@ -4,6 +4,7 @@ window.onload = function() {
 
     if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById('loginDialog').scrollTop = 0;
     }
 
     // 變數

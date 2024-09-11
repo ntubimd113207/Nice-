@@ -94,6 +94,7 @@
       
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }
     };
 
@@ -111,6 +112,7 @@
         document.getElementById('saveweight').setAttribute('data-id', id);
         
         document.getElementById('weight').showModal();
+        document.getElementById("weight").scrollTop = 0;
 
         document.getElementById('weight-kg').focus();
       });
@@ -176,6 +178,7 @@
         document.getElementById('savedelete').setAttribute('data-id', id);
         
         document.getElementById('delete').showModal();
+        document.getElementById('delete').scrollTop = 0;
       });
     });
 

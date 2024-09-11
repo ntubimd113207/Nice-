@@ -165,6 +165,7 @@
 
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }
     };
 
@@ -220,6 +221,7 @@
 
       document.getElementById("openapplynutritionist").addEventListener("click", function () {
         document.getElementById("applynutritionist").showModal();
+        document.getElementById("applynutritionist").scrollTop = 0;
 
         // 清空檔案列表
         fileList.innerHTML = "";

@@ -394,6 +394,7 @@
 
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }
     };
 
@@ -433,6 +434,7 @@
 
       openinfor.addEventListener("click", function() {
         infor.showModal();
+        infor.scrollTop = 0;
       });
 
       closeinfor.addEventListener("click", function() {
@@ -456,6 +458,7 @@
 
         // show modal
         dialog.showModal();
+        dialog.scrollTop = 0;
       });
 
       closebtn.addEventListener("click", function() {
