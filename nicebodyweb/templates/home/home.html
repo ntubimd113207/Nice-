@@ -54,7 +54,11 @@
 							打造健康飲食的小助手
 						</h2>
 						<p>確保您的飲食均衡且營養豐富</p>
-						<a href="/robott/generateRecipes?showDialog=true"><button>開始使用</button></a>
+						<div class="homebtn">
+							<a href="/robott/generateRecipes?showDialog=true" class="btn">
+								<span>開始使用</span>
+							</a>
+						</div>
 					</div>
 			</section>
 
@@ -183,6 +187,18 @@
 				renderNav();
 				renderFooter();
 			};
+
+			// homebtn
+			const btnEl = document.querySelector(".btn");
+
+			btnEl.addEventListener("mouseover", (event) => {
+				const x = event.pageX - btnEl.offsetLeft;
+				const y = event.pageY - btnEl.offsetTop;
+
+				btnEl.style.setProperty("--xPos", x + "px");
+				btnEl.style.setProperty("--yPos", y + "px");
+			});
+
 		</script>
 
 		<script src="/static/js/jquery.min.js"></script>

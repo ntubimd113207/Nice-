@@ -138,10 +138,10 @@ input, select, textarea {
 		font-style: italic;
 	}
 
-		a:hover {
-			color: #ef8376;
-			border-bottom-color: transparent;
-		}
+	a:hover {
+		color: #FFF;
+		border-bottom-color: transparent;
+	}
 
 	sub {
 		position: relative;

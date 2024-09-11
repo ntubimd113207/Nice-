@@ -51,11 +51,48 @@ article {
   font-size: 1.250em;
 }
 
-.torobot .right button {
-  background-color: #6E3D0D;
+.homebtn {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.btn {
+  background-color: #a56e37;
+  white-space: nowrap;
   font-size: 1em;
   cursor: pointer;
-  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  color: #FFF;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px #be9871b3;
+}
+
+.btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  background-color: #6E3D0D;
+  width: 0;
+  height: 0;
+  left: var(--xPos);
+  top: var(--yPos);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 /* carousel */
@@ -312,7 +349,7 @@ article {
     font-size: 1em;
   }
 
-  .torobot .right button {
+  .torobot .right span {
     font-size: 0.8em;
     width: 50%;
   }
