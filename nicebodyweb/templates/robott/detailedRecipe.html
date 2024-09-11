@@ -163,6 +163,7 @@
 
 				if (messageText == "0") {
 					document.getElementById("loginDialog").showModal();
+					document.getElementById("loginDialog").scrollTop = 0;
 				}
 			};
 
@@ -246,6 +247,7 @@
 			let closeinfor=document.getElementById('closeinfor');
 			openinfor.addEventListener("click", function(){
 				infor.showModal();
+				infor.scrollTop = 0;
 			})
 			closeinfor.addEventListener("click", function(){
 				infor.close();
@@ -257,6 +259,7 @@
 			let closerelease=document.getElementById('closerelease');
 			openrelease.addEventListener("click", function(){
 				release.showModal();
+				release.scrollTop = 0;
 			})
 			closerelease.addEventListener("click", function(){
 				release.close();

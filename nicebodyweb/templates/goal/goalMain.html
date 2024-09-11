@@ -273,6 +273,7 @@
 
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
       }
     };
 
@@ -399,6 +400,7 @@
     function clearImage(type) {
       const dialog = document.getElementById(`${type}delete`);
       dialog.showModal();
+      dialog.scrollTop = 0;
     }
 
     function clearImage_confirm(type) {
@@ -481,6 +483,7 @@
     let closecheck=document.getElementById('closecheck');
     opencheck.addEventListener("click", function(){
       check.showModal();
+      check.scrollTop = 0;
     })
     closecheck.addEventListener("click", function(){
       check.close();
@@ -492,6 +495,7 @@
     let closeweight=document.getElementById('closeweight');
     openweight.addEventListener("click", function(){
       weight.showModal();
+      weight.scrollTop = 0;
     })
     closeweight.addEventListener("click", function(){
       weight.close();

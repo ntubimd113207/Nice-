@@ -252,6 +252,7 @@
 
 				if (messageText == "0") {
 					document.getElementById("loginDialog").showModal();
+					document.getElementById("loginDialog").scrollTop = 0;
 				}
 			};
 
@@ -339,6 +340,7 @@
 			let closeinfor=document.getElementById('closeinfor');
 			openinfor.addEventListener("click", function(){
 				infor.showModal();
+				infor.scrollTop = 0;
 			})
 			closeinfor.addEventListener("click", function(){
 				infor.close();
@@ -491,6 +493,7 @@
 				// 當打開 dialog 時，記錄當前的勾選狀態
 				openCollectButton.addEventListener('click', function() {
 					collect.showModal();
+					collect.scrollTop = 0;
 					// 清空 previous selections
 					oldSelect = [];
 					document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
@@ -589,9 +592,6 @@
 					collect.close();
 				});
 			});
-
-
-
 		</script>
 	</body>
 </html>

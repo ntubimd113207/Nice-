@@ -214,6 +214,7 @@
 
       if (messageText == "0") {
         document.getElementById("loginDialog").showModal();
+        document.getElementById('loginDialog').scrollTop = 0;
       }
     };
 
@@ -232,6 +233,7 @@
         switch (action) {
           case 'trash-can':
             document.getElementById('delete').showModal();
+            document.getElementById('delete').scrollTop = 0;
             document.getElementById('delete').setAttribute('data-uid', questionId);
             break;
           case 'pen-to-square':
@@ -239,10 +241,12 @@
             break;
           case 'bookmark':
             document.getElementById('collect').showModal();
+            document.getElementById('collect').scrollTop = 0;
             document.getElementById('collect').setAttribute('data-uid', questionId);
             break;
           case 'triangle-exclamation':
             document.getElementById('report').showModal();
+            document.getElementById('report').scrollTop = 0;
             document.getElementById('report').setAttribute('data-uid', questionId);
             break;
           default:
@@ -391,6 +395,7 @@
       openReportButtons.forEach(button => {
         button.addEventListener('click', () => {
           reportDialog.showModal();
+          reportDialog.scrollTop = 0;
 
           // 將檢舉原因清空
           reportDialog.querySelectorAll('.reasons input').forEach(input => input.checked = false);
@@ -481,6 +486,7 @@
       openCollectButtons.forEach(button => {
         button.addEventListener('click', () => {
           collectDialog.showModal();
+          collectDialog.scrollTop = 0;
 
           // 將打勾的checkbox清空
           collectDialog.querySelectorAll('.eachclass input').forEach(input => input.checked = false);
@@ -624,6 +630,7 @@
       openDeleteButtons.forEach(button => {
         button.addEventListener('click', () => {
           deleteDialog.showModal();
+          deleteDialog.scrollTop = 0;
 
           const questionId = button.closest('.question-item').getAttribute('data-uid');
 
