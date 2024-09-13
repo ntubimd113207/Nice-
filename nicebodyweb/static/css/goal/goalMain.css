@@ -1,6 +1,6 @@
 article {
   background-color: #F0EAD2;
-  padding: 10% 20% 5%;
+  padding: 200px 20% 5%;
 }
 
 /* check-in */
@@ -247,11 +247,32 @@ canvas {
   color: #FFF;
 }
 
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 170px 15% 5%;
+  }
+
+  .check-box > .item,
+  .add-check-box {
+    padding: 15px 25px;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  article {
+    padding: 150px 10% 5%;
+  }
+}
+
 /* Medium 1024px */
 
 @media screen and (max-width:1024px) {
   article {
-    padding: 15% 15% 5%;
+    padding: 120px 10% 5%;
   }
 
   dialog{
@@ -263,10 +284,6 @@ canvas {
 /* Small 768px */
 
 @media screen and (max-width:768px) {
-  article {
-    padding: 20% 15% 5%;
-  }
-
   dialog{
     width: 70vw;
   }
@@ -275,7 +292,4 @@ canvas {
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
-  article {
-    padding: 25% 15% 10%;
-  }
 }

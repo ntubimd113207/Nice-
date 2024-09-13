@@ -8,8 +8,6 @@ from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 from utils import db
-from dotenv import load_dotenv
-
 
 # 配置 Google OAuth 2.0 憑證
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -42,7 +40,7 @@ def login_is_required(function):
 @login_bp.route('/loginPage')
 def login_page(): 
     if "google_id" in session:
-        return render_template('/home/login.html', name=session['name'], userImage=session['user_image'], uid=session[uid], logged_in=True)
+        return render_template('/home/login.html', name=session['name'], userImage=session['user_image'], uid=session['uid'], logged_in=True)
     else: 
         return render_template('/home/login.html', name='0', uid='0', logged_in=False)
 

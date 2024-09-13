@@ -502,12 +502,14 @@
         let newMessage = document.createElement("div");
         newMessage.classList.add("eachsay");
         newMessage.innerHTML = `
-          <div class="left">
-            <img src="/static/images/userImage/${uid}/${userImage}" alt="">
-            <h6>${messageText}</h6>
-            <p>${text}</p>
+          <div class="top">
+            <div class="left">
+              <img src="/static/images/userImage/${uid}/${userImage}" alt="">
+              <h6>${messageText}</h6>
+            </div>
+            <div class="date">${today}</div>
           </div>
-          <div class="date">${today}</div>`
+          <p>${text}</p>`
         ;
 
         // 每新增一次留言，留言次數-1
