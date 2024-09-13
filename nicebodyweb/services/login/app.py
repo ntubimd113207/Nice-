@@ -95,7 +95,7 @@ def callback():
 
             cursor.execute(
                 """
-                SELECT "Uid", "userImage" FROM body.user_profile WHERE "googleId" = %s
+                SELECT "Uid", "userImage", "isNutritionist", username FROM body.user_profile WHERE "googleId" = %s
                 """,
                 (id_info.get("sub"),)
             )
@@ -103,6 +103,8 @@ def callback():
             result = cursor.fetchone()
             uid = result[0]
             user_image = result[1]
+            is_nutritionist = result[2]
+            username = result[3]
 
             # 獲取應用程序的根目錄
             app_root = current_app.root_path

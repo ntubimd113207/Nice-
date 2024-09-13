@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta property="og:title" content="Nice巴底推薦！輕鬆打造健康美味的一餐">
+		<meta property="og:description" content="還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n不僅美味，製作起來也超簡單，\n讓你輕鬆享受健康新生活！\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理">
 		<link href="/static/images/favicon.ico" rel="shortcut icon"/>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -468,14 +470,15 @@
 				const facebookButton = document.getElementById('fa-facebook');
 				const twitterButton = document.getElementById('twitter');
 
-				const shareText = encodeURIComponent("還在為今天的午餐所煩惱嗎？( •́ .̫ •̀ ) 我在Nice巴底生成了新食譜，一起嘗試健康新生活吧！🍽️ 美味又簡單，快來看看！(⁎⁍̴̛ᴗ⁍̴̛⁎) #食譜 #健康飲食");
+				const shareText = encodeURIComponent("還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n不僅美味，製作起來也超簡單，\n讓你輕鬆享受健康新生活！\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理");
+				const shareText2 = encodeURIComponent("還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理");
 
 				facebookButton.addEventListener('click', function() {
-					window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href + '&quote=' + shareText, '_blank');
+					window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
 				});
 
 				twitterButton.addEventListener('click', function() {
-					window.open('https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + shareText, '_blank');
+					window.open('https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + shareText2, '_blank');
 				});
 			});
 
