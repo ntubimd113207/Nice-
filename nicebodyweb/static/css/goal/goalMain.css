@@ -1,6 +1,6 @@
 article {
   background-color: #F0EAD2;
-  padding: 200px 20% 5%;
+  padding: 150px 20% 5%;
 }
 
 /* check-in */
@@ -15,14 +15,11 @@ article {
 
 .top > .title {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   color: #BC6C25;
   font-weight: bold;
-}
-
-.top > .title > i {
-  margin-right: 15px;
+  gap: 15px;
 }
 
 .top > button,
@@ -30,8 +27,8 @@ article {
 .input > button {
   border: none;
   background-color: #86BAA1;
-  height: 40px;
   width: 40px;
+  aspect-ratio: 1;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -83,15 +80,19 @@ article {
 }
 
 .input {
+  width: 100%;
   margin-top: 5%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .input input {
   border: none;
   padding: 1.5%;
   border-radius: 10px;
+  flex: 1;
 }
 
 canvas {
@@ -119,6 +120,7 @@ canvas {
   cursor: pointer;
   padding: 10px 15px;
   gap: 5px;
+  aspect-ratio: 0;
 }
 
 .photo {
@@ -287,9 +289,124 @@ canvas {
   dialog{
     width: 70vw;
   }
+
+  .custom-input {
+    height: 250px;
+  }
+
+  .edit {
+    font-size: 12px;
+  }
+
+  .edit > .left {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+  .edit > .left > button {
+    background-color: transparent;
+    height: fit-content;
+    width: fit-content;
+    font-size: 12px;
+  }
+
+  .edit > .left > button:last-child {
+    background-color: transparent;
+  }
+
+  .edit .left .fa-pen {
+    color: #86BAA1;
+  }
+
+  .edit .left .fa-trash-can {
+    color: #BC4749;
+  }
+
+  .top > button,
+  .top > .btn > button,
+  .input > button {
+    background-color: transparent;
+    width: fit-content;
+    font-size: 12px;
+    color: #BC6C25;
+  }
+
+  .top > button i,
+  .top > .btn > button i {
+    color: #BC6C25;
+  }
+
+  .btn {
+    gap: 10px;
+  }
+
+  .fa-paper-plane {
+    color: #BC6C25;
+  }
+
+  .input {
+    font-size: 12px;
+    line-height: 20px;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .input input {
+    padding: 2%;
+  }
+
+  .contrast > .top > button {
+    background-color: transparent;
+    font-size: 12px;
+    color: #BC6C25;
+  }
+
+  .contrast > .top > button p {
+    display: none;
+  }
 }
 
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  .top {
+    font-size: 20px;
+  }
+
+  .btn {
+    gap: 0;
+  }
+
+  .check-box > .item,
+  .add-check-box {
+    padding: 10px 20px;
+    margin-top: 3%;
+    font-size: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .input p {
+    display: none;
+  }
+
+  .photo {
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .photo > i {
+    font-size: 15px;
+  }
+
+  .before,
+  .after {
+    width: 100%;
+    flex: content;
+  }
 }
