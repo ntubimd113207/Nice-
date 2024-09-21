@@ -53,3 +53,82 @@ ___
 </table>  
 
 ### 使用標準與工具
+<table>
+  <tr>
+    <th colspan="2">系統開發環境</th>
+  </tr>
+  <tr>
+    <td>作業系統</td>
+    <td>Windows</td>
+  </tr>
+  <tr>
+    <td>撰寫工具</td>
+    <td>Visual Studio Code、DBeaver</td>
+  </tr>
+</table>  
+<table>
+  <tr>
+    <th colspan="2">程式開發語言</th>
+  </tr>
+  <tr>
+    <td>前端</td>
+    <td>HTML、CSS、JS</td>
+  </tr>
+  <tr>
+    <td>後端</td>
+    <td>Flask</td>
+  </tr>
+  <tr>
+    <td>資料庫</td>
+    <td>PostgreSQL</td>
+  </tr>
+</table>  
+<table>
+  <tr>
+    <th colspan="2">介面及插圖繪製工具</th>
+  </tr>
+  <tr>
+    <td>插圖</td>
+    <td>Copilot、DALL-E</td>
+  </tr>
+  <tr>
+    <td>介面</td>
+    <td>Figma</td>
+  </tr>
+</table> 
+<table>
+  <tr>
+    <th colspan="2">文件及美化工具</th>
+  </tr>
+  <tr>
+    <td>文件</td>
+    <td>Microsoft Word、Excel</td>
+  </tr>
+  <tr>
+    <td>圖表</td>
+    <td>Diagram.net、Canva</td>
+  </tr>
+  <tr>
+    <td>簡報</td>
+    <td>Microsoft PowerPoint、Canva</td>
+  </tr>
+</table>  
+<table>
+  <tr>
+    <th colspan="2">專案管理及版本控制工具</th>
+  </tr>
+  <tr>
+    <td>應用程式</td>
+    <td>Fork</td>
+  </tr>
+  <tr>
+    <td>版本控制</td>
+    <td>Git</td>
+  </tr>
+</table> 
+
+## 需求模型
+### 使用者需求
+
+### 使用個案圖
+## 結論及未來發展
