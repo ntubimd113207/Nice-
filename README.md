@@ -23,3 +23,33 @@ ___
 ### 預期成果
 - 吸引更多人嘗試和維持健康飲食習慣，提升國民整體健康水準。
 - 在獲取食譜的過程中，可吸收到關於營養和健康的知識，提高他們對飲食選擇的認識，長期受益。
+## 系統規格
+### 系統架構
+![photo_2024-09-21_16-20-58](https://github.com/user-attachments/assets/553cb068-7af0-41c8-93e1-a54cd67d6de5)
+### 系統架構 - 樹狀圖
+![photo_2024-09-21_16-31-47](https://github.com/user-attachments/assets/4f7a4eeb-968a-41de-bc92-3012b95e4954)
+### 系統軟、硬體需求與技術平台
+<table>
+  <tr>
+    <th colspan="2">硬體需求</th>
+  </tr>
+  <tr>
+    <td>作業系統</td>
+    <td>Windows、Mac</td>
+  </tr>
+</table>  
+<table>
+  <tr>
+    <th colspan="2">裝置需求</th>
+  </tr>
+  <tr>
+    <td>網路需求</td>
+    <td>WiFi/行動數據</td>
+  </tr>
+  <tr>
+    <td>網頁需求</td>
+    <td>建議使用Chrome</td>
+  </tr>
+</table>  
+
+### 使用標準與工具
