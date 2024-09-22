@@ -83,8 +83,8 @@
           <h3>{{d[0]}}</h3>
         </div>
         <p>{{d[1]}}</p>
-        {% if d[2]|length > 55 %}
-        <p>{{d[2][:55]}}...</p>
+        {% if d[2]|length > 50 %}
+        <p>{{d[2][:50]}}...</p>
         {% else %}
         <p>{{d[2]}}</p>
         {% endif %}
@@ -118,35 +118,6 @@
           {% endif %}
         </div>
       </div>
-      {% endfor %}
-
-      {% for d in data %}
-      <form class="rwdrecipe" action="/robott/detailedRecipe" method="get">
-        <input type="hidden" name="recipe_id" value="{{ d[6] }}">
-        <button type="submit">
-          <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
-          <div class="forrwd">
-            <div class="title">
-              {% if d[7] == '2' %}
-              <div class="recipe-avatarFrame have">
-                <img class="recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
-              </div>
-              {% else %}
-              <div class="recipe-avatarFrame">
-                <img class="noAvatarFrame recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
-              </div>
-              {% endif %}
-              <h3>{{d[0]}}</h3>
-            </div>
-            <p>{{d[1]}}</p>
-            {% if d[2]|length > 35 %}
-            <p>{{d[2][:35]}}...</p>
-            {% else %}
-            <p>{{d[2]}}</p>
-            {% endif %}
-          </div>
-        </button>
-      </form>
       {% endfor %}
     </section>
 

@@ -291,7 +291,7 @@ article {
   }
 
   .torobot {
-    padding: 4%;
+    padding: 10%;
   }
   
   .torobot .right h2 {
@@ -430,6 +430,10 @@ article {
   
   .honoroll > .title h2 {
     font-size: 0.8em;
+  }
+
+  .honoroll .type {
+    margin: 15% 0;
   }
 
   .type .infro {
