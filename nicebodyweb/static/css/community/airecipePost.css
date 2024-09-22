@@ -243,6 +243,17 @@ form {
   .carousel-cell {
     height: 200px;
   }
+
+  .flickity-page-dots {
+    bottom: -15px;
+    left: 0;
+  }
+
+  .flickity-page-dots .dot {
+    width: 5px;
+    height: 5px;
+    margin: 0 5px;
+  }
 }
 
 /* Small 768px */
@@ -277,7 +288,7 @@ form {
   }
 
   .btn input {
-    padding: 1.5% 7%;
+    padding: 10px 20px;
   }
 }
 
@@ -289,14 +300,10 @@ form {
   }
 
   .pen h3,
+  .pen > input,
   .pen > textarea,
   .fa-plus {
     font-size: 12px;
-  }
-
-  .pen > input {
-    font-size: 12px;
-    padding: 6px;
   }
 
   .add-file-btn {
@@ -305,6 +312,10 @@ form {
 
   .carousel-cell {
     width: 100%;
+  }
+
+  .btn {
+    margin-top: 40px;
   }
 
   .btn input {

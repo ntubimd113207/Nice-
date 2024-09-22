@@ -29,20 +29,20 @@ main h1 {
   justify-content: space-between;
   align-items: center;
   margin-top: 5%;
+  gap: 10px;
 }
 
 .search input {
   border: none;
   border-radius: 10px;
   padding: 10px;
-  width: 88%;
+  flex: 1;
 }
 
 .search button {
   border: none;
   background-color: #6E3D0D;
-  height: 40px;
-  width: 40px;
+  padding: 10px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -56,21 +56,25 @@ table {
   width: 100%;
   margin-top: 5%;
   table-layout: fixed;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 15px 0;
 }
 
 table th {
   text-align: left;
   padding: 10px 0;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #6E3D0D;
+  box-sizing: border-box;
 }
 
 table td {
   padding: 20px 0;
+  box-sizing: border-box;
 }
+
 th:nth-child(1),
 td:nth-child(1) {
-  width: 15%;
+  width: 20%;
   text-align: left;
 }
 
@@ -87,20 +91,6 @@ td:nth-child(2) {
   width: 75%;
 }
 
-table th:nth-of-type(4) button {
-  border: none;
-  background-color: #86BAA1;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.5em;
-  color: #FFF;
-  cursor: pointer;
-}
-
 .fa-pen {
   color: #6E3D0D;
 }
@@ -113,7 +103,11 @@ table th:nth-of-type(4) button {
 
 @media screen and (max-width:1024px) {
   article {
-    padding: 15% 15% 5%;
+    padding: 15% 0 5%;
+  }
+
+  main {
+    width: 60%;
   }
 }
 
@@ -121,7 +115,11 @@ table th:nth-of-type(4) button {
 
 @media screen and (max-width:768px) {
   article {
-    padding: 20% 15% 5%;
+    padding: 20% 0 5%;
+  }
+
+  main {
+    width: 70%;
   }
 }
 
@@ -129,6 +127,28 @@ table th:nth-of-type(4) button {
 
 @media screen and (max-width:480px) {
   article {
-    padding: 25% 15% 10%;
+    padding: 30% 0 10%;
+  }
+
+  main {
+    width: 80%;
+  }
+
+  .search {
+    margin-top: 10%;
+  }
+
+  table tr:nth-of-type(1) {
+    display: none;
+  }
+
+  td:nth-child(1),
+  td:nth-child(3),
+  td:nth-child(4) {
+    width: 5%;
+  }
+
+  td:nth-child(2) {
+    width: 85%;
   }
 }

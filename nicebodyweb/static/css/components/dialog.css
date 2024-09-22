@@ -34,7 +34,7 @@ dialog .content {
 }
 
 dialog .plot {
-  margin-top: 5%;
+  margin: 5% 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,7 +52,7 @@ dialog .plot {
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
-  user-select:none;
+  user-select: none;
   padding: 5%;
   outline: none;
   transition: all 0.3s;
@@ -202,6 +202,12 @@ dialog .content .eachclass {
   align-items: center;
 }
 
+dialog .content .eachclass .left {
+  display: flex;
+  align-items: center;
+  gap: 10px ;
+}
+
 .eachclass .num {
   font-size: 0.5em;
 }
@@ -224,7 +230,6 @@ dialog .content .input {
 }
 
 #howToGenerate > .save {
-  margin-top: 5%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -280,7 +285,6 @@ dialog .content .input {
 /* Small 768px */
 
 @media screen and (max-width:768px) {
-
   dialog{
     width: 70vw;
   }
@@ -289,4 +293,55 @@ dialog .content .input {
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  dialog h1 {
+    font-size: 20px;
+  }
+
+  dialog .content {
+    gap: 10px;
+    font-size: 15px;
+    line-height: 15px;
+  }
+
+  dialog > .content > h2 {
+    font-size: 15px; 
+  }
+
+  dialog .content p {
+    line-height: 2em;
+    font-size: 15px;
+  }
+
+  .reasons .eachreason,
+  dialog .content .eachclass {
+    font-weight: initial;
+    font-size: 12px;
+  }
+
+  dialog .plot {
+    gap: 20px;
+    margin: 10% 0;
+  }
+
+  .selectbtn {
+    width: 100%;
+  }
+
+  .selectbtn > i {
+    font-size: 5em;
+  }
+
+  .selectbtn h3 {
+    font-size: 20px;
+    font-weight: initial;
+  }
+
+  .selectbtn:hover h3 {
+    font-size: 25px;
+  }
+
+  .save button,
+  .contentsave button {
+    font-size: 12px;
+  }
 }

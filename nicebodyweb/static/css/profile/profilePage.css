@@ -102,7 +102,7 @@ article {
   border-bottom: 2px solid #6E3D0D;
   width: 60%;
   border-radius: 0;
-  padding: 25px 0px 0px 0px;
+  padding-top: 25px;
   box-sizing: border-box;
   font-size: 2em;
   color: #6E3D0D;
@@ -281,6 +281,9 @@ p{
   border-radius: 15px;
   padding: 10px 10px;
   box-sizing: border-box;
+  background-color: #FFF;
+  flex: 1;
+  color: #495057;
 }
 
 .closesetting {
@@ -365,7 +368,7 @@ footer img {
 
 @media screen and (max-width:1024px) {
   .sectionwrap {
-    padding: 150px 5% 50px;
+    padding: 120px 5% 50px;
     display: flex;
     flex-direction: column;
   }
@@ -411,7 +414,51 @@ footer img {
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  article {
+    padding: 0 5%;
+  }
+
+  .profile {
+    gap: 0;
+  }
+
+  .noAvatarFrame {
+    margin-bottom: 0;
+  }
+
+  .profile input {
+    padding-top: 0;
+    font-size: 20px;
+  }
+
+  .settings {
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .settings input {
+    font-size: 14px;
+  }
+
+  .progress-bar > .level {
+    padding: 15px 5px;
+    font-size: 1em;
+  }
+  
+  .progress-bar > .level > span {
+    font-size: 10px;
+  }
+
   .out1 {
     margin: 5% 0 10%;
+  }
+
+  .container .lists {
+    margin-top: 20px;
+  }
+
+  .lists a {
+    padding: 10px;
+    border-radius: 10px;
   }
 }
