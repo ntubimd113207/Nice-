@@ -1,12 +1,13 @@
 article {
   background-color: #F0EAD2;
   min-height: 100vh;
-  padding: 10% 20% 5%;
+  padding: 150px 20% 5%;
   color: #495057;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  gap: 50px;
 }
 
 article .title {
@@ -17,7 +18,6 @@ article .title {
   font-size: 1.5em;
   color: #BC6C25;
   font-weight: bold;
-  margin-bottom: 5%;
 }
 
 .fa-bookmark,
@@ -43,6 +43,7 @@ article .title {
   box-sizing: border-box;
   border-radius: 10px;
   font-size: 1em;
+  color: #495057;
 }
 
 .select .add {
@@ -118,6 +119,7 @@ section .collectcontent {
 .eachcollect .wrap p {
   color: #495057;
   text-decoration: none;
+  line-height: 25px;
 }
 
 .eachcollect .wrap img {
@@ -127,11 +129,20 @@ section .collectcontent {
   height: 35px;
 }
 
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 150px 15% 5%;
+  }
+}
+
 /* Large 1200px */
 
 @media screen and (max-width:1200px) {
   article {
-    padding: 12% 15% 5%;
+    padding: 150px 10% 5%;
+    gap: 40px;
   }
 
   .select,
@@ -148,10 +159,6 @@ section .collectcontent {
 /* Middle 1024px */
 
 @media screen and (max-width:1024px) {
-  article {
-    padding: 15% 15% 5%;
-  }
-
   .select,
   section {
     width: 90%;
@@ -162,7 +169,7 @@ section .collectcontent {
 
 @media screen and (max-width:768px) {
   article {
-    padding: 20% 10% 5%;
+    gap: 30px;
   }
 
   .select,
@@ -175,6 +182,51 @@ section .collectcontent {
 
 @media screen and (max-width:480px) {
   article {
-    padding: 25% 10% 5%;
+    padding: 120px 10% 5%;
+    gap: 20px;
+  }
+
+  article .title {
+    font-size: 20px;
+  }
+
+  .select select {
+    font-size: 12px;
+  }
+
+  .select .add {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  section .collecttitle {
+    font-size: 15px;
+    margin: 5% 0;
+  }
+
+  .select,
+  .collecttitle .left,
+  .collecttitle .right,
+  .eachcollect {
+    gap: 15px;
+  }
+
+  .eachcollect .wrap {
+    padding: 5px 10px;
+  }
+
+  .eachcollect .wrap p {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .eachcollect .wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 35px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }

@@ -150,6 +150,7 @@ section {
   color: #6E3D0D;
   font-weight: bold;
   font-size: 1.5em;
+  line-height: 25px;
 }
 
 .pocontent > .middle > .imgcontent {
@@ -207,13 +208,13 @@ section {
   box-sizing: border-box;
   border-radius: 10px;
   margin-bottom: 20px;
+  gap: 25px;
 }
 
 .each > .top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
 }
 
 .optimal {
@@ -426,7 +427,7 @@ section {
   
   .carousel-cell {
     width: 60%;
-    height: 150px;
+    height: 200px;
   }
 
   .pocontent > .line {
@@ -442,10 +443,6 @@ section {
     padding: 3%;
   }
 
-  .each > .top {
-    margin-bottom: 10px;
-  }
-
   .flickity-prev-next-button {
     width: 25px;
     height: 25px;
@@ -455,6 +452,10 @@ section {
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  article {
+    padding: 120px 5% 5%;
+  }
+
   .eachpo,
   .po {
     gap: 10px;
@@ -475,5 +476,35 @@ section {
   .flickity-prev-next-button {
     width: 20px;
     height: 20px;
+  }
+
+  .each {
+    gap: 5px;
+  }
+
+  .pocontent > .middle > .textcontent > p,
+  .each > .bottom {
+    line-height: 20px;
+  }
+
+  .optimal {
+    gap: 5px;
+  }
+  
+  .optimal i {
+    font-size: 1em;
+  }
+
+  .optimal p {
+    font-size: 12px;
+  }
+
+  .right > .photostickers {
+    max-width: 100%;
+    max-height: 100%;
+    width: 25px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }

@@ -17,7 +17,8 @@
 /* receipe */
 .receipe,
 .summary,
-.wrap > .content {
+.wrap > .content p,
+.wrap > .content ol {
   line-height: 25px;
 }
 
@@ -502,8 +503,16 @@ audio {
 /* X-Small 480px */
 
 @media screen and (max-width:480px) {
+  .sidetitle {
+    display: none;
+  }
+
   .receipe > .wrap > .title {
-    margin: 20% 0 10%;
+    margin: 5% 0 10%;
+  }
+
+  .diet {
+    font-size: 12px;
   }
 
   .content h2 {
@@ -514,8 +523,11 @@ audio {
     margin: 15% 0 10%;
   }
 
-  #nutritionChart {
-    width: 200px;
-    aspect-ratio: 1;
+  .wrap > .content ol {
+    margin-left: 15px;
+  }
+
+  .button {
+    margin-top: 10%;
   }
 }

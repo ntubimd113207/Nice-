@@ -301,48 +301,34 @@ canvas {
   .edit > .left {
     display: flex;
     justify-content: flex-end;
-    gap: 5px;
-}
+    gap: 0;
+  }
 
-  .edit > .left > button {
+  .edit > .left > button,
+  .edit > .left > button:last-child,
+  .top > button,
+  .top > .btn > button,
+  .input > button,
+  .contrast > .top > button {
     background-color: transparent;
-    height: fit-content;
     width: fit-content;
     font-size: 12px;
-  }
-
-  .edit > .left > button:last-child {
-    background-color: transparent;
-  }
-
-  .edit .left .fa-pen {
-    color: #86BAA1;
+    color: #BC6C25;
   }
 
   .edit .left .fa-trash-can {
     color: #BC4749;
   }
 
-  .top > button,
-  .top > .btn > button,
-  .input > button {
-    background-color: transparent;
-    width: fit-content;
-    font-size: 12px;
-    color: #BC6C25;
-  }
-
+  .edit .left .fa-pen,
   .top > button i,
-  .top > .btn > button i {
+  .top > .btn > button i,
+  .fa-paper-plane {
     color: #BC6C25;
   }
 
   .btn {
     gap: 10px;
-  }
-
-  .fa-paper-plane {
-    color: #BC6C25;
   }
 
   .input {
@@ -354,12 +340,6 @@ canvas {
 
   .input input {
     padding: 2%;
-  }
-
-  .contrast > .top > button {
-    background-color: transparent;
-    font-size: 12px;
-    color: #BC6C25;
   }
 
   .contrast > .top > button p {
@@ -408,5 +388,9 @@ canvas {
   .after {
     width: 100%;
     flex: content;
+  }
+
+  .edit > .left {
+    gap: 0;
   }
 }
