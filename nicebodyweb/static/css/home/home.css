@@ -95,56 +95,6 @@ article {
   height: 300px;
 }
 
-/* carousel */
-
-.carousel {
-  padding: 6em 0;
-}
-
-.food {
-  border-radius: 10px;
-  display: inline-block;
-  width: 18em;
-  background: #F0EAD2;
-  text-align: center;
-  margin: 0 1.25em 0 0;
-  white-space: normal;
-  opacity: 1.0;
-  transition: opacity 0.75s ease-in-out;
-}
-
-/* .image.featured 中間不可有空格 */
-.image.featured {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.featured img {
-  transition: transform  0.3s;
-}
-
-.featured h3 {
-  margin: 10% 0;
-  font-weight: bold;
-  transition: font-size  0.3s;
-}
-
-.image.featured:hover img {
-  transform: scale(1.1);
-}
-
-.image.featured:hover h3 {
-  font-size: 1.5em;
-  color: #BC6C25;
-}
-
-.forward,
-.backward {
-  display: block;
-}
-
 /* honoroll */
 
 .honoroll {
