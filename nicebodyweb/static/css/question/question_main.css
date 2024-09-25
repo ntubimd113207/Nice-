@@ -10,13 +10,13 @@ article {
   justify-content: center;
   align-items: flex-end;
   background-color: #fcfaf1;
-  padding: 0 5% 2.3%;
+  padding: 0 0 2.3%;
 }
 
 section {
   width: 75vw;
   height: 80vh;
-  padding: 2%;
+  padding: 20px;
   box-sizing: border-box;
   background: #fff;
   border-radius: 20px;
@@ -24,7 +24,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  gap: 20px;
 }
 
 .gray {
@@ -71,21 +71,7 @@ section {
   height: 14px;
 }
 
-.up {
-  width: 100%;
-}
-
 .top {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.hide {
-  visibility: hidden;
-}
-
-.top-2 {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -94,17 +80,14 @@ section {
 /* title */
 
 section .title {
-  align-self: start;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 20px;
   font-size: 36px;
   color: #0b1a2f;
-  font-weight: 400;
   white-space: nowrap;
   letter-spacing: 8px;
-  margin: 1% 0 0;
   width: 100%;
 }
 
@@ -130,226 +113,172 @@ section .title i {
 
 /* input */
 
-.top .input {
-  width: 100%;
-  letter-spacing: 5px;
-}
-
 .top .input input {
   width: 100%;
   border-radius: 30px;
   padding: 1%;
 }
 
-.top .input label {
-  font-size: 18px;
-  color: #111;
-  margin: 1.3% 0;
-  display: block;
-}
-
-.top .input div i.fa {
-  font-size: 16px;
-  color: #888;
-}
-
 .top .input .question {
   font-size: 20px;
-  padding: 0.8% 0;
-}
-
-.top .input div {
-  height: 10%;
+  padding: 20px 0;
 }
 
 .top .input #tag-ip {
   padding: 10px;
   width: 100%;
-  height: 50px;
   font-size: 18px;
-  color: #111;
+  color: #495057;
   text-indent: 20px;
   border: 1px solid #86baa1;
   outline: none;
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
 
-section .diet-tag {
+/* diet-tag、mainingredients-tag */
+
+.diet-tag,
+.mainingredients-tag {
   width: 100%;
-  height: 60%;
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 20px;
-  margin: 2% 0;
 }
 
-section .diet-tag a {
+.diet-tag a,
+.mainingredients-tag a {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #d6e1db;
-  padding: 1%;
   box-sizing: border-box;
   border-radius: 10px;
   text-decoration: none;
-  gap: 30px;
-  font-size: 25px;
   color: #495057;
   transition: all 0.3s;
 }
 
-section .diet-tag a:hover,
-section .tag-list-class .type:hover {
+.diet-tag a {
+  gap: 30px;
+  font-size: 25px;
+}
+
+.mainingredients-tag a {
+  gap: 15px;
+  font-size: 20px;
+}
+
+.diet-tag a:hover,
+.mainingredients-tag a:hover {
   background-color: #92ae9e;
   color: #fff;
 }
 
-section .diet-tag a i {
+.diet-tag a i {
   font-size: 70px;
 }
 
-/* tag-list */
-
-section .tag-list {
-  height: 60%;
-  display: flex;
-  gap: 18px;
-  background-color: #d6e1db;
-  border-radius: 10px;
-  padding: 18px;
-  width: 100%;
-  flex-direction: column;
-  align-content: flex-start;
-  justify-content: start;
-  margin: 1.5% 0;
+.mainingredients-tag a i {
+  font-size: 50px;
 }
 
-section .tag-list .line {
-  height: 2px;
-  background-color: #00000033;
-  margin: 1% 0;
-}
 
-section .tag-list-item,
-section .tag-list-item2,
-section .tag-list-item3,
-section .tag-list-item4 {
-  width: 100%;
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: start;
-}
+/* 
+  mainingredients-tag-sub
+  nutritional-requirements
+  cooking-time
+  special-needs
+*/
 
-.item,
-.item-select {
-  /* padding: 0.5% 1%; */
-  padding: 1% 2%;
-  height: fit-content;
-  background: #fff;
-  border-radius: 50px;
-  color: #495057;
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-  border: 3px #fff solid;
-}
-
-section .item-select {
-  border: 3px solid #6e3d0d;
-}
-
-/* tag-list-sub */
-section .tag-list-sub {
-  height: 62%;
+.mainingredients-tag-sub {
+  flex: 1;
   background-color: #d6e1db;
   border-radius: 10px;
   padding: 15px;
   width: 100%;
-  align-content: flex-start;
-  margin: 1% 0;
-}
-
-section .tag-list-title {
-  width: 100%;
-  height: 10%;
   display: flex;
-  justify-content: start;
-  font-size: 18px;
-  color: #0b1a2f;
-  font-weight: 400;
-  letter-spacing: 8px;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
 }
 
-section .tag-list-sub .list-item {
+.tag-list-title {
   width: 100%;
-  align-content: flex-start;
-}
-
-section .tag-list-title i {
-  margin: 0 1%;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 18px;
   color: #495057;
+  letter-spacing: 8px;
+  gap: 10px;
 }
 
-section .tag-list-sub .list-item > * {
-  margin-right: 10px;
-  margin-top: 1%;
+.mainingredients-tag-sub .list-item,
+.nutritional-requirements,
+.cooking-time,
+.special-needs {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  overflow-x: scroll;
 }
 
-/* tag-list-4 */
-section .tag-list-4 {
-  height: 60%;
-  gap: 22px;
+.nutritional-requirements,
+.cooking-time,
+.special-needs {
   background-color: #d6e1db;
   border-radius: 10px;
-  padding: 20px;
+  padding: 15px;
+}
+
+.tag-list-item,
+.tag-list-item2,
+.tag-list-item3,
+.tag-list-item4 {
   width: 100%;
-  align-content: flex-start;
-  justify-content: start;
+  display: flex;
+  gap: 10px;
 }
 
-section .tag-list-4 .score-item {
-  display: flex;
-  gap: 20px;
+.item {
+  background-color: #FFF;
+  border-radius: 50px;
+  border: 3px solid #FFF;
+  padding: 10px 20px;
+  color: #495057;
   white-space: nowrap;
-  padding: 0 0 1% 0;
-  align-items: center;
+  font-size: 15px;
 }
 
-section .tag-list-4 .score-item label {
-  height: 100%;
+.select,
+.item-select {
+  border: 3px solid #6e3d0d;
 }
 
-section .tag-list-4 .score-range {
-  color: rgba(0, 0, 0, 0.5);
-  letter-spacing: 3px;
-  font-size: 17px;
-  padding: 1% 0;
-}
+/* check-item */
 
-section .tag-list-4 .metric-block {
+.check-item {
   display: flex;
   align-items: center;
   justify-content: start;
   gap: 20px;
 }
 
-section .tag-list-4 .checkbox_class {
+.check-item:last-child {
+  align-items: flex-start;
+}
+
+.checkbox_class {
   transform: scale(1.5);
   background-color: transparent;
 }
 
-section .tag-list-4 .metric-description {
-  letter-spacing: 2px;
-  margin: auto 0;
-  font-size: 18px;
-  white-space: nowrap;
-}
-
-section .tag-list-4 .score-input {
-  width: 10%;
+.score-input {
+  width: 20%;
   border: none;
   border-radius: 10px;
   align-self: stretch;
@@ -358,52 +287,21 @@ section .tag-list-4 .score-input {
   padding: 0.5%;
 }
 
-/* tag-list-group */
-section .tag-list-group {
-  height: 100%;
-  width: 100%;
-  justify-content: space-between;
+.check-item label:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* tag-list-class */
-section .tag-list-class {
-  height: 45%;
+.howmin {
   display: flex;
-  gap: 15px;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 0.5% 1px 1.4%;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-section .tag-list-class .type {
-  height: 100%;
-  display: flex;
-  background-color: #d6e1db;
-  color: #495057;
-  border-radius: 10px;
-  width: 18%;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  border: white;
-  margin: 1% 0 0%;
-  transition: all 0.3s;
-  font-weight: bold;
-  font-size: 20px;
-  text-decoration: none;
-  gap: 10%;
+  gap: 10px;
 }
 
-section .tag-list-class .type i {
-  font-size: 3em;
-}
-
-section .tag-list-class .select,
-section .diet-tag .select {
-  border: 3px solid #6e3d0d;
+.hint {
+  color: #848484;
+  font-size: 13px;
 }
 
 /* next */
@@ -414,7 +312,7 @@ section .diet-tag .select {
 
 .line {
   background-color: #6e3d0d;
-  height: 0.8px;
+  height: 1px;
   width: 100%;
 }
 
@@ -425,44 +323,46 @@ section .diet-tag .select {
   width: 100%;
 }
 
-.btn {
+.btn,
+.btn-end {
   display: flex;
-  margin-top: 0.8%;
-  justify-content: space-between;
+  margin-top: 20px;
   align-items: center;
   color: #495057;
 }
 
-.btn i {
-  font-size: 35px;
-  color: #6e3d0d;
+.btn {
+  justify-content: space-between;
 }
 
-.btn .back {
-  height: 11%;
-  width: 1%;
-  padding: 2%;
+.btn-end {
+  justify-content: flex-end;
 }
 
-.next .continue-btn {
+#back {
+  display: flex;
   justify-content: center;
+  align-items: center;
+  background-color: #6e3d0d;
+  border-radius: 35px;
+  width: 35px;
+  aspect-ratio: 1;
+}
+
+.btn i {
+  font-size: 20px;
+  color: #FFF;
+}
+
+.continue-btn {
   border-radius: 50px;
   border: none;
   padding: 1.5% 3%;
   background-color: #e5e5e5;
-  letter-spacing: 3px;
   justify-content: center;
 }
 
-.next .continue-btn button {
-  background-color: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-.next .button-brwon {
+.button-brwon {
   background-color: #6e3d0d;
   color: #fff;
   text-decoration: none;
@@ -471,77 +371,32 @@ section .diet-tag .select {
 /* X-Large 1440px */
 
 @media screen and (max-width: 1440px) {
-  article {
-    padding: 0 5% 3%;
-  }
-
-  section {
-    width: 80vw;
-    height: 83vh;
-    padding: 2%;
-  }
 }
 
 /* Large 1200px */
 
 @media screen and (max-width: 1200px) {
-  article {
-    padding: 0 5% 5%;
-  }
-
-  section {
-    width: 80vw;
-    height: 80vh;
-    padding: 3%;
-  }
-
-  section .tag-list {
-    gap: 25px;
-  }
-
-  section .tag-list-sub {
-    height: 60%;
-    margin-top: 1%;
-  }
-
-  section .tag-list-class .type .wrap {
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  section .tag-list-class .type .wrap .one {
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  section .diet-tag a {
+  section .diet-tag a,
+  section .mainingredients-tag a {
     font-size: 25px;
     gap: 30px;
   }
 
-  section .diet-tag a i {
+  section .diet-tag a i,
+  section .mainingredients-tag a i {
     font-size: 50px;
-  }
-
-  section .tag-list-class .type i {
-    font-size: 2em;
   }
 }
 
 /* Middle 1024px */
 
 @media screen and (max-width: 1024px) {
-  section {
-    width: 90vw;
-    height: 80vh;
-    padding: 3%;
-  }
-
   section .tag-list-4 .score-input {
     width: 15%;
   }
 
-  section .diet-tag a i {
+  section .diet-tag a i,
+  section .mainingredients-tag a i {
     font-size: 40px;
   }
 }
@@ -549,13 +404,15 @@ section .diet-tag .select {
 /* Small 768px */
 
 @media screen and (max-width: 768px) {
-  article {
-    padding: 0 5% 8%;
+  section .diet-tag a,
+  section .mainingredients-tag a {
+    font-size: 20px;
+    gap: 20px;
   }
 
-  section {
-    width: 90vw;
-    padding: 4%;
+  section .diet-tag a i,
+  section .mainingredients-tag a i {
+    font-size: 40px;
   }
 
   content {
@@ -566,66 +423,8 @@ section .diet-tag .select {
     margin-top: 5%;
   }
 
-  .next .continue-btn {
-    padding: 2% 4%;
-    font-size: 16px;
-  }
-
-  section .tag-list {
-    margin-top: 2.5%;
-  }
-
-  section .tag-list-sub {
-    height: 62%;
-    margin-top: 2.5%;
-  }
-
-  section .tag-list-sub .list-item {
-    margin-top: 2%;
-  }
-
-  section .tag-list-sub .list-item > * {
-    margin-bottom: 2%;
-  }
-
-  section .tag-list-group {
-    padding: 1% 0;
-  }
-
-  section .tag-list-class {
-    height: 30%;
-    justify-content: left;
-  }
-
-  section .tag-list-class .type {
-    width: 22%;
-  }
-
-  section .tag-list-class .type .wrap {
-    display: flex;
-    flex-direction: none;
-  }
-
-  section .tag-list-class .type img {
-    width: 40%;
-    height: 38%;
-  }
-
-  section .tag-list-class .type .wrap .one {
-    font-size: 16px;
-  }
-
   section .tag-list-4 .score-input {
     width: 20%;
-  }
-
-  section .diet-tag a {
-    font-size: 20px;
-    gap: 20px;
-  }
-
-  section .diet-tag a i {
-    font-size: 40px;
   }
 }
 
@@ -633,88 +432,66 @@ section .diet-tag .select {
 
 @media screen and (max-width: 480px) {
   article {
-    padding: 0 2% 8%;
+    padding: 0 0 40px;
   }
 
   section {
-    width: 83vw;
-    height: 83vh;
+    width: 90vw;
     padding: 6%;
+    gap: 10px;
   }
 
   section .title {
-    gap: 12px;
-    font-size: 30px;
+    font-size: 20px;
+    gap: 10px;
   }
 
-  section .tag-list {
-    height: 60%;
-    margin-top: 5%;
+  section .title img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 35px;
+    height:35px;
+    border-radius: 5px;
   }
 
-  section .tag-list-sub {
-    height: 63%;
-    margin-top: 5%;
+  .top .input #tag-ip {
+    padding: 5px;
+    width: 100%;
+    font-size: 15px;
+    text-indent: 10px;
   }
 
-  section .tag-list-sub .list-item {
-    margin-top: 4%;
+  section .diet-tag,
+  section .mainingredients-tag {
+    gap: 10px;
+    margin: 0;
+    overflow-y: scroll;
   }
 
-  .btn {
-    margin-top: 4%;
-  }
-
-  .btn i {
-    font-size: 30px;
-  }
-
-  .top .input label {
-    margin: 3% 0;
-  }
-
-  .top .input .question {
-    font-size: 18px;
-  }
-
-  .top .input div #tag-ip {
-    height: 38px;
-    margin-top: 2%;
-  }
-
-  section .tag-list-item,
-  section .tag-list-item2 {
-    gap: 11px;
-  }
-
-  section .tag-list-class {
-    height: 23%;
-  }
-
-  section .tag-list-class .type {
-    width: 29%;
-    padding: 2% 0;
-  }
-
-  section .tag-list-class .type .wrap .one {
-    font-size: 14px;
-    letter-spacing: 2px;
-  }
-
-  section .tag-list-class .type .wrap div {
+  section .diet-tag a,
+  section .mainingredients-tag a {
+    padding: 15px 0;
     font-size: 15px;
   }
 
-  section .tag-list-4 .score-input {
-    width: 22%;
+  #back {
+    width: 30px;
+  }
+
+  .btn i {
+    font-size: 15px;
   }
 
   .item,
-  .item-select {
-    padding: 2% 4%;
+  .next .continue-btn {
+    padding: 10px 20px;
+    font-size: 13px;
   }
 
-  section .diet-tag a {
+  .mainingredients-tag-sub .list-item,
+  .nutritional-requirements,
+  .cooking-time,
+  .special-needs {
     gap: 10px;
   }
 }
