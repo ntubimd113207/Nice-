@@ -19,7 +19,6 @@ window.onload = function () {
     const tagListContainer1 = document.querySelector('.tag-list-item');
     const tagListContainer2 = document.querySelector('.tag-list-item2');
     const tagListContainer3 = document.querySelector('.tag-list-item3');
-    const tagListContainer4 = document.querySelector('.tag-list-item4');
 
     const continueBtn = document.getElementById('continue-btn');
 
@@ -58,10 +57,8 @@ window.onload = function () {
             tagListContainer1.appendChild(tagButton);
         } else if (index <= 12) {
             tagListContainer2.appendChild(tagButton);
-        } else if (index <= 15) {
-            tagListContainer3.appendChild(tagButton);
         } else {
-            tagListContainer4.appendChild(tagButton);
+            tagListContainer3.appendChild(tagButton);
         }
     });
 

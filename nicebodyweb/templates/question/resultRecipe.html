@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
 	<link rel="stylesheet" href="/static/css/layout/footer.css">
 	<link rel="stylesheet" href="/static/css/robott/shareResults.css">
+	<link rel="stylesheet" href="/static/css/components/carousel.css">
 	<link rel="stylesheet" href="/static/css/fancybox/jquery.fancybox.css"/>
 	<link rel="stylesheet" href="/static/css/fancybox/my.jquery.fancybox.css"/>
 	<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
@@ -115,6 +116,23 @@
 					<button>發佈食譜</button>
 				</div>
 			</div>
+		</section>
+
+		<section class="carousel">
+			<div class="reel">
+				{% for d in recipe_data %}
+				<div class="food">
+					<form action="/robott/shareResults" method="get">
+						<input type="hidden" name="recipe_id" value="{{ d[2] }}">
+						<button type="submit" class="image featured" style="border: none; background: none; padding: 0;">
+							<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
+							<h3>{{ d[1] }}</h3>
+						</button>
+					</form>
+				</div>
+				{% endfor %}
+			</div>
+		</section>
 	</article>
 
 	<dialog id="loginDialog">
@@ -126,6 +144,7 @@
 
 	<footer id="footer-container"></footer>
 
+	<script src="/static/js/jquery.scrollex.min.js"></script>
 	<script>
 		let messageText = "{{name}}";
 		let userImage = "{{userImage}}"

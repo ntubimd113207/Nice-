@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>機器人問題二之一</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>營養師問題二之二</title>
   <link href="/static/images/favicon.ico" rel="shortcut icon"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,35 +31,32 @@
         <div class="green-second"></div>
       </div>
         
-      <div class="up">
-        <div class="top">
-          <div class="title">
-            <img
-              loading="lazy"
-              srcset="/static/images/question/question_banana.png 100w, 
-              /static/images/question/question_banana.png 200w, 
-              /static/images/question/question_banana.png 400w, 
-              /static/images/question/question_banana.png 800w,
-              /static/images/question/question_banana.png 1200w, 
-              /static/images/question/question_banana.png 1600w, 
-              /static/images/question/question_banana.png 2000w,"
-            />
+      <div class="top">
+        <div class="title">
+          <img
+            loading="lazy"
+            srcset="/static/images/question/question_banana.png 100w, 
+            /static/images/question/question_banana.png 200w, 
+            /static/images/question/question_banana.png 400w, 
+            /static/images/question/question_banana.png 800w,
+            /static/images/question/question_banana.png 1200w, 
+            /static/images/question/question_banana.png 1600w, 
+            /static/images/question/question_banana.png 2000w,"
+          />
 
-            <div class = "title_icon">
-              <div>主要食材</div>
-            </div>
+          <div class = "title_icon">
+            <div>主要食材</div>
           </div>
+        </div>
 
-          <div class="input">
-            <p class = "question">你對主要食材有特別的偏好嗎？</p>
-            <input type="text" id="tag-ip" class="text-border" placeholder="例如：牛肉、豬肉、雞肉" />
-          </div>
+        <div class="input">
+          <p class="question">你對主要食材有特別的偏好嗎？</p>
+          <input type="text" id="tag-ip" class="text-border" placeholder="例如：牛肉、豬肉、雞肉" />
         </div>
       </div>
       
-
-      <div class="tag-list-sub">
-        <div class="top-2">
+      <div class="mainingredients-tag-sub">
+        <div class="top">
           <div class="tag-list-title">
             <i class="fa-solid fa-bowl-food"></i>
             <div>主食類</div>
@@ -67,20 +65,19 @@
         </div>
 
         <div class="list-item">
-            <div class="tag-list-item"> </div>
-            <div class="tag-list-item2"></div>
-            <div class="tag-list-item3"></div>
-            <div class="tag-list-item4"></div>
+          <div class="tag-list-item"></div>
+          <div class="tag-list-item2"></div>
+          <div class="tag-list-item3"></div>
         </div>
       </div>
 
       <div class="next">
         <div class="line"></div>
         <div class="btn">
-          <a id = "back" href="/question/question_n2">
-            <i class="fa-solid fa-circle-arrow-left"></i>
+          <a id="back" href="/question/question_n2">
+            <i class="fa-solid fa-arrow-left"></i>
           </a>
-          <a id="continue-btn" class = "continue-btn">繼續</a>
+          <a id="continue-btn" class="continue-btn">繼續</a>
         </div>
       </div>
     </section>

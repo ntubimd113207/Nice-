@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
   <link rel="stylesheet" href="/static/css/components/dialog.css">
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
-  <link rel="stylesheet" href="/static/css/goal/checkList.css">
+  <link rel="stylesheet" href="/static/css/goal/goalList.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -29,38 +29,43 @@
   <article>
     <main>
       <h1>打卡目標列表</h1>
-      <div class="search">
+      <div class="checksearch">
         <input type="text" placeholder="關鍵字查詢" id="searchInput">
         <button><i class="fa-solid fa-magnifying-glass"></i></button>
       </div>
-      <table>
-        <tr>
-          <th>icon</th>
-          <th>打卡目標</th>
-          <th></th>
-          <th></td>
-        </tr>
-        {% for d in data %}
-        <tr data-id="{{ d[0] }}">
-          <td class="icon-cell">
-            {% if d[2] == '1' %}
-            <i class="fa-solid fa-droplet" data-icon="droplet"></i>
-            {% elif d[2] == '2' %}
-            <i class="fa-solid fa-seedling" data-icon="seedling"></i>
-            {% elif d[2] == '3' %}
-            <i class="fa-solid fa-martini-glass" data-icon="martini-glass"></i>
-            {% elif d[2] == '4' %}
-            <i class="fa-solid fa-cookie-bite" data-icon="cookie-bite"></i>
-            {% elif d[2] == '5' %}
-            <i class="fa-solid fa-apple-whole" data-icon="apple-whole"></i>
-            {% endif %}
-          </td>
-          <td class="goal-cell">{{ d[1] }}</td>
-          <td><i class="fa-solid fa-pen opencheck" data-id="{{ d[0] }}" data-goal="{{ d[1] }}" data-icon="{{ d[2] }}"></i></td>
-          <td><i class="fa-regular fa-trash-can opendelete" data-id="{{ d[0] }}"></i></td>
-        </tr>
-        {% endfor %}
-      </table>
+      <div class="tablewrap">
+        <table class="checktable">
+          <tr>
+            <th>icon</th>
+            <th>打卡目標</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </table>
+        <div class="line"></div>
+        <table class="checktable">
+          {% for d in data %}
+          <tr data-id="{{ d[0] }}">
+            <td class="icon-cell">
+              {% if d[2] == '1' %}
+              <i class="fa-solid fa-droplet" data-icon="droplet"></i>
+              {% elif d[2] == '2' %}
+              <i class="fa-solid fa-seedling" data-icon="seedling"></i>
+              {% elif d[2] == '3' %}
+              <i class="fa-solid fa-martini-glass" data-icon="martini-glass"></i>
+              {% elif d[2] == '4' %}
+              <i class="fa-solid fa-cookie-bite" data-icon="cookie-bite"></i>
+              {% elif d[2] == '5' %}
+              <i class="fa-solid fa-apple-whole" data-icon="apple-whole"></i>
+              {% endif %}
+            </td>
+            <td class="goal-cell">{{ d[1] }}</td>
+            <td><i class="fa-solid fa-pen opencheck" data-id="{{ d[0] }}" data-goal="{{ d[1] }}" data-icon="{{ d[2] }}"></i></td>
+            <td><i class="fa-regular fa-trash-can opendelete" data-id="{{ d[0] }}"></i></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
       <dialog id="check">
         <h1>修改打卡目標</h1>
         <div class="content">

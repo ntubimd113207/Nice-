@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>機器人問題五</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>營養師問題五</title>
   <link href="/static/images/favicon.ico" rel="shortcut icon"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,43 +33,41 @@
         <div class="green-five"></div>
       </div>
 
-      <div class="up">
-        <div class="top">
-          <div class="title">
-            <img
-              loading="lazy"
-              srcset="/static/images/question/question_banana.png 100w, 
-              /static/images/question/question_banana.png 200w, 
-              /static/images/question/question_banana.png 400w, 
-              /static/images/question/question_banana.png 800w,
-              /static/images/question/question_banana.png 1200w, 
-              /static/images/question/question_banana.png 1600w, 
-              /static/images/question/question_banana.png 2000w,"
-            />
+      <div class="top">
+        <div class="title">
+          <img
+            loading="lazy"
+            srcset="/static/images/question/question_banana.png 100w, 
+            /static/images/question/question_banana.png 200w, 
+            /static/images/question/question_banana.png 400w, 
+            /static/images/question/question_banana.png 800w,
+            /static/images/question/question_banana.png 1200w, 
+            /static/images/question/question_banana.png 1600w, 
+            /static/images/question/question_banana.png 2000w,"
+          />
 
-            <div class = "title_icon">
-              <div>特殊飲食需求</div>
-            </div>
+          <div class = "title_icon">
+            <div>特殊飲食需求</div>
           </div>
+        </div>
 
-          <div class="input">
-            <p class = "question">你對任何食物有過敏或不吃的嗎？</p>
-            <input type="text" id="tag-ip" class="text-border" placeholder="例如：素食、無乳製品、牛奶" />
-          </div>
+        <div class="input">
+          <p class="question">你對任何食物有過敏或不吃的嗎？</p>
+          <input type="text" id="tag-ip" class="text-border" placeholder="例如：素食、無乳製品、牛奶" />
         </div>
       </div>
 
-      <div class="tag-list">
+      <div class="special-needs">
         <div class="tag-list-item"></div>
       </div>
         
       <div class="next">
         <div class="line"></div>
         <div class="btn">
-          <a id = "back" href="/question/question_n4">
-            <i class="fa-solid fa-circle-arrow-left"></i>
+          <a id="back" href="/question/question_n4">
+            <i class="fa-solid fa-arrow-left"></i>
           </a>
-          <a id="continue-btn" class = "continue-btn">確認</a>
+          <a id="continue-btn" class="continue-btn">確認</a>
         </div>
       </div>
     </section>

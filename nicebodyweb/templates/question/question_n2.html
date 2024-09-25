@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>機器人問題二</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>營養師問題二之一</title>
   <link href="/static/images/favicon.ico" rel="shortcut icon"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,93 +31,80 @@
         <div class="green-second"></div>
       </div>
         
-      <div class="up">
-        <div class="top">
-          <div class="title">
-            <img
-              loading="lazy"
-              srcset="/static/images/question/question_banana.png 100w, 
-              /static/images/question/question_banana.png 200w, 
-              /static/images/question/question_banana.png 400w, 
-              /static/images/question/question_banana.png 800w,
-              /static/images/question/question_banana.png 1200w, 
-              /static/images/question/question_banana.png 1600w, 
-              /static/images/question/question_banana.png 2000w,"
-            />
+      <div class="top">
+        <div class="title">
+          <img
+            loading="lazy"
+            srcset="/static/images/question/question_banana.png 100w, 
+            /static/images/question/question_banana.png 200w, 
+            /static/images/question/question_banana.png 400w, 
+            /static/images/question/question_banana.png 800w,
+            /static/images/question/question_banana.png 1200w, 
+            /static/images/question/question_banana.png 1600w, 
+            /static/images/question/question_banana.png 2000w,"
+          />
 
-            <div class = "title_icon">
-              <div>主要食材</div>
-            </div>
+          <div class = "title_icon">
+            <div>主要食材</div>
           </div>
+        </div>
 
-          <div class="input">
-            <p class = "question">你對主要食材有特別的偏好嗎？</p>
-            <input type="text" id="tag-ip" class="text-border" placeholder="例如：牛肉、豬肉、雞肉" />
-          </div>
+        <div class="input">
+          <p class="question">你對主要食材有特別的偏好嗎？</p>
+          <input type="text" id="tag-ip" class="text-border" placeholder="例如：牛肉、豬肉、雞肉" />
         </div>
       </div>
       
-      <div class="tag-list-group">
-        <div class="tag-list-class">
-          <a  href="/question/question_n2_1" class="type one" id="n2_1">
-            <i class="fa-solid fa-bowl-food"></i>
-            <div>主食類</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-drumstick-bite"></i>
-            <div>肉類</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-carrot"></i>
-            <div>蔬菜</div>
-          </a>
-        
-          <a class="type">
-            <i class="fa-solid fa-lemon"></i>
-            <div>水果</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-egg"></i>
-            <div>蛋類</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-cubes-stacked"></i>
-            <div>堅果類</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-glass-water"></i>
-            <div>乳製品</div>
-          </a>
-        
-          <a class="type">
-            <i class="fa-solid fa-wine-bottle"></i>
-            <div>調味料</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-martini-glass-citrus"></i>
-            <div>飲料</div>
-          </a>
-
-          <a class="type">
-            <i class="fa-solid fa-flask"></i>
-            <div>其他</div>
-          </a>
-        </div>
+      <div class="mainingredients-tag">
+        <a href="/question/question_n2_1" id="n2_1">
+          <i class="fa-solid fa-bowl-food"></i>
+          <div>主食類</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-drumstick-bite"></i>
+          <div>肉類</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-carrot"></i>
+          <div>蔬菜</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-lemon"></i>
+          <div>水果</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-egg"></i>
+          <div>蛋類</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-cubes-stacked"></i>
+          <div>堅果類</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-glass-water"></i>
+          <div>乳製品</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-wine-bottle"></i>
+          <div>調味料</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-martini-glass-citrus"></i>
+          <div>飲料</div>
+        </a>
+        <a>
+          <i class="fa-solid fa-flask"></i>
+          <div>其他</div>
+        </a>
       </div>
 
       <div class="next">
         <div class="line"></div>
         <div class="btn">
-          <a id = "back" href="/question/question_n1">
-            <i class="fa-solid fa-circle-arrow-left"></i>
+          <a id="back" href="/question/question_n1">
+            <i class="fa-solid fa-arrow-left"></i>
           </a>
-          <a id="continue-btn" class = "continue-btn">繼續</a>
+          <a id="continue-btn" class="continue-btn">繼續</a>
         </div>
       </div>
     </section>

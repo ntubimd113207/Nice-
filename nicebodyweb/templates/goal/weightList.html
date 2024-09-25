@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/static/css/components/mousemove.css">
   <link rel="stylesheet" href="/static/css/components/dialog.css">
 	<link rel="stylesheet" href="/static/css/layout/navbar.css">
-  <link rel="stylesheet" href="/static/css/goal/weightList.css">
+  <link rel="stylesheet" href="/static/css/goal/goalList.css">
   <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
   <script src="/static/components/mousemove.js" defer></script>
 	<script src="/static/components/layout/navbar.js" defer></script>
@@ -28,14 +28,13 @@
   <article>
     <main>
       <h1>體重紀錄列表</h1>
-      <div class="search">
+      <div class="weightsearch">
         <div class="left">
-          日期 : <input type="date" id="date-search">
+          <span>日期 : </span>
+          <input type="date" id="date-search">
         </div>
-        <div class="right">
-          <input type="text" id="keyword-search" placeholder="關鍵字查詢">
-          <button><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
+        <input type="text" id="keyword-search" placeholder="關鍵字查詢">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
       </div>
       <div class="rwdsearch">
         <div class="left">
@@ -48,22 +47,27 @@
           <button><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
       </div>
-      <table>
-        <tr>
-          <th>日期</th>
-          <th>體重(kg)</th>
-          <th></th>
-          <th></th>
-        </tr>
-        {% for d in data %}
-        <tr>
-          <td>{{ d[2] }}</td>
-          <td>{{ d[1] }}</td>
-          <td><i class="fa-solid fa-pen openweight" data-id="{{ d[0] }}" data-date="{{ d[2] }}" data-kg="{{ d[1] }}"></i></td>
-          <td><i class="fa-regular fa-trash-can opendelete" data-id="{{ d[0] }}"></i></td>
-        </tr>
-        {% endfor %}
-      </table>
+      <div class="tablewrap">
+        <table class="weighttable">
+          <tr>
+            <th>日期</th>
+            <th>體重(kg)</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </table>
+        <div class="line"></div>
+        <table class="weighttable">
+          {% for d in data %}
+          <tr>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[1] }}</td>
+            <td><i class="fa-solid fa-pen openweight" data-id="{{ d[0] }}" data-date="{{ d[2] }}" data-kg="{{ d[1] }}"></i></td>
+            <td><i class="fa-regular fa-trash-can opendelete" data-id="{{ d[0] }}"></i></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
       <dialog id="weight">
         <h1>修改體重紀錄</h1>
         <div class="content">
@@ -81,8 +85,8 @@
       <dialog id="delete">
         <h1>確定刪除體重紀錄?</h1>
         <div class="contentsave">
-            <button id="closedelete" class="closebtn">cancel</button>
-            <button id="savedelete" class="savebtn">confirm</button>
+          <button id="closedelete" class="closebtn">cancel</button>
+          <button id="savedelete" class="savebtn">confirm</button>
         </div>
     </dialog>
 
@@ -246,7 +250,6 @@
         row.style.display = match ? '' : 'none';
       });
     }
-
   </script>
 </body>
 </html>
