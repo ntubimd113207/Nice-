@@ -110,12 +110,39 @@ def robott_selfList_more():
         try:    
             connection = db.get_connection() 
             cursor = connection.cursor()     
+            
             recipe_id = request.args.get('recipe_id')
             cursor.execute('SELECT title, TO_CHAR(create_time, \'MM.DD.YYYY\'), summary, "prepare", "cookTime", "cookStep", nutrition, "cookImage", "isPublish", diet, "prepareMoney", "Cookid", "cookStep_mp3" FROM body."cookbook" where "Cookid" =%s', (recipe_id,))
             data = cursor.fetchone()
+
+            # 獲取前 7 個最喜歡的食譜
+            cursor.execute('''
+                WITH first_query AS (
+                    SELECT "cookImage", title, "Cookid" 
+                    FROM body."v_recipeWorld" 
+                    WHERE main_req = (SELECT main_req FROM body.cookbook WHERE "Cookid" = %s) 
+                    AND "Cookid" != %s
+                    ORDER BY likecount DESC
+                    LIMIT 7
+                )
+
+                SELECT * FROM first_query
+
+                UNION ALL
+
+                -- 只在 first_query 的結果少於 7 筆時從這裡補足
+                select "cookImage", title, "Cookid" from (
+                SELECT "cookImage", title, "Cookid", likecount 
+                FROM body."v_recipeWorld"
+                WHERE "Cookid" NOT IN (SELECT "Cookid" FROM first_query) -- 避免重複
+                ORDER BY likecount DESC
+                LIMIT 7 - (SELECT COUNT(*) FROM first_query)) as a;
+            ''', (recipe_id, recipe_id))
+            recipe_data = cursor.fetchall()
+
             connection.close()
 
-            return render_template('/robott/detailedRecipe.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid)
+            return render_template('/robott/detailedRecipe.html', data=data, Recipes_image_path=Recipes_image_path, name=name, userImage=userImage, uid=uid, recipe_data=recipe_data)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
         
