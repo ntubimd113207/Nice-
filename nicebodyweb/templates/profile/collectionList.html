@@ -185,77 +185,77 @@
       document.getElementById('addcollect').showModal();
       document.getElementById("addcollect").scrollTop = 0;
       document.getElementById('insertName').value = '';
+    });
 
-      // close dialog
-      document.getElementById('closeaddcollect').addEventListener('click', function() {
-        document.getElementById('addcollect').close();
-      });
+    // close dialog
+    document.getElementById('closeaddcollect').addEventListener('click', function() {
+      document.getElementById('addcollect').close();
+    });
 
-      // save dialog
-      document.getElementById('saveaddcollect').addEventListener('click', function() {
-        let input = document.querySelector('.input').value;
-        let options = document.querySelectorAll('#collectionSelect option');
+    // save dialog
+    document.getElementById('saveaddcollect').addEventListener('click', function() {
+      let input = document.querySelector('.input').value;
+      let options = document.querySelectorAll('#collectionSelect option');
 
-        if (input === '') {
-          alert('請輸入列表名稱');
+      if (input === '') {
+        alert('請輸入列表名稱');
+        return;
+      }
+
+      if (input.length > 10) {
+        alert('列表名稱不得超過10個字');
+        return;
+      }
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].textContent === input) {
+          alert('列表名稱已存在');
           return;
         }
+      }
 
-        if (input.length > 10) {
-          alert('列表名稱不得超過10個字');
-          return;
+      $.ajax({
+        type: 'POST',
+        url: '/profile/addCollection',
+        data: {
+          collectionName: input
+        },
+        success: function(response) {
+          console.log(response);
+        },  
+        error: function(xhr, status, error) {
+          console.error(error);
+          // alert('出現錯誤，請稍後再試！');
         }
-
-        for (let i = 0; i < options.length; i++) {
-          if (options[i].textContent === input) {
-            alert('列表名稱已存在');
-            return;
-          }
-        }
-
-        $.ajax({
-          type: 'POST',
-          url: '/profile/addCollection',
-          data: {
-            collectionName: input
-          },
-          success: function(response) {
-            console.log(response);
-          },  
-          error: function(xhr, status, error) {
-            console.error(error);
-            alert('出現錯誤，請稍後再試！');
-          }
-        });
-
-        
-
-        // 更新 select 元素
-        let select = document.getElementById('collectionSelect');
-        let option = document.createElement('option');
-        option.textContent = input;  // 從伺服器回應中獲取新分類的名稱
-        select.appendChild(option);
-
-        // 更新 section
-        let article = document.querySelector('article');
-        let section = document.createElement('section');
-        section.setAttribute('data-collection-id', input);
-        section.innerHTML = `
-        <div class="collecttitle">
-            <div class="left">
-                <i class="fa-regular fa-folder"></i>
-                <h2>${input}</h2>
-            </div>
-            <div class="right">
-                <i class="fa-solid fa-pen opencollecttitle" data-name=${input}></i>
-                <i class="fa-regular fa-trash-can opencollectdelete" data-name=${input}></i>
-            </div>
-        </div>
-        <div class="collectcontent"></div>`;
-        article.appendChild(section);
-
-        document.getElementById('addcollect').close();
       });
+
+      
+
+      // 更新 select 元素
+      let select = document.getElementById('collectionSelect');
+      let option = document.createElement('option');
+      option.textContent = input;  // 從伺服器回應中獲取新分類的名稱
+      select.appendChild(option);
+
+      // 更新 section
+      let article = document.querySelector('article');
+      let section = document.createElement('section');
+      section.setAttribute('data-collection-id', input);
+      section.innerHTML = `
+      <div class="collecttitle">
+          <div class="left">
+              <i class="fa-regular fa-folder"></i>
+              <h2>${input}</h2>
+          </div>
+          <div class="right">
+              <i class="fa-solid fa-pen opencollecttitle" data-name=${input}></i>
+              <i class="fa-regular fa-trash-can opencollectdelete" data-name=${input}></i>
+          </div>
+      </div>
+      <div class="collectcontent"></div>`;
+      article.appendChild(section);
+
+      document.getElementById('addcollect').close();
     });
 
     // 更改分類名稱
@@ -318,7 +318,7 @@
         },
         error: function(xhr, status, error) {
           console.error(error);
-          alert('出現錯誤，請稍後再試！');
+          // alert('出現錯誤，請稍後再試！');
         }
       });
 
@@ -372,7 +372,7 @@
         },
         error: function(xhr, status, error) {
           console.error(error);
-          alert('出現錯誤，請稍後再試！');
+          // alert('出現錯誤，請稍後再試！');
         }
       });
 
@@ -521,7 +521,7 @@
                   },
                   error: function(xhr, status, error) {
                       console.error(error);
-                      alert('出現錯誤，請稍後再試！');
+                      // alert('出現錯誤，請稍後再試！');
                       reject(error);
                   }
               });
@@ -547,7 +547,7 @@
       .catch(() => {
           // 如果有任何請求失敗，仍然隱藏 loading 指示器
           document.getElementById('loading').style.display = 'none';
-          alert('出現錯誤，請稍後再試！');
+          // alert('出現錯誤，請稍後再試！');
       });
 
       document.getElementById('collect').close();
@@ -600,7 +600,7 @@
         },
         error: function(xhr, status, error) {
           console.error(error);
-          alert('出現錯誤，請稍後再試！');
+          // alert('出現錯誤，請稍後再試！');
         }
       });
 
