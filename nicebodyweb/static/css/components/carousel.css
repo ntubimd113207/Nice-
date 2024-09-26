@@ -5,6 +5,28 @@
   margin-bottom: 0;
 }
 
+.related-carousel {
+  background: linear-gradient(#FCFAF1 0%, #f4fff5 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 4em 0 6em;
+}
+
+.carouseltitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  color: #6E3D0D;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.carouseltitle i {
+  color: #D4A373;
+}
+
 .carousel .forward,
 .carousel .backward {
   position: absolute;
@@ -130,6 +152,11 @@
   transition: opacity 0.75s ease-in-out;
 }
 
+.related-food {
+  background: #FFF;
+  box-shadow: 0 0 10px 5px #be98711e;
+}
+
 /* .image.featured 中間不可有空格 */
 .image.featured {
   margin: 0;
@@ -139,13 +166,18 @@
 }
 
 .featured img {
-  transition: transform  0.3s;
+  transition: all 0.3s;
+  width: 100%;
+  display: block;
 }
 
 .featured h3 {
   margin: 10% 0;
   font-weight: bold;
-  transition: font-size  0.3s;
+  transition: all 0.3s;
+  font-size: 1.25em;
+  line-height: 1.25em;
+  color: #483949;
 }
 
 .image.featured:hover img {
