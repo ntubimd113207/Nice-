@@ -1,0 +1,324 @@
+article {
+  padding: 150px 25% 5%;
+  background-color: #F0EAD2;
+  min-height: 85vh;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title > i,
+.title > h1 {
+  color: #BC6C25;
+  font-size: 1.875em;
+}
+
+.title > i {
+  margin-right: 15px;
+}
+
+/* form */
+
+form {
+  margin-top: 5%;
+}
+
+.pen {
+  margin-bottom: 5%;
+}
+
+.pen h3 {
+  margin-bottom: 2%;
+}
+
+.pen > input,
+.pen > textarea {
+  width: 100%;
+  padding: 10px;
+  border: hsl(48, 50%, 88%);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.pen .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3%;
+}
+
+.pen .title button {
+  background-color: #86BAA1;
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.pen .title button i {
+  color: #FCFAF1;
+}
+
+/* uploads */
+
+.uploads {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.a-upload {
+  width: 100%;
+  padding: 4px 10px;
+  height: 40px;
+  line-height: 20px;
+  position: relative;
+  cursor: pointer;
+  color: #495057;
+  background: #FFF;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+}
+  
+.a-upload input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.a-upload i {
+  position: absolute; 
+  right: 10px;
+  top: 10px;
+  transition: color 0.3s ease;
+}
+  
+.a-upload i:hover {
+  color: #000000;
+  background: #FFF;
+  text-decoration: none
+}
+
+.showFileName {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn input {
+  font-size: 1em;
+  border: none;
+  background-color: #86BAA1;
+  color: #FCFAF1;
+  padding: 1% 8%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Flickity Carousel */
+.carousel {
+  width: 100%;
+  height: 320px;
+  background: #FFF;
+  padding: 10px;
+  border: hsl(48, 50%, 88%);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.carousel-cell {
+  width: 50%;
+  height: 300px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.carousel-cell img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.add-file-btn {
+  display: inline-block;
+  background-color: #BC6C25;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.add-file-btn:hover {
+  background-color: #874912;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.remove-btn i {
+  pointer-events: none;
+}
+
+.edit-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.edit-btn i {
+  pointer-events: none;
+}
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 150px 23% 5%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  article {
+    padding: 150px 20% 5%;
+  }
+}
+
+/* Medium 1024px */
+
+@media screen and (max-width:1024px) {
+  article {
+    padding: 120px 18% 5%;
+  }
+
+  .title > i,
+  .title > h1 {
+    font-size: 25px;
+  }
+
+  .carousel {
+    height: 220px;
+  }
+
+  .carousel-cell {
+    height: 200px;
+  }
+
+  .flickity-page-dots {
+    bottom: -15px;
+    left: 0;
+  }
+
+  .flickity-page-dots .dot {
+    width: 5px;
+    height: 5px;
+    margin: 0 5px;
+  }
+}
+
+/* Small 768px */
+
+@media screen and (max-width:768px) {
+  article {
+    padding: 120px 15% 5%;
+  }
+
+  form {
+    margin-top: 30px;
+  }
+
+  .title > i,
+  .title > h1 {
+    font-size: 20px;
+  }
+
+  .pen h3,
+  .pen > input,
+  .pen > textarea {
+    font-size: 15px;
+  }
+
+  .carousel {
+    height: 170px;
+  }
+  
+  .carousel-cell {
+    width: 60%;
+    height: 150px;
+  }
+
+  .btn input {
+    padding: 10px 20px;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  article {
+    padding: 120px 10% 5%;
+  }
+
+  .pen h3,
+  .pen > input,
+  .pen > textarea,
+  .fa-plus {
+    font-size: 12px;
+  }
+
+  .add-file-btn {
+    padding: 6px;
+  }
+
+  .carousel-cell {
+    width: 100%;
+  }
+
+  .btn {
+    margin-top: 40px;
+  }
+
+  .btn input {
+    font-size: 12px;
+  }
+}

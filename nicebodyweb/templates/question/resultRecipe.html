@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="/static/images/favicon.ico" rel="shortcut icon"/>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/base/reset.css">
+	<link rel="stylesheet" href="/static/css/base/global.css">
+	<link rel="stylesheet" href="/static/css/components/mousemove.css">
+	<link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+	<link rel="stylesheet" href="/static/css/layout/footer.css">
+	<link rel="stylesheet" href="/static/css/robott/shareResults.css">
+	<link rel="stylesheet" href="/static/css/components/carousel.css">
+	<link rel="stylesheet" href="/static/css/fancybox/jquery.fancybox.css"/>
+	<link rel="stylesheet" href="/static/css/fancybox/my.jquery.fancybox.css"/>
+	<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+	<script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+	<script src="/static/components/layout/footer.js" defer></script>
+	<script src="/static/js/jquery.fancybox.js"></script> 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<title>食譜</title>
+</head>
+<body>
+	<div id="myCursor"></div>
+	<div id="circle"></div>
+
+	<nav id="nav-container"></nav>
+
+	<article>
+		<div class="banner">
+			<a data-fancybox="gallery" href="{{ Recipes_image_path }}/{{ image_name }}">
+				<img src="{{ Recipes_image_path }}/{{ image_name }}" alt="">
+			</a>
+		</div>
+		
+		<section class="receipe">
+			<div class="wrap">
+				<div class="title">
+					<div class="left">
+						<h1>{{ data['recipe']['title'] }}</h1>
+					</div>
+					<div class="diet" id="openinfor">
+						{% if data['recipe']['diet'] is not none %}
+							{% if '1' in data['recipe']['diet'] %}
+								<span class="dietname mediterranean">地中海</span>
+							{% endif %}
+							{% if '2' in data['recipe']['diet'] %}
+								<span class="dietname deshu">得舒</span>
+							{% endif %}
+							{% if '3' in data['recipe']['diet'] %}
+								<span class="dietname vegetarian">彈性素食</span>
+							{% endif %}
+							{% if '4' in data['recipe']['diet'] %}
+								<span class="dietname numdiet">234</span>
+							{% endif %}
+						{% endif %}
+					</div>
+					<dialog id="infor">
+						<h1>飲食法簡介</h1>
+						<div class="content">
+							<h2>地中海飲食法</h2>
+							<p>以蔬菜、水果、橄欖油、魚類和全穀雜糧為主，強調新鮮、天然的食材。</p>
+							<h2>得舒飲食法</h2>
+							<p>著重食用大量的蔬菜和水果，限制或避免動物性食品和加工食品的攝入，是一個降低血壓飲食治療方法。</p>
+							<h2>彈性素食</h2>
+							<p>結合了素食和非素食的元素，以植物性食物為主，但允許偶爾食用少量的動物性食物。</p>
+							<h2>234飲食法</h2>
+							<p>以每餐攝入500卡路里為原則，攝取的營養比例為：蛋白質佔25%、澱粉佔35%、脂肪佔40%。</p>
+						</div>
+						<div class="save">
+							<button id="closeinfor">close</button>
+						</div>
+					</dialog>
+				</div>
+			
+				<div class="summary">
+					<p>{{ current_time }}</p>
+					<h2>摘要</h2>
+					<p>{{data['recipe']['summary']}}</p>
+				</div>
+					
+				<div class="content">
+					<h2>食材預算 - {{ data2['total'] }}元</h2>
+					<ol>
+						{% for item in data2['prepareMoney'] %}
+						<li>{{ item }}</li>
+						{% endfor %}
+					</ol>
+
+					<h2>烹調時間</h2>
+					<p>{{data['recipe']['cookTime']}}分</p>
+
+					<h2>料理步驟</h2>
+					<ol>
+						{% for item in data['recipe']['cookStep'] %}
+						<li>{{ item }}</li>
+						{% endfor %}
+					</ol>
+
+					<h2>營養配比</h2>
+					<div class="chart-container">
+						{% for item in data['recipe']['nutrition'] %}
+							<p style="display: inline;">{{ item }}</p>
+							{% if not loop.last %}，{% endif %}
+						{% endfor %}
+						<canvas id="nutritionChart" width="400" height="400"></canvas>	
+					</div>
+				</div>
+
+				<div class="button">
+					<button>發佈食譜</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="carousel">
+			<div class="reel">
+				{% for d in recipe_data %}
+				<div class="food">
+					<form action="/robott/shareResults" method="get">
+						<input type="hidden" name="recipe_id" value="{{ d[2] }}">
+						<button type="submit" class="image featured" style="border: none; background: none; padding: 0;">
+							<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
+							<h3>{{ d[1] }}</h3>
+						</button>
+					</form>
+				</div>
+				{% endfor %}
+			</div>
+		</section>
+	</article>
+
+	<dialog id="loginDialog">
+		<h1>請先登入</h1>
+		<div class="contentsave">
+		  <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+		</div>
+	</dialog>
+
+	<footer id="footer-container"></footer>
+
+	<script src="/static/js/jquery.scrollex.min.js"></script>
+	<script>
+		let messageText = "{{name}}";
+		let userImage = "{{userImage}}"
+		let uid = "{{uid}}"
+		
+		window.onload = function() {
+			renderNav();
+			renderFooter();
+			renderChart();
+
+			if (messageText == "0") {
+				document.getElementById("loginDialog").showModal();
+				document.getElementById("loginDialog").scrollTop = 0;
+			}
+		};
+
+		function renderChart() {
+			var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
+				var parts = item.match(/(\D+)(\d+)%/);
+				return {
+					label: parts[1],
+					value: parseInt(parts[2])
+				};
+			});
+
+			// 顏色映射表，對應每個標籤
+			var colorMap = {
+				'蛋白質': '#efebce', 
+				'纖維': '#C1CCC7', 
+				'維生素C': '#E4B69E', 
+				'礦物質': '#A98978', 
+				'澱粉': '#BFD1C4',
+				'脂肪': '#a3a380',
+				'糖': '#B3CAD8',
+				'澱粉':'#DBB89C',
+				'碳水化合物':'#d6ce93',
+				'纖維素': '#D3AC73',
+				'鈉': '#D09075',
+				'其他': '#F1D09D',
+				'維生素與礦物質': '#F4D4BE',
+				'維生素': '#CEA77E',
+			};
+
+			var labels = nutritionData.map(function(item) {
+				return item.label;
+			});
+
+			var data = nutritionData.map(function(item) {
+				return item.value;
+			});
+
+			// 為每個標籤分配顏色
+			var backgroundColor = labels.map(function(label) {
+				return colorMap[label] || '#d8a48f'; // 默認顏色為黑色
+			});
+
+			var borderColor = backgroundColor; // 使用相同的邊框顏色
+
+			var ctx = document.getElementById('nutritionChart').getContext('2d');
+			var chart = new Chart(ctx, {
+				type: 'pie',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: '營養配比',
+						data: data,
+						backgroundColor: backgroundColor,
+						borderColor: borderColor,
+						borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: false,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							position: 'top',
+							onClick: function(e, legendItem, legend) {
+								e.stopPropagation(); // 阻止點擊事件
+							}
+						},
+						title: {
+							display: false,
+							text: '營養配比'
+						}
+					}
+				}
+			});
+		}
+
+
+		// 彈跳視窗 飲食法簡介
+		let openinfor=document.getElementById('openinfor');
+		let infor=document.getElementById('infor');
+		let closeinfor=document.getElementById('closeinfor');
+		openinfor.addEventListener("click", function(){
+			infor.showModal();
+		})
+		closeinfor.addEventListener("click", function(){
+			infor.close();
+		})
+	</script>
+</body>
+</html>

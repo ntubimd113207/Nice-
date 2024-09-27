@@ -1,0 +1,533 @@
+/* banner */
+.banner {
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+  padding-top: 4%;
+}
+
+.banner img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  opacity:0.5;
+  object-fit: cover;
+}
+
+/* receipe */
+.receipe,
+.summary,
+.wrap > .content p,
+.wrap > .content ol {
+  line-height: 25px;
+}
+
+.sidetitle {
+  position: sticky;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #6E3D0D;
+  background-color: #FCFAF1;
+  padding: 20px 15px;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px 2px #e0cbb249;
+}
+
+.sidetitle > a,
+.sidetitle > p {
+  writing-mode: vertical-rl;
+  letter-spacing: 5px;
+  font-weight: bold;
+  line-height: 0;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #6E3D0D;
+  transition: all 0.3s;
+}
+
+.sidetitle > a:hover,
+.sidetitle > p:hover {
+  color: #FFCF56;
+}
+
+.receipe {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+  padding: 5% 20% 5% 15%;
+  box-sizing: border-box;
+}
+
+.receipe > .wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* title */
+.receipe > .wrap > .title {
+  display: flex;
+  margin: 0 0 20px;
+  align-items: center;
+  width: 100%;
+}
+
+.title > .left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+.title > .left > h1 {
+  font-size: 1.875em;
+  font-weight: bold;
+}
+
+.left > .like,
+.receiperate,
+.bookmark {
+  display: flex;
+  align-items: center;  
+}
+
+.left > .like {
+  color: #D4A373;
+}
+
+.receiperate {
+  color: #f6bd60;
+}
+
+.fa-solid {
+  transition: transform 0.3s ease;
+}
+
+.fa-solid.liked {
+  transform: scale(1.3);
+}
+
+.left > .like > i,
+.receiperate > i,
+.bookmark > i {
+  margin-right: 10px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.receiperate > i {
+  font-weight: bold;
+}
+
+/* diet */
+
+.diet {
+  font-size: 0.5em;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2%;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.dietname {
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5e6472;
+  cursor: pointer;
+}
+
+/* .summary */
+.summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 0.75em;
+  margin-bottom: 5%;
+}
+
+.summary p:nth-of-type(1) {
+  margin-bottom: 1.5%;
+}
+
+.summary h2 {
+  margin-bottom: 1%;
+}
+
+.summary p:nth-of-type(2) {
+  font-size: 1.25em;
+}
+
+/* content */
+.wrap > .content > h2 {
+  font-size: 1.6875em;
+  font-weight: bold;
+  margin-bottom: 3%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.wrap > .content > ol {
+  list-style: decimal;
+  padding-left: 30px;
+  margin-bottom: 5%;
+}
+
+.wrap > .content > p {
+  margin-bottom: 5%;
+}
+
+/* canvas */
+
+#nutritionChart {
+  margin: 5% auto 0;
+  width: 400px;
+  aspect-ratio: 1;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.button button {
+  padding: 1% 2%;
+  background-color: #86BAA1;
+  border: none;
+  border-radius: 10px;
+  color: #FFF;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* sharebtns */
+.sharebtns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #FCFAF1;
+  gap: 30px;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+
+.sharebtns > h2 {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.sharebtns > .links {
+  font-size: 2.5em;
+  display: flex;
+  gap: 50px;
+}
+
+.sharebtns > .links > button:first-child {
+  color: rgb(24, 119, 242);
+}
+
+.sharebtns > .links > button:last-child {
+  color: #14171A;
+}
+
+.sharebtns > .links > button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 40px;
+}
+
+/* comment */
+.comment {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #86baa15f;
+}
+
+.comment > .wrap {
+  width: 60%;
+  margin-bottom: 50px;
+  align-items: center;
+}
+
+.comment > .wrap > .title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin: 50px 0;
+  color: #464646;
+}
+
+.comment > .wrap > .title > .share {
+  color: #464646;
+}
+
+/* each */
+.comment .each,
+.comment .message {
+  width: 100%;
+  background-color: #FFF;
+  padding: 1% 1.5%; 
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.comment .message > .left {
+  flex-grow: 1;
+}
+
+.comment .message > .left > .evaluaterate {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.evaluaterate > h3 {
+  font-size: 0.5em;
+}
+
+.evaluaterate i {
+  color: #f6bd60;
+  margin: 0 10px;
+}
+
+.evaluaterate select {
+  border: none;
+  color: #464646;
+}
+
+.comment .message > .left > input {
+  border: none;
+  font-size: 15px;
+  color: #464646;
+  width: 100%;
+}
+
+.comment .submitButton {
+  background-color: #FFF;
+  border: none;
+}
+
+.comment .message > button > i {
+  font-size: 20px;
+  color: #6E3D0D;
+  margin-left: 3%;
+  transition: color 0.3s;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.comment .message > i:hover {
+  color: #D4A373;
+}
+
+.each .left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+  min-width: 0;
+  gap: 10px;
+}
+
+.each .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.left p {
+  flex-grow: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 25px;
+}
+
+.right p {
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.right .photostickers {
+  max-width: 100%;
+  max-height: 100%;
+  width: 35px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+audio {
+  height: 25px;
+}
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  .receipe {
+    padding: 5% 15% 5% 10%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  .receipe {
+    gap: 50px;
+    padding: 5% 12% 5% 8%;
+  }
+
+  #nutritionChart {
+    width: 350px;
+    aspect-ratio: 1;
+  }
+}
+
+/* Medium 1024px */
+
+@media screen and (max-width:1024px) {
+  .receipe {
+    padding: 7% 10% 5% 10%;
+  }
+
+  .receipe > .wrap > .title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 0 20px;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .title > .left {
+    gap: 10px;
+  }
+
+  .title > .left > h1 {
+    font-size: 25px;
+  }
+
+  .left > .like > i,
+  .receiperate > i,
+  .bookmark > i {
+    margin-right: 5px;
+    font-size: 1.2em;
+  }
+
+  .diet {
+    font-size: 0.5em;
+    display: flex;
+    justify-content: flex-start;
+    gap: 2%;
+    align-items: center;
+    width: 100%;
+  }
+
+  .dietname {
+    padding: 2px 10px;
+  }
+
+  .wrap > .content > h2 {
+    font-size: 20px;
+    margin-bottom: 3%;
+  }
+
+  .wrap > .content {
+    line-height: 20px;
+    font-size: 15px;
+  }
+
+  .sidetitle {
+    padding: 15px 10px;
+    font-size: 15px;
+  }
+
+  .comment > .wrap {
+    width: 70%;
+    margin-bottom: 30px;
+  }
+
+  #nutritionChart {
+    width: 300px;
+    aspect-ratio: 1;
+  }
+}
+
+/* Small 768px */
+
+@media screen and (max-width:768px) {
+  .button button {
+    padding: 2% 4%;
+  }
+
+  .content p {
+    margin-bottom: 10%;
+  }
+
+  .comment .each {
+    padding: 2%; 
+  }
+
+  .right p {
+    display: none;
+  }
+
+  #nutritionChart {
+    width: 250px;
+    aspect-ratio: 1;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  .sidetitle {
+    display: none;
+  }
+
+  .receipe > .wrap > .title {
+    margin: 5% 0 10%;
+  }
+
+  .diet {
+    font-size: 12px;
+  }
+
+  .content h2 {
+    margin: 10% 0;
+  }
+
+  .comment > .wrap > .title {
+    margin: 15% 0 10%;
+  }
+
+  .wrap > .content ol {
+    margin-left: 15px;
+  }
+
+  .button {
+    margin-top: 10%;
+  }
+}

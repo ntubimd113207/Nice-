@@ -1,0 +1,277 @@
+body {
+  background-color: #F0EAD2;
+}
+
+article {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10% 0 5%;
+}
+
+main {
+  width: 50%;
+}
+
+main h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #BC6C25;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checksearch,
+.weightsearch,
+.rwdsearch {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin-top: 5%;
+  gap: 10px;
+}
+
+.checksearch {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weightsearch {
+  display: flex;
+}
+
+.rwdsearch {
+  display: none;
+  justify-content: space-between;
+}
+
+.checksearch input,
+.weightsearch input,
+.rwdsearch input {
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  flex: 1;
+  background-color: #FFF;
+  box-sizing: border-box;
+  color: #495057;
+}
+
+.rwdsearch .left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.rwdsearch .left .top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checksearch button,
+.weightsearch button,
+.rwdsearch button {
+  border: none;
+  background-color: #6E3D0D;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.5em;
+  color: #FFF;
+  cursor: pointer;
+}
+
+.tablewrap {
+  margin-top: 5%;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  text-align: left; 
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: #6E3D0D;
+}
+
+.checktable th:nth-child(1),
+.checktable td:nth-child(1) {
+  width: 10%;
+  text-align: center;
+}
+
+.weighttable th:nth-child(1),
+.weighttable td:nth-child(1) {
+  width: 20%;
+}
+
+.checktable th:nth-child(2),
+.checktable td:nth-child(2) {
+  width: 80%;
+}
+
+.weighttable th:nth-child(2),
+.weighttable td:nth-child(2) {
+  width: 75%;
+}
+
+.checktable th:nth-child(3),
+.checktable td:nth-child(3),
+.checktable th:nth-child(4),
+.checktable td:nth-child(4),
+.weighttable th:nth-child(3),
+.weighttable td:nth-child(3),
+.weighttable th:nth-child(4),
+.weighttable td:nth-child(4) {
+  width: 5%;
+  text-align: right;
+}
+
+.fa-pen {
+  color: #6E3D0D;
+}
+
+.fa-trash-can {
+  color: #FF3333;
+}
+
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  .weighttable th:nth-child(1),
+  .weighttable td:nth-child(1) {
+    width: 25%;
+  }
+
+  .weighttable th:nth-child(2),
+  .weighttable td:nth-child(2) {
+    width: 65%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+}
+
+/* Medium 1024px */
+
+@media screen and (max-width:1024px) {
+  article {
+    padding: 15% 0 5%;
+  }
+
+  main {
+    width: 60%;
+  }
+
+  .weighttable th:nth-child(1),
+  .weighttable td:nth-child(1) {
+    width: 30%;
+  }
+
+  .weighttable th:nth-child(2),
+  .weighttable td:nth-child(2) {
+    width: 60%;
+  }
+}
+
+/* Small 768px */
+
+@media screen and (max-width:768px) {
+  article {
+    padding: 120px 0 5%;
+  }
+
+  main {
+    width: 70%;
+  }
+
+  .weightsearch {
+    display: none;
+  }
+
+  .rwdsearch {
+    display: flex;
+    margin-top: 10%;
+  }
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 15px 0;
+  }
+
+  table th,
+  table td {
+    font-size: 14px;
+    padding: 15px 0;
+  }
+
+  .checktable th:nth-child(1),
+  .checktable td:nth-child(1) {
+    width: 15%;
+  }
+
+  .checktable th:nth-child(2),
+  .checktable td:nth-child(2) {
+    width: 75%;
+  }
+
+  .weighttable th:nth-child(1),
+  .weighttable td:nth-child(1) {
+    width: 40%;
+  }
+
+  .weighttable th:nth-child(2),
+  .weighttable td:nth-child(2) {
+    width: 50%;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  article {
+    padding: 120px 0 10%;
+  }
+
+  main {
+    width: 80%;
+  }
+
+  .checksearch {
+    margin-top: 10%;
+  }
+
+  main h1 {
+    font-size: 20px;
+  }
+
+  .weighttable th:nth-child(1),
+  .weighttable td:nth-child(1) {
+    width: 50%;
+  }
+
+  .weighttable th:nth-child(2),
+  .weighttable td:nth-child(2) {
+    width: 40%;
+  }
+}

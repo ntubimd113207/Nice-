@@ -1,0 +1,104 @@
+*, 
+body {
+  letter-spacing: 3px;
+  font-family: "Montserrat", sans-serif;
+}
+
+input,
+button,
+select {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-button {
+  background: transparent;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgb(204, 204, 204);
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
+.fa-droplet {
+  color: #59A5D8;
+}
+
+.fa-seedling {
+  color: #4AD66D;
+}
+
+.fa-martini-glass {
+  color: #FF9914;
+}
+
+.fa-cookie-bite,
+.fa-pen-to-square,
+.fa-triangle-exclamation {
+  color: #BC6C25;
+}
+
+.fa-apple-whole {
+  color: #e5446d;
+}
+
+.mediterranean {
+  background-color: #d8f3dc;
+}
+
+.deshu {
+  background-color: #b8f2e6;
+}
+
+.vegetarian {
+  background-color: #aed9e0;
+}
+
+.numdiet {
+  background-color: #ffd6ba;
+}
+
+.none {
+  visibility: hidden;
+}
+
+.fa-pen {
+  color: #6E3D0D;
+}
+
+.fa-trash-can,
+.fa-heart {
+  color: #FF3333;
+}
+
+.fa-paper-plane {
+  color: #FFF;
+}
+
+.fa-user-plus,
+.fa-user-check {
+  color: #86BAA1;
+}
+
+.fa-bookmark,
+.fa-crown {
+  color: #FFCF56;
+}

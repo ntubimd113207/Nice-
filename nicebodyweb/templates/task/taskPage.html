@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="/static/css/task/taskpage.css">
+  <link rel="stylesheet" href="/static/css/task/taskbutton.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <title>任務</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <div class="progress-bar">
+      <div class="level">
+        <span>LV.</span><p id="level">{{level_data[0]}}</p>
+      </div>
+      <form action="test.aspx" method="get">
+        <progress id="progress" value="{{level_data[1] / level_data[2]}}"></progress>
+      </form>
+    </div>
+
+    <div class="right">
+      <p id="score">{{level_data[1]}}/{{level_data[2]}}</p>
+    </div>
+
+    <section>
+      <div class="title">
+        <div class="text">
+          <i class="fa-regular fa-calendar-check"></i>
+          <h2>每日任務</h2>
+        </div>
+      </div>
+
+      <div class="titlecontent">
+        {% if '1' in task_data and '1' not in award_data %}
+        <a class="eachtask" >
+          <p>上線一次<span>+5</span></p>
+          <main id="app">
+            <div class="static nocancel">
+              <button class="rewardButton" data-task-id="1">
+                <span>領取獎勵</span>
+                <svg viewBox="0 0 22 22" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <line x1="15" y1="16" x2="19" y2="12"></line>
+                  <line x1="15" y1="8" x2="19" y2="12"></line>
+                </svg>
+
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% elif '1' in task_data and '1' in award_data %}
+        <a class="eachtask">
+          <p>上線一次<span>+5</span></p>
+          <main id="app">
+            <div class="static cancel">
+              <button class="rewardButton disabled">
+                <span>領取成功</span>
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% else %}
+        <a class="eachtask">
+          <p>上線一次<span>+5</span></p>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </a>  
+        {% endif %}
+
+        {% if '2' in task_data and '2' not in award_data %}
+        <a class="eachtask">
+          <p>輸入今日體重<span>+5</span></p>
+          <main id="app">
+            <div class="static nocancel">
+              <button class="rewardButton" data-task-id="2">
+                <span>領取獎勵</span>
+                <svg viewBox="0 0 22 22" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <line x1="15" y1="16" x2="19" y2="12"></line>
+                  <line x1="15" y1="8" x2="19" y2="12"></line>
+                </svg>
+
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% elif '2' in task_data and '2' in award_data %}
+        <a class="eachtask">
+          <p>輸入今日體重<span>+5</span></p>
+          <main id="app">
+            <div class="static cancel">
+              <button class="rewardButton disabled">
+                <span>領取成功</span>
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% else %}
+        <a class="eachtask" href="/goal/goalMain#weight-change-chart">
+          <p>輸入今日體重<span>+5</span></p>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </a>  
+        {% endif %}
+        
+        {% if '3' in task_data and '3' not in award_data %}
+        <a class="eachtask">
+          <p>生成一次食譜<span>+5</span></p>
+          <main id="app">
+            <div class="static nocancel">
+              <button class="rewardButton" data-task-id="3">
+                <span>領取獎勵</span>
+                <svg viewBox="0 0 22 22" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <line x1="15" y1="16" x2="19" y2="12"></line>
+                  <line x1="15" y1="8" x2="19" y2="12"></line>
+                </svg>
+
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% elif '3' in task_data and '3' in award_data %}
+        <a class="eachtask">
+          <p>生成一次食譜<span>+5</span></p>
+          <main id="app">
+            <div class="static cancel">
+              <button class="rewardButton disabled">
+                <span>領取成功</span>
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% else %}
+        <a class="eachtask" href="/robott/generateRecipes?showDialog=true">
+          <p>生成一次食譜<span>+5</span></p>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </a>
+        {% endif %}
+
+        {% if '4' in task_data and '4' not in award_data %}
+        <a class="eachtask">
+          <p>成功打卡一次<span>+5</span></p>
+          <main id="app">
+            <div class="static nocancel">
+              <button class="rewardButton" data-task-id="4">
+                <span>領取獎勵</span>
+                <svg viewBox="0 0 22 22" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <line x1="15" y1="16" x2="19" y2="12"></line>
+                  <line x1="15" y1="8" x2="19" y2="12"></line>
+                </svg>
+
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% elif '4' in task_data and '4' in award_data %}
+        <a class="eachtask">
+          <p>成功打卡一次<span>+5</span></p>
+          <main id="app">
+            <div class="static cancel">
+              <button class="rewardButton disabled">
+                <span>領取成功</span>
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% else %}
+        <a class="eachtask" href="/goal/goalMain">
+          <p>成功打卡一次<span>+5</span></p>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </a>
+        {% endif %}
+        {% if '5' in task_data and '5' not in award_data %}
+        <a class="eachtask">
+          <p>完成個人檔案<span>+5</span></p>
+          <main id="app">
+            <div class="static nocancel">
+              <button class="rewardButton" data-task-id="5">
+                <span>領取獎勵</span>
+                <svg viewBox="0 0 22 22" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <line x1="15" y1="16" x2="19" y2="12"></line>
+                  <line x1="15" y1="8" x2="19" y2="12"></line>
+                </svg>
+
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% elif '5' in task_data and '5' in award_data %}
+        <a class="eachtask">
+          <p>完成個人檔案<span>+5</span></p>
+          <main id="app">
+            <div class="static cancel">
+              <button class="rewardButton disabled">
+                <span>領取成功</span>
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l5 5l10 -10"></path>
+                </svg>
+              </button>
+            </div>
+          </main>
+        </a>
+        {% else %}
+        <a class="eachtask" href="/profile/profilePage">
+          <p>完成個人檔案<span>+5</span></p>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </a>
+        {% endif %}
+      </div>
+    </section>
+
+    <section>
+      <div class="title">
+        <div class="text">
+          <i class="fa-regular fa-calendar-check"></i>
+          <h2>里程碑</h2>
+          <i class="fa-solid fa-angle-right"></i>
+          <h2>打卡小將</h2>
+        </div>
+        <i class="fa-regular fa-circle-question" id="openinfor"></i>
+        <dialog id="infor">
+          <h1>如何在里程碑留言?</h1>
+          <div class="content">
+            <p>每達到10次的累積數量，就可以獲得1次留言的機會!加油啊各位!</p>
+          </div>
+          <div class="save">
+            <button id="closeinfor" class="closebtn">close</button>
+          </div>
+        </dialog>
+      </div>
+  
+      <div class="milestone">
+        <div class="accumulation">
+          <i class="fa-regular fa-calendar-check"></i>
+          <h1>{{ milestone[0][0] }}</h1>
+          <span class="label">累積打卡天數</span>
+        </div>
+        <div class="accumulation">
+          <i class="fa-solid fa-chart-line"></i>
+          <h1>{{ milestone[1][0] }}</h1>
+          <span class="label">累積記錄體重</span>
+        </div>
+        <div class="accumulation">
+          <i class="fa-solid fa-puzzle-piece"></i>
+          <h1>{{ milestone[2][0] }}</h1>
+          <span class="label">累積生成食譜</span>
+        </div>
+        <div class="accumulation">
+          <i class="fa-regular fa-thumbs-up"></i>
+          <h1>{{ milestone[3][0] }}</h1>
+          <span class="label">評價食譜數量</span>
+        </div>
+      </div>
+
+      {% if achieve_time[0] > 0 %}
+      <div class="comment">
+        <div class="commentbtn" id="opencheckcmt">新增留言 x {{ achieve_time[0] }}</div>
+      </div>
+      {% endif %}    
+
+      <div class="saying">
+        {% for a in achievement %}
+        <div class="eachsay">
+          <div class="top">
+            <div class="left">
+              <img src="/static/images/userImage/{{ a[2] }}/{{ a[5] }}" alt="">
+              <h6>{{ a[4] }}</h6>
+            </div>
+            <div class="date">{{ a[3].strftime('%Y/%m/%d') }}</div>
+          </div>
+          <p>{{ a[1] }}</p>
+        </div>
+        <div class="line"></div>
+        {% endfor %}
+      </div>
+
+      <dialog id="loginDialog">
+        <h1>請先登入</h1>
+        <div class="contentsave">
+          <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+        </div>
+      </dialog>
+
+      <canvas class="fireworks"></canvas>
+    </section>
+  </article>
+
+  <dialog id="dialogAchieve">
+    <h1>請輸入你的名言佳句~</h1>
+    <div class="content">
+      <p>(送出後無法修改，累積10次才有1次留言機會，請慎重輸入喔!)</p>
+      <textarea rows="5" placeholder="說點甚麼吧~"></textarea>
+    </div>
+    <div class="save">
+      <button class="closebtn">close</button>
+      <button class="savebtn">save</button>
+    </div>
+  </dialog>
+
+  <footer id="footer-container"></footer>
+
+  <script>
+		let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}";
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }
+    };
+
+    // 里程碑 留言開合、accumulation點選樣式
+    document.addEventListener("DOMContentLoaded", function() {
+      let accumulations = document.querySelectorAll(".accumulation");
+      let currentAccumulation = null;
+
+      accumulations.forEach(function(accumulation) {
+        accumulation.addEventListener("click", function() {
+          accumulations.forEach(item => {
+            if (item !== this && item.classList.contains('active')) {
+              item.classList.remove('active');
+            }
+          });
+
+          this.classList.toggle('active');
+          let saying = document.querySelector(".saying");
+
+          if (this === currentAccumulation & currentAccumulation === accumulation) {
+            currentAccumulation = null;
+            saying.style.display = saying.style.display === "none" || saying.style.display === "" ? "block" : "none";
+          } else {
+            currentAccumulation = this;
+            saying.style.display = "block";
+            currentAccumulation = accumulation;
+          }
+        });
+      });
+    });
+
+    // 如何在里程碑留言
+    document.addEventListener("DOMContentLoaded", function() {
+      let openinfor = document.getElementById("openinfor");
+      let infor = document.getElementById("infor");
+      let closeinfor = document.getElementById("closeinfor");
+
+      openinfor.addEventListener("click", function() {
+        infor.showModal();
+        infor.scrollTop = 0;
+      });
+
+      closeinfor.addEventListener("click", function() {
+        infor.close();
+      });
+    });
+
+    // 新增留言
+    document.addEventListener("DOMContentLoaded", function() {
+      let opencheckcmt = document.getElementById("opencheckcmt");
+      let saying = document.querySelector(".saying");
+
+      let dialog = document.getElementById("dialogAchieve");
+      let closebtn = dialog.querySelector(".closebtn");
+      let savebtn = dialog.querySelector(".savebtn");
+
+      opencheckcmt.addEventListener("click", function() {
+        // 清空
+        let textarea = dialog.querySelector("textarea");
+        textarea.value = "";
+
+        // show modal
+        dialog.showModal();
+        dialog.scrollTop = 0;
+      });
+
+      closebtn.addEventListener("click", function() {
+        dialog.close();
+      });
+
+      savebtn.addEventListener("click", function() {
+        let textarea = dialog.querySelector("textarea");
+        let text = textarea.value;
+
+        if (text === "") {
+          alert("請輸入留言");
+          return;
+        }
+
+        if (text.length > 50) {
+          alert("留言字數不可超過100字");
+          return;
+        }
+
+        // 發送留言
+        $.ajax({
+          type: "POST",
+          url: "/task/goalMessage",
+          data: {
+            message : text
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        // 今天日期
+        let today = new Date();
+        today = `${today.getFullYear()}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getDate().toString().padStart(2, "0")}`
+
+        let newMessage = document.createElement("div");
+        newMessage.classList.add("eachsay");
+        newMessage.innerHTML = `
+          <div class="top">
+            <div class="left">
+              <img src="/static/images/userImage/${uid}/${userImage}" alt="">
+              <h6>${messageText}</h6>
+            </div>
+            <div class="date">${today}</div>
+          </div>
+          <p>${text}</p>`
+        ;
+
+        // 每新增一次留言，留言次數-1
+        let opencheckcmt = document.getElementById("opencheckcmt");
+        let count = opencheckcmt.textContent.split("x")[1];
+        
+        console.log(count);
+
+        count = parseInt(count) - 1;
+        
+        if (count === 0) {
+          opencheckcmt.style.display = "none";
+        } else {
+          opencheckcmt.textContent = `新增留言 x ${count}`;
+        }
+        
+
+        // line
+        let line = document.createElement("div");
+        line.classList.add("line");
+
+        // 新增在最前面
+        saying.insertBefore(line, saying.firstChild);
+        saying.insertBefore(newMessage, saying.firstChild);
+        
+        dialog.close();
+      });
+    });
+    
+    // 任務按鈕
+    document.addEventListener('DOMContentLoaded', function() {
+      const rewardButtons = document.querySelectorAll('.rewardButton');
+      const levelElement = document.getElementById('level');
+      const progressElement = document.getElementById('progress');
+      const scoreElement = document.getElementById('score');
+      const levels = [10, 20, 40, 65, 90, 125, 150, 200, 300, 500];
+
+      let currentScore = "{{level_data[1]}}"
+      let currentLevel = "{{level_data[0]}}"
+
+      function updateProgress() {
+        const levelMax = levels[currentLevel - 1];
+        scoreElement.textContent = `${currentScore}/${levelMax}`;
+        progressElement.value = currentScore / levelMax;
+        levelElement.textContent = currentLevel;
+      }
+
+      function triggerFireworks() {
+        let fireworks = document.querySelector(".fireworks");
+        fireworks.style.display = "block";
+
+        var duration = 15 * 300;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+          var timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          var particleCount = 50 * (timeLeft / duration);
+          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+        }, 250);
+
+        fireworks.style.display = "none";
+      }
+    
+      rewardButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const btn = this;
+
+          $.ajax({
+            url: '/task/receiveTask',
+            type: 'POST',
+            data: {
+              task_id: btn.getAttribute('data-task-id')
+            },
+            success: function(response) {
+              const staticDiv = btn.closest('.static');
+              const firstSvg = btn.querySelector('svg:nth-child(2)');
+              const svgToToggle = btn.querySelector('svg:nth-child(3)');
+              const spinner = btn.querySelector('.spinner');
+
+              staticDiv.classList.remove('nocancel');
+              staticDiv.classList.add('cancel');
+
+              btn.classList.add("disabled");
+                    
+              firstSvg.style.display = 'none';
+              svgToToggle.style.display = '';
+              spinner.style.display = 'none';
+
+              btn.querySelector('span').textContent = '領取成功';
+
+              document.activeElement.blur();
+
+              currentScore = parseInt(currentScore);
+
+              currentScore += 5;
+              const levelMax = levels[currentLevel - 1];
+              
+              console.log(currentScore, levelMax);
+
+              if (currentScore >= levelMax) {
+                currentLevel++;
+                currentScore = 0;
+                triggerFireworks();
+              }
+
+              updateProgress();
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+              alert(xhr.responseText);
+            },
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

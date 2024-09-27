@@ -1,0 +1,190 @@
+.carousel {
+  position: relative;
+  overflow: hidden;
+  padding: 6em 0;
+  margin-bottom: 0;
+}
+
+.related-carousel {
+  background: linear-gradient(#FCFAF1 0%, #f4fff5 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 4em 0 6em;
+}
+
+.carouseltitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  color: #6E3D0D;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.carouseltitle i {
+  color: #D4A373;
+}
+
+.carousel .forward,
+.carousel .backward {
+  position: absolute;
+  top: 50%;
+  width: 6em;
+  height: 12em;
+  margin-top: -6em;
+  cursor: pointer;
+  display: block;
+}
+
+.carousel .forward:before,
+.carousel .backward:before {
+  content: "";
+  display: block;
+  width: 6em;
+  height: 6em;
+  border-radius: 100%;
+  background-color: rgba(72, 57, 73, 0.5);
+  position: absolute;
+  top: 50%;
+  margin-top: -3em;
+  -moz-transition: background-color 0.35s ease-in-out;
+  -webkit-transition: background-color 0.35s ease-in-out;
+  -o-transition: background-color 0.35s ease-in-out;
+  -ms-transition: background-color 0.35s ease-in-out;
+  transition: background-color 0.35s ease-in-out;
+  -webkit-backface-visibility: hidden;
+}
+
+.carousel .forward:after,
+.carousel .backward:after {
+  content: "";
+  width: 3em;
+  height: 3em;
+  position: absolute;
+  top: 50%;
+  margin: -1.5em 0 0 0;
+  background: url("images/arrow.svg") no-repeat center center;
+}
+
+.carousel .forward:hover:before,
+.carousel .backward:hover:before {
+  background-color: rgba(239, 131, 118, 0.75);
+}
+
+.carousel .forward {
+  right: 0;
+}
+
+.carousel .forward:before {
+  right: -3em;
+}
+
+.carousel .forward:after {
+  right: -0.25em;
+}
+
+.carousel .backward {
+  left: 0;
+}
+
+.carousel .backward:before {
+  left: -3em;
+}
+
+.carousel .backward:after {
+  left: -0.25em;
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.carousel .reel {
+  white-space: nowrap;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 2em 0 2em;
+}
+
+.carousel article {
+  display: inline-block;
+  width: 18em;
+  background: #fff;
+  text-align: center;
+  padding: 0 1em 3em 1em;
+  margin: 0 2em 0 0;
+  white-space: normal;
+  opacity: 1;
+  -moz-transition: opacity 0.75s ease-in-out;
+  -webkit-transition: opacity 0.75s ease-in-out;
+  -ms-transition: opacity 0.75s ease-in-out;
+  transition: opacity 0.75s ease-in-out;
+}
+
+.carousel article.loading {
+  opacity: 0;
+}
+
+.carousel article .image {
+  position: relative;
+  left: -1em;
+  top: 0;
+  width: auto;
+  margin-right: -2em;
+  margin-bottom: 3em;
+}
+
+.carousel article p {
+  text-align: center;
+}
+
+.food {
+  border-radius: 10px;
+  display: inline-block;
+  width: 18em;
+  background: #F0EAD2;
+  text-align: center;
+  margin: 0 1.25em 0 0;
+  white-space: normal;
+  opacity: 1.0;
+  transition: opacity 0.75s ease-in-out;
+}
+
+.related-food {
+  background: #FFF;
+  box-shadow: 0 0 10px 5px #be98711e;
+}
+
+/* .image.featured 中間不可有空格 */
+.image.featured {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.featured img {
+  transition: all 0.3s;
+  width: 100%;
+  display: block;
+}
+
+.featured h3 {
+  margin: 10% 0;
+  font-weight: bold;
+  transition: all 0.3s;
+  font-size: 1.25em;
+  line-height: 1.25em;
+  color: #483949;
+}
+
+.image.featured:hover img {
+  transform: scale(1.1);
+}
+
+.image.featured:hover h3 {
+  font-size: 1.5em;
+  color: #BC6C25;
+}

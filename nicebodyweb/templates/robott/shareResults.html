@@ -1,0 +1,620 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta property="og:title" content="Nice巴底推薦！輕鬆打造健康美味的一餐">
+		<meta property="og:description" content="還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n不僅美味，製作起來也超簡單，\n讓你輕鬆享受健康新生活！\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理">
+		<link href="/static/images/favicon.ico" rel="shortcut icon"/>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/static/css/base/reset.css">
+		<link rel="stylesheet" href="/static/css/base/global.css">
+		<link rel="stylesheet" href="/static/css/components/mousemove.css">
+		<link rel="stylesheet" href="/static/css/components/dialog.css">
+		<link rel="stylesheet" href="/static/css/layout/navbar.css">
+		<link rel="stylesheet" href="/static/css/layout/footer.css">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<link rel="stylesheet" href="/static/css/robott/shareResults.css">
+		<link rel="stylesheet" href="/static/css/components/carousel.css">
+		<link rel="stylesheet" href="/static/css/components/fancybox/jquery.fancybox.css"/>
+		<link rel="stylesheet" href="/static/css/components/fancybox/my.jquery.fancybox.css"/>
+		<link rel="stylesheet" href="/static/css/components/dialog.css">
+		<script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+		<script src="/static/components/mousemove.js" defer></script>
+		<script src="/static/components/layout/navbar.js" defer></script>
+		<script src="/static/components/layout/footer.js" defer></script>
+		<script src="/static/components/jquery.fancybox.js"></script> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<title>食譜天地 > 詳細食譜</title>
+	</head>
+
+	<body>
+		<div id="myCursor"></div>
+		<div id="circle"></div>
+
+		<nav id="nav-container"></nav>
+
+		<article>
+			<div class="banner">
+				<a data-fancybox="gallery" href="{{ Recipes_image_path }}/{{ data[7] }}">
+					<img src="{{ Recipes_image_path }}/{{ data[7] }}" alt="">
+				</a>
+			</div>
+
+			<section class="receipe">
+				<div class="sidetitle" id="sidetitle">
+					<a href="/robott/recipeWorld">食譜天地</a>
+					<i class="fa-solid fa-caret-down"></i>
+					<p>{{data[0]}}</p>
+				</div>
+				<div class="wrap">
+					<div class="title">
+						<div class="left">
+							<h1>{{data[0]}}</h1>
+							<div class="like" id="like-button">
+								{% if data[12] != 0 %}
+									<i class="fa-solid fa-thumbs-up"></i>
+								{% else %}
+									<i class="fa-regular fa-thumbs-up"></i>
+								{% endif %}
+								<span>{{data[13]}}&ensp;</span>
+							</div>
+							<div class="receiperate">
+								{% if data[12] == 1 %}
+									<i class="fa-solid fa-star"></i>
+								{% else %}
+									<i class="fa-regular fa-star"></i>
+								{% endif %}
+								<span>{{data[15]}}</span>
+							</div>
+							<div class="bookmark">
+								{% if has_non_zero %}
+									<i class="fa-solid fa-bookmark" id="opencollect"></i>
+								{% else %}
+									<i class="fa-regular fa-bookmark" id="opencollect"></i>
+								{% endif %}
+							</div>
+							<dialog id="collect">
+								<h1>編輯分類</h1>
+								<div class="content">
+									{% for d in data3 %}
+									<div class="eachclass">
+										<div class="left">
+											<input type="checkbox" id="scales" name="scales" {% if d[2] != 0 %}checked{% endif %} />
+											<label for="scales" data-id="{{ d[0] }}">{{ d[1] }}</label>
+										</div>
+										<div class="num">({{ d[3] }}篇)</div>
+									</div>
+									{% endfor %}
+								</div>
+								<div class="save">
+									<button id="closecollect" class="closebtn closecollect">close</button>
+									<button id="savecollect" class="savebtn savecollect">save</button>
+								</div>
+							</dialog>
+						</div>
+						<div class="diet" id="openinfor">
+							{% if data[8] is not none %}
+								{% if '1' in data[8] %}
+									<span class="dietname mediterranean">地中海</span>
+								{% endif %}
+								{% if '2' in data[8] %}
+									<span class="dietname deshu">得舒</span>
+								{% endif %}
+								{% if '3' in data[8] %}
+									<span class="dietname vegetarian">彈性素食</span>
+								{% endif %}
+								{% if '4' in data[8] %}
+									<span class="dietname numdiet">234</span>
+								{% endif %}
+							{% endif %}
+						</div>
+						<dialog id="infor">
+							<h1>飲食法簡介</h1>
+							<div class="content">
+								<h2>地中海飲食法</h2>
+								<p>以蔬菜、水果、橄欖油、魚類和全穀雜糧為主，強調新鮮、天然的食材。</p>
+								<h2>得舒飲食法</h2>
+								<p>著重食用大量的蔬菜和水果，限制或避免動物性食品和加工食品的攝入，是一個降低血壓飲食治療方法。</p>
+								<h2>彈性素食</h2>
+								<p>結合了素食和非素食的元素，以植物性食物為主，但允許偶爾食用少量的動物性食物。</p>
+								<h2>234飲食法</h2>
+								<p>以每餐攝入500卡路里為原則，攝取的營養比例為：蛋白質佔25%、澱粉佔35%、脂肪佔40%。</p>
+							</div>
+							<div class="save">
+								<button id="closeinfor" class="closebtn">close</button>
+							</div>
+						</dialog>
+					</div>
+				
+					<div class="summary">
+						<p>{{data[1]}}</p>
+						<h2>摘要</h2>
+						<p>{{data[2]}}</p>
+					</div>
+						
+					<div class="content">
+						<h2>食材預算 - {{data[9]}}元</h2>
+						<ol>
+							{% for item in data[3].split(', ') %}
+							<li>{{ item }}</li>
+							{% endfor %}
+						</ol>
+
+						<h2>烹調時間</h2>
+						<p>{{data[4]}}分</p>
+
+						<h2>
+							料理步驟
+							{% if data[10] > 162 %}
+							<audio controls>
+								<source src="/static/mp3/{{ data[11] }}/{{ data[16] }}" type="audio/mpeg">
+								您的瀏覽器不支援音頻播放。
+							</audio>
+							{% endif %}
+						</h2>
+						<ol>
+							{% for item in data[5].split(', ') %}
+							<li>{{ item }}</li>
+							{% endfor %}
+						</ol>
+
+						<h2>營養配比</h2>
+						<div class="chart-container">
+							<p>{{data[6]}}</p>
+							{% if data[10] > 134 %}
+								<canvas id="nutritionChart"></canvas>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="sharebtns">
+				<h2>分享你的創意食譜</h2>
+				<div class="links">
+					<button id="fa-facebook"><i class="fa-brands fa-facebook"></i></button>
+					<button id="twitter"><i class="fa-brands fa-square-x-twitter"></i></button>
+				</div>
+			</section>
+
+			
+			<section class="carousel related-carousel">
+				<div class="reel">
+					{% for d in recipe_data %}
+					<div class="food">
+						<form action="/robott/shareResults" method="get">
+							<input type="hidden" name="recipe_id" value="{{ d[2] }}">
+							<button type="submit" class="image featured" style="border: none; background: none; padding: 0;">
+								<img src="{{ Recipes_image_path }}/{{ d[0] }}" alt="">
+								<h3>{{ d[1] }}</h3>
+							</button>
+						</form>
+					</div>
+					{% endfor %}
+				</div>
+			</section>
+
+			<section class="comment">
+				<div class="wrap">
+					<div class="title">
+						<div class="left">
+							<h1>大家一起做</h1>
+							<div class="share">
+								<i class="fa-solid fa-comments"></i>
+								<span>{{data[14]}}</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="message">
+						<div class="left">
+							<div class="evaluaterate">
+								<h3>食譜品質</h3>
+								<i class="fa-solid fa-star"></i>
+								<select name="" id="star">
+									<option value="0">0</option>
+									<option value="0.5">0.5</option>
+									<option value="1">1</option>
+									<option value="1.5">1.5</option>
+									<option value="2">2</option>
+									<option value="2.5">2.5</option>
+									<option value="3">3</option>
+									<option value="3.5">3.5</option>
+									<option value="4">4</option>
+									<option value="4.5">4.5</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+							<input type="text" id="messageInput" placeholder="說點什麼吧！">
+						</div>
+						<button id="submitButton" class="submitButton"><i class="fa-solid fa-paper-plane"></i></button>
+					</div>
+
+					{% for d in data2%}
+						<a class="each">
+							<div class="left">
+								<div class="receiperate">
+									<i class="fa-solid fa-star"></i>
+									<span>{{d[5]}}</span>
+								</div>
+								<p>{{d[4]}}</p>
+							</div>
+							<div class="right">
+								<p>{{d[6]}}</p>
+								<img class="photostickers" src="{{ user_image_path }}/{{ d[1] }}/{{ d[2] }}" alt="">
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			</section>
+
+			<dialog id="loginDialog">
+				<h1>請先登入</h1>
+				<div class="contentsave">
+				  <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+				</div>
+			</dialog>
+		</article>
+
+		<footer id="footer-container"></footer>
+
+		<script src="/static/js/jquery.scrollex.min.js"></script>
+		<script>
+			let messageText = "{{name}}";
+			let userImage = "{{userImage}}"
+			let uid = "{{uid}}"
+
+			window.onload = function() {
+				renderNav();
+				renderFooter();
+				renderChart();
+
+				if (messageText == "0") {
+					document.getElementById("loginDialog").showModal();
+					document.getElementById("loginDialog").scrollTop = 0;
+				}
+			};
+
+			function showModal() {
+				document.getElementById("loginModal").style.display = "flex";
+			}
+
+			function renderChart() {
+				var nutritionData = "{{data[6]}}".split(', ').map(function(item) {
+					var parts = item.match(/(\D+)(\d+)%/);
+					return {
+						label: parts[1],
+						value: parseInt(parts[2])
+					};
+				});
+
+				// 顏色映射表，對應每個標籤
+				var colorMap = {
+					'蛋白質': '#efebce', 
+					'纖維': '#C1CCC7', 
+					'維生素C': '#E4B69E', 
+					'礦物質': '#A98978', 
+					'澱粉': '#BFD1C4',
+					'脂肪': '#a3a380',
+					'糖': '#B3CAD8',
+					'澱粉':'#DBB89C',
+					'碳水化合物':'#d6ce93',
+					'纖維素': '#D3AC73',
+					'鈉': '#D09075',
+					'其他': '#F1D09D',
+					'維生素與礦物質': '#F4D4BE',
+					'維生素': '#CEA77E',
+				};
+
+				var labels = nutritionData.map(function(item) {
+					return item.label;
+				});
+
+				var data = nutritionData.map(function(item) {
+					return item.value;
+				});
+
+				// 為每個標籤分配顏色
+				var backgroundColor = labels.map(function(label) {
+					return colorMap[label] || '#d8a48f'; // 默認顏色為黑色
+				});
+
+				var borderColor = backgroundColor; // 使用相同的邊框顏色
+
+				var ctx = document.getElementById('nutritionChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: '營養配比',
+							data: data,
+							backgroundColor: backgroundColor,
+							borderColor: borderColor,
+							borderWidth: 1
+						}]
+					},
+					options: {
+						responsive: false,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'top',
+								onClick: function(e, legendItem, legend) {
+									e.stopPropagation(); // 阻止點擊事件
+								}
+							},
+							title: {
+								display: false,
+								text: '營養配比'
+							}
+						}
+					}
+				});
+			}
+
+			// 彈跳視窗 飲食法簡介
+			let openinfor=document.getElementById('openinfor');
+			let infor=document.getElementById('infor');
+			let closeinfor=document.getElementById('closeinfor');
+			openinfor.addEventListener("click", function(){
+				infor.showModal();
+				infor.scrollTop = 0;
+			})
+			closeinfor.addEventListener("click", function(){
+				infor.close();
+			})
+
+			// 按讚
+			document.addEventListener('DOMContentLoaded', function() {
+				const likeButton = document.getElementById('like-button');
+				const likeIcon = likeButton.querySelector('i');
+				const likeCountSpan = likeButton.querySelector('span');
+				let likeCount = parseInt(likeCountSpan.textContent);
+
+				likeButton.addEventListener('click', function() {
+					if (likeIcon.classList.contains('fa-regular')) {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeAdd",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+
+						likeIcon.classList.remove('fa-regular');
+						likeIcon.classList.add('fa-solid', 'liked');
+						likeCount++;
+					} else {
+						$.ajax({
+							type: "POST",
+							url: "/robott/likeSub",
+							data: {
+								recipe_id: "{{ data[10] }}"
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+
+						likeIcon.classList.remove('fa-solid', 'liked');
+						likeIcon.classList.add('fa-regular');
+						likeCount--;
+					}
+					likeCountSpan.textContent = likeCount;
+				});
+			});
+
+			// 留言
+			document.addEventListener('DOMContentLoaded', function() {
+				const messageInput = document.getElementById('messageInput');
+				const submitButton = document.getElementById('submitButton');
+				const star = document.getElementById('star');
+
+				submitButton.addEventListener('click', function() {
+					const message = messageInput.value;
+					const starValue = star.value;
+					if (message === '') {
+						alert('請輸入留言');
+						return;
+					}
+
+					$.ajax({
+						type: "POST",
+						url: "/robott/comment",
+						data: {
+							recipe_id: "{{ data[10] }}",
+							message: message,
+							star: starValue
+						},
+						success: function(response) {
+							console.log(response);
+						},
+						error: function(xhr, status, error) {
+							console.error(error);
+							alert(error, '出現錯誤，請稍後再試！');
+						}
+					});
+
+					// 清空 messageInput 並將 star 設為 0
+					messageInput.value = '';
+					star.value = 0;
+
+					// 取得現在的日期
+					const today = new Date();
+					const formattedDate = ('0' + (today.getMonth() + 1)).slice(-2) + '.' + 
+						('0' + today.getDate()).slice(-2) + '.' + 
+						today.getFullYear();
+
+					// 新增留言到 .each 元素中
+					const newMessage = document.createElement('a');
+					newMessage.classList.add('each');
+					newMessage.innerHTML = `
+						<div class="left">
+							<div class="receiperate">
+								<i class="fa-solid fa-star"></i>
+								<span>${starValue}</span>
+							</div>
+							<p>${message}</p>
+						</div>
+						<div class="right">
+							<p>${formattedDate}</p>
+							<img class="photostickers" src="/static/images/userImage/${uid}/${userImage}" alt="">
+						</div>
+					`;
+					const firstEach = document.querySelector('.each');
+					if (firstEach) {
+						firstEach.parentNode.insertBefore(newMessage, firstEach);
+					} else {
+						document.querySelector('.comment .wrap').appendChild(newMessage);
+					}
+				});
+			});
+
+			// 分享
+			document.addEventListener('DOMContentLoaded', function() {
+				const facebookButton = document.getElementById('fa-facebook');
+				const twitterButton = document.getElementById('twitter');
+
+				const shareText = encodeURIComponent("還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n不僅美味，製作起來也超簡單，\n讓你輕鬆享受健康新生活！\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理");
+				const shareText2 = encodeURIComponent("還在煩惱今天午餐要吃什麼嗎？✨\n別擔心，我已經在 Nice巴底 準備好了一道全新的健康食譜！🍽️\n\n快來挑戰這個料理，讓你的味蕾大呼過癮！(ง •̀_•́)ง💪\n還有更多驚喜等著你喔～馬上來試試吧！🥦🍅\n\n#美味食譜 #健康生活 #輕鬆料理");
+
+				facebookButton.addEventListener('click', function() {
+					window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
+				});
+
+				twitterButton.addEventListener('click', function() {
+					window.open('https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + shareText2, '_blank');
+				});
+			});
+
+			// 收藏
+			document.addEventListener('DOMContentLoaded', function() {
+				const collect = document.getElementById('collect');
+				const openCollectButton = document.getElementById('opencollect');
+				const saveCollectButton = document.getElementById('savecollect');
+				const closeCollectButton = document.getElementById('closecollect');
+				const bookmarkIcon = document.getElementById('opencollect');
+
+				let oldSelect = [];
+				let newSelect = [];
+
+				// 當打開 dialog 時，記錄當前的勾選狀態
+				openCollectButton.addEventListener('click', function() {
+					collect.showModal();
+					collect.scrollTop = 0;
+					// 清空 previous selections
+					oldSelect = [];
+					document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+						if (checkbox.checked) {
+							oldSelect.push(checkbox.parentElement.querySelector('label').textContent);
+						}
+					});
+				});
+
+				// 當點擊 save 按鈕時，執行以下操作
+				saveCollectButton.addEventListener('click', function() {
+					newSelect = [];
+					const itemsToUpdate = {};
+
+					document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+						const label = checkbox.parentElement.querySelector('label').textContent;
+						if (checkbox.checked) {
+							newSelect.push(label);
+							// 記錄需要增加計數的項目
+							itemsToUpdate[label] = (itemsToUpdate[label] || 0) + 1;
+						}
+					});
+
+					const addedItems = newSelect.filter(item => !oldSelect.includes(item));
+					const removedItems = oldSelect.filter(item => !newSelect.includes(item));
+
+					console.log('addedItems', addedItems);
+					console.log('removedItems', removedItems);
+
+					// 更新收藏符號的樣式
+					if (newSelect.length > 0) {
+						bookmarkIcon.classList.remove('fa-regular');
+						bookmarkIcon.classList.add('fa-solid');
+					} else {
+						bookmarkIcon.classList.remove('fa-solid');
+						bookmarkIcon.classList.add('fa-regular');
+					}
+
+					// 更新 num 數字
+					addedItems.forEach(item => {
+						const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+							.find(div => div.querySelector('label').textContent === item)
+							.querySelector('.num');
+						const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+						numElement.textContent = `(${currentCount + 1}篇)`;
+
+						$.ajax({
+							type: "POST",
+							url: "/robott/addCollect",
+							data: {
+								recipe_id: "{{ data[10] }}",
+								category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+					});
+
+					removedItems.forEach(item => {
+						const numElement = Array.from(document.querySelectorAll('#collect .eachclass'))
+							.find(div => div.querySelector('label').textContent === item)
+							.querySelector('.num');
+						const currentCount = parseInt(numElement.textContent.match(/\d+/)[0]);
+						numElement.textContent = `(${currentCount - 1}篇)`;
+
+						console.log(numElement.previousElementSibling.querySelector('label').dataset.id);
+						console.log("{{ data[10] }}");
+
+						$.ajax({
+							type: "POST",
+							url: "/robott/subCollect",
+							data: {
+								recipe_id: "{{ data[10] }}",
+								category_id: numElement.previousElementSibling.querySelector('label').dataset.id
+							},
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(xhr, status, error) {
+								console.error(error);
+								//alert(error, '出現錯誤，請稍後再試！');
+							}
+						});
+					});
+
+					collect.close();
+				});
+
+				// 當關閉 dialog 時，保留勾選狀態
+				closeCollectButton.addEventListener('click', function() {
+					collect.close();
+				});
+			});
+		</script>
+	</body>
+</html>

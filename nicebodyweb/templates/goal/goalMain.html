@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="/static/css/goal/goalMain.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="/static/js/goal/goalMain.js" async></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>目標</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <section class="check-in">
+      <div class="top">
+        <div class="title">
+          <i class="fa-regular fa-calendar-check"></i>
+          <h2>每日打卡</h2>
+        </div>
+        <button onclick="location.href='/goal/checkList'" type="button"><i class="fa-solid fa-pen"></i></button>
+      </div>
+      
+      <div class="check-box">
+
+        {% for d in data %}
+        <div class="item">
+            <input type="checkbox" id="checkbox-{{ loop.index }}" {% if d[3] == 1 %}checked{% endif %} data-id="{{ d[0] }}"/>
+            <label for="horns">
+              &ensp;
+              {% if d[2] == '1' %}
+              <i class="fa-solid fa-droplet"></i>
+              {% elif d[2] == '2' %}
+              <i class="fa-solid fa-seedling"></i>
+              {% elif d[2] == '3' %}
+              <i class="fa-solid fa-martini-glass"></i>
+              {% elif d[2] == '4' %}
+              <i class="fa-solid fa-cookie-bite"></i>
+              {% elif d[2] == '5' %}
+              <i class="fa-solid fa-apple-whole"></i>
+              {% endif %}
+              {{ d[1] }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <div class="add-check-box" id="opencheck">
+          <i class="fa-solid fa-plus"></i>
+          &ensp;
+          新增打卡目標
+        </div>
+      </div>
+      <dialog id="check">
+        <h1>新增打卡目標</h1>
+        <div class="content">
+          <h2>icon</h2>
+          <div class="icons">
+            <div class="iconbtn iconbtn-droplet" onclick="changeColor(this)"><i class="fa-solid fa-droplet"></i></div>
+            <div class="iconbtn iconbtn-seedling" onclick="changeColor(this)"><i class="fa-solid fa-seedling"></i></div>
+            <div class="iconbtn iconbtn-martini-glass" onclick="changeColor(this)"><i class="fa-solid fa-martini-glass"></i></div>
+            <div class="iconbtn iconbtn-cookie-bite" onclick="changeColor(this)"><i class="fa-solid fa-cookie-bite"></i></div>
+            <div class="iconbtn iconbtn-apple-whole" onclick="changeColor(this)"><i class="fa-solid fa-apple-whole"></i></div>
+          </div>
+          <h2>打卡目標</h2>
+          <input type="text" class="input" id="textcheck">
+        </div>
+        <div class="save">
+          <button id="closecheck" class="closebtn">close</button>
+          <button id="savecheck" class="savebtn">save</button>
+        </div>
+      </dialog>
+    </section>
+
+    <section class="weight_change" id="weight-change-chart">
+      <div class="top">
+        <div class="title">
+          <i class="fa-solid fa-chart-line"></i>
+          <h2>體重變化表</h2>
+        </div>
+        <div class="btn">
+          <button id="openweight"><i class="fa-solid fa-plus"></i></button>
+          <button onclick="location.href='/goal/weightList'" type="button"><i class="fa-solid fa-pen"></i></button>
+        </div>
+      </div>
+      <dialog id="weight">
+        <h1>新增體重紀錄</h1>
+        <div class="content">
+          <h2>日期</h2>
+          <input type="date" class="input" id = "inputDate">
+          <h2>體重(kg)</h2>
+          <input type="text" class="input" id = "inputWeight">
+        </div>
+        <div class="save">
+          <button id="closeweight" class="closebtn">close</button>
+          <button id="saveweight" class="savebtn">save</button>
+        </div>
+      </dialog>
+
+      <div class="input">
+        <p>請輸入今日體重(kg) :</p>
+        <input type="text" id="weightInput">
+        <button id="submitButton"><i class="fa-regular fa-paper-plane"></i></button>
+      </div>
+
+      <canvas id="myChart"></canvas>
+    </section>
+
+    <section class="contrast">
+      <div class="top">
+        <div class="title">
+          <i class="fa-regular fa-image"></i>
+          <h2>前後對比照</h2>
+        </div>
+        <button>
+          <i class="fa-solid fa-puzzle-piece"></i>
+          <p>生成前後對比照</p>
+        </button>
+      </div>
+    
+      <div class="photo">
+        <dialog id="beforedelete">
+          <h1>確定刪除before照片?</h1>
+          <div class="contentsave">
+              <button id="closebeforedelete" class="closebtn">cancel</button>
+              <button id="savebeforedelete" class="savebtn">confirm</button>
+          </div>
+        </dialog>
+
+        <dialog id="afterdelete">
+          <h1>確定刪除after照片?</h1>
+          <div class="contentsave">
+              <button id="closeafterdelete" class="closebtn">cancel</button>
+              <button id="saveafterdelete" class="savebtn">confirm</button>
+          </div>
+        </dialog>
+        
+        <div class="before">
+          <div class="container">
+            <span class="text">before</span>
+            <div class="background">&nbsp;</div>
+          </div>
+          {% if contrast[0] is not none %}
+          <label for="beforefileInput" class="custom-input">
+            <input type="file" id="beforefileInput" accept="image/*" onchange="beforepreviewImage(event)" disabled>
+            <div class="icon" style="display: none;">
+              <i class="fas fa-plus"></i>
+            </div>
+
+            <img id="beforepreviewImage" src="{{ contrast_image_path }}/{{uid}}/{{ contrast[0] }}" alt="" style="display: block">
+
+          </label>
+          <div class="edit" style="visibility: visible;">
+            <div class="right" id="currentDate1">{{ contrast[0][:4] + '-' + contrast[0][4:6] + '-' + contrast[0][6:8] }}</div>
+            <div class="left">
+              <button onclick="enableEditing('before')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% else %}
+          <label for="beforefileInput" class="custom-input">
+            <input type="file" id="beforefileInput" accept="image/*" onchange="beforepreviewImage(event)">
+            <div class="icon">
+              <i class="fas fa-plus"></i>
+            </div>
+              <img id="beforepreviewImage" src="" alt="">
+          </label>
+          <div class="edit">
+            <div class="right" id="currentDate1"></div>
+            <div class="left">
+              <button onclick="uploadImage('before')"><i class="fa-solid fa-upload"></i></button>
+              <button onclick="clearImage('before')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+    
+        <i class="fa-solid fa-angles-right"></i>
+    
+        <div class="after">
+          <div class="container">
+            <span class="text">after</span>
+            <div class="background">&nbsp;</div>
+          </div>
+          {% if contrast[1] is not none %}
+          <label for="afterfileInput" class="custom-input">
+            <input type="file" id="afterfileInput" accept="image/*" onchange="afterpreviewImage(event)" disabled>
+            <div class="icon" style="display: none;">
+              <i class="fas fa-plus"></i>
+            </div>
+            <img id="afterpreviewImage" src="{{ contrast_image_path }}/{{uid}}/{{ contrast[1] }}" alt="" style="display: block">
+          </label>
+          <div class="edit" style="visibility: visible;">
+            <div class="right" id="currentDate2">{{ contrast[1][:4] + '-' + contrast[1][4:6] + '-' + contrast[1][6:8] }}</div>
+            <div class="left">
+              <button onclick="enableEditing('after')"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% else %}
+          <label for="afterfileInput" class="custom-input">
+            <input type="file" id="afterfileInput" accept="image/*" onchange="afterpreviewImage(event)">
+            <div class="icon">
+              <i class="fas fa-plus"></i>
+            </div>
+            <img id="afterpreviewImage" src="" alt="">
+          </label>
+          <div class="edit">
+            <div class="right" id="currentDate2"></div>
+            <div class="left">
+              <button onclick="uploadImage('after')"><i class="fa-solid fa-upload"></i></button>
+              <button onclick="clearImage('after')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <div id="loading" style="display: none;">
+      <div class="loader2"></div>
+    </div>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
+  </article>
+
+  <footer id="footer-container"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let weight_data= "{{ weight }}";
+    let uid = "{{uid}}";
+    let weight_list = JSON.parse(weight_data);
+
+    console.log(weight_list);
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+
+      if (weight_list[6]>0) {
+        document.getElementById('weightInput').style.backgroundColor = "#CCC5B9";
+        document.getElementById('weightInput').value = weight_list[6];
+        document.getElementById('weightInput').disabled = true;
+        document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
+        document.getElementById('submitButton').disabled = true;
+      }
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }
+    };
+
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
+
+    // 體重變化表輸入設定
+    document.getElementById('submitButton').addEventListener('click', function() {
+      let input = document.getElementById('weightInput');
+      let value = input.value.trim();
+
+      if (value === "") {
+        alert("請輸入數字或浮點數");
+        input.value = "";
+      } else if (isNaN(value)) {
+        alert("請輸入數字或浮點數");
+        input.value = "";
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/goal/saveTodayWeight",
+          data: {
+            weight: value
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+              console.error(error);
+              alert(error, '出現錯誤，請稍後再試！');
+          }
+        });
+
+        // 將新的體重值添加到數據數組中
+        data[6] = parseFloat(value);
+
+        // 更新點的半徑和背景色
+        chart.data.datasets[0].pointRadius[6] = 3;
+        chart.data.datasets[0].pointBackgroundColor[6] = 'blue';
+        
+        // 更新圖表
+        chart.update();
+
+        console.log(data);
+
+        input.style.backgroundColor = "#CCC5B9";
+        input.disabled = true;
+        this.innerHTML = '<i class="fa-solid fa-check"></i>';
+        localStorage.setItem('inputState', 'disabled');
+
+      }
+    });
+
+    function resetInputAndButton() {
+      let input = document.getElementById('weightInput');
+      let button = document.getElementById('submitButton');
+      input.disabled = false;
+      input.style.backgroundColor = "#FFF";
+      input.value = "";
+      button.innerHTML = '<i class="fa-regular fa-paper-plane"></i>';
+      localStorage.removeItem('inputState');
+    }
+
+    // 體重變化表
+    let chartElement = document.getElementById('myChart');
+    let today = new Date();
+    let labels = [];
+
+    for (let i = 6; i >= 0; i--) {
+      let date = new Date(today);
+      date.setDate(today.getDate() - i);
+      
+      let formattedDate = (date.getMonth() + 1) + '/' + date.getDate();
+      labels.push(formattedDate);
+    }
+
+    let originalData = weight_list;
+    let data = originalData.map(value => value !== 0 ? value : null);
+
+    let chartData = {
+      labels: labels,
+      datasets: [{
+        label: 'weight',
+        data: data,
+        pointRadius: data.map(value => value !== null ? 3 : 0), 
+        pointBackgroundColor: data.map(value => value !== null ? 'blue' : 'rgba(0,0,0,0)'), 
+      }]
+    };
+
+    let chart = new Chart(chartElement, {
+      type: 'line',
+      data: chartData,
+    });
+
+    // 前後對照圖
+    let isEditing = {
+      'before': false,
+      'after': false
+    };
+
+    function toggleEdit(type) {
+      const inputLabel = document.querySelector(`.${type} .custom-input`);
+      inputLabel.style.pointerEvents = isEditing[type] ? 'none' : 'auto';
+
+      const editDiv = document.querySelector(`.${type} .edit`);
+      editDiv.style.display = isEditing[type] ? 'flex' : 'none';
+    }
+
+    function enableEditing(type) {
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (icon.classList.contains('fa-upload')) {
+        uploadImage(type);
+      } else {
+        isEditing[type] = true;
+        const fileInput = document.getElementById(`${type}fileInput`);
+        fileInput.disabled = false;
+        fileInput.click(); // Trigger the file input click event
+        fileInput.disabled = true;
+      }
+    }
+
+    // 清除照片
+    function clearImage(type) {
+      const dialog = document.getElementById(`${type}delete`);
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    }
+
+    function clearImage_confirm(type) {
+      document.getElementById('loading').style.display = 'flex';
+
+      $.ajax({
+        type: 'POST',
+        url: '/goal/clearImage',
+        data: {
+          type: type
+        },
+        success: function(response) {
+          console.log(response);
+          const previewImage = document.getElementById(`${type}previewImage`);
+          previewImage.src = "";
+          previewImage.style.display = 'none';
+          const fileInput = document.getElementById(`${type}fileInput`);
+          fileInput.value = "";  // Reset the file input value
+          fileInput.disabled = false;
+          const inputLabel = document.querySelector(`.${type} .custom-input`);
+          inputLabel.style.pointerEvents = 'auto';
+          const editDiv = document.querySelector(`.${type} .edit`);
+          editDiv.style.visibility = 'hidden';
+          const plusIcon = document.querySelector(`.${type} .icon`);
+          plusIcon.style.display = 'block';
+          isEditing[type] = false;
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          alert('出現錯誤，請稍後再試！');
+        },
+        complete: function() {
+          document.getElementById('loading').style.display = 'none';
+        }
+      });
+    }
+
+    function previewImage(event, type) {
+      const file = event.target.files[0];
+      const fileInput = document.getElementById(`${type}fileInput`);
+      fileInput.disabled = true;
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImage = document.getElementById(`${type}previewImage`);
+          previewImage.src = e.target.result;
+          previewImage.style.display = 'block';
+          document.querySelector(`.${type} .icon`).style.display = 'none';
+          isEditing[type] = true;
+          const editDiv = document.querySelector(`.${type} .edit`);
+          editDiv.style.visibility = 'visible';
+          toggleUploadIcon(type, true);
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function toggleUploadIcon(type, isUpload) {
+      const icon = document.querySelector(`.${type} .left button i`);
+      if (isUpload) {
+        icon.classList.remove('fa-pen');
+        icon.classList.add('fa-upload');
+      } else {
+        icon.classList.remove('fa-upload');
+        icon.classList.add('fa-pen');
+      }
+    }
+
+    function beforepreviewImage(event) {
+      previewImage(event, 'before');
+    }
+
+    function afterpreviewImage(event) {
+      previewImage(event, 'after');
+    }
+
+    // 彈跳視窗 新增打卡目標
+    let opencheck=document.getElementById('opencheck');
+    let check=document.getElementById('check');
+    let closecheck=document.getElementById('closecheck');
+    opencheck.addEventListener("click", function(){
+      check.showModal();
+      check.scrollTop = 0;
+    })
+    closecheck.addEventListener("click", function(){
+      check.close();
+    })
+
+    // 彈跳視窗 新增體重
+    let openweight=document.getElementById('openweight');
+    let weight=document.getElementById('weight');
+    let closeweight=document.getElementById('closeweight');
+    openweight.addEventListener("click", function(){
+      weight.showModal();
+      weight.scrollTop = 0;
+    })
+    closeweight.addEventListener("click", function(){
+      weight.close();
+    })
+
+    // icon變換顏色
+    let lastClickedElement = null;
+
+    function changeColor(element) {
+      let iconName = element.classList[1].replace("iconbtn-", "");
+      element.style.backgroundColor = getColor(iconName);
+      element.querySelector("i").style.color = "#ffffff";
+
+      // Reset color of last clicked element
+      if (lastClickedElement && lastClickedElement !== element) {
+        resetColor(lastClickedElement);
+      }
+      
+      lastClickedElement = element;
+    }
+
+    function resetColor(element) {
+      let iconName = element.classList[1].replace("iconbtn-", "");
+      element.style.backgroundColor = '';
+      element.querySelector("i").style.color = '';
+    }
+
+    function getColor(iconName) {
+      switch(iconName) {
+        case "droplet":
+          return "#59A5D8";
+        case "seedling":
+          return "#4AD66D";
+        case "martini-glass":
+          return "#FF9914";
+        case "cookie-bite":
+          return "#BC6C25";
+        case "apple-whole":
+          return "#e5446d";
+        default:
+          return "#ffffff";
+      }
+    }
+
+    // 上傳照片
+    function uploadImage(type) {
+      const isBefore = type === 'before';
+      const inputId = isBefore ? 'beforefileInput' : 'afterfileInput';
+      const uploadUrl = isBefore ? '/goal/uploadBeforeImage' : '/goal/uploadAfterImage';
+      const iconClass = isBefore ? '.before .left button i' : '.after .left button i';
+
+      const uploadImage = document.getElementById(inputId);
+      uploadImage.disabled = true;
+      document.getElementById('loading').style.display = 'flex';
+      const icon = document.querySelector(iconClass);
+
+      const formData = new FormData();
+      formData.append('image', uploadImage.files[0]);
+
+      $.ajax({
+        type: 'POST',
+        url: uploadUrl,
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          console.log(response);
+          icon.classList.remove('fa-upload');
+          icon.classList.add('fa-pen');
+
+          const button = icon.parentElement;
+          button.setAttribute('onclick', "enableEditing('" + type + "')");
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          alert(xhr.responseText);
+        },
+        complete: function() {
+          document.getElementById('loading').style.display = 'none';
+          uploadImage.disabled = false;
+        }
+      });
+
+      // 上傳對比照日期
+      var currentDate = new Date();
+
+      var formattedDate = currentDate.getFullYear() + '.' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '.' + currentDate.getDate().toString().padStart(2, '0');
+
+      document.getElementById('currentDate1').innerHTML = formattedDate;
+      document.getElementById('currentDate2').innerHTML = formattedDate;
+    }
+
+    // 新增體重紀錄
+    document.getElementById('saveweight').addEventListener('click', function() {
+      let date = document.querySelector('#weight input[type="date"]').value;
+      let weight = document.querySelector('#weight input[type="text"]').value;
+
+      // 格式化日期到只包含年月日，忽略時間
+      let formattedDate = new Date(date);
+      let formattedDateStr = formattedDate.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+      let formattedDateDisplay = (formattedDate.getMonth() + 1) + '/' + formattedDate.getDate(); // 'MM/DD'
+
+      // 獲取今天的日期和七天前的日期，僅日期部分
+      let today = new Date();
+      let todayStr = today.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+      let sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 6);
+      let sevenDaysAgoStr = sevenDaysAgo.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+      // 檢查日期是否已存在
+      let index = chart.data.labels.indexOf(formattedDateDisplay);
+
+      if (date === "" || weight === "") {
+        alert("請輸入日期和體重");
+        return;
+      } else if (isNaN(weight) || parseFloat(weight) <= 0) {
+        alert("請輸入合理的數字或浮點數");
+        return;
+      } else if (formattedDateStr > todayStr) {
+        alert("日期不可大於今天");
+      } else if (index !== -1){
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          },
+        });
+        
+        // 更新已存在日期的體重數據
+        chart.data.datasets[0].data[index] = parseFloat(weight);
+        chart.data.datasets[0].pointRadius[index] = 3;
+        chart.data.datasets[0].pointBackgroundColor[index] = 'blue';
+
+        // // 重新排序日期和數據
+        let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+          .sort((a, b) => new Date(a.label) - new Date(b.label));
+
+        chart.data.labels = combined.map(item => item.label);
+        chart.data.datasets[0].data = combined.map(item => item.data);
+
+        // // 更新圖表
+        chart.update();
+
+        document.getElementById('weight').close();
+
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
+      }else if (formattedDateStr < sevenDaysAgoStr) {
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          }
+        });
+        document.getElementById('weight').close();
+
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
+      } else {
+        $.ajax({
+          type: 'POST',
+          url: '/goal/saveWeight',
+          data: {
+            date: date,
+            weight: weight
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            alert('出現錯誤，請稍後再試！');
+          }
+        });
+
+        // 添加新的日期和體重數據
+        chart.data.labels.push(formattedDateDisplay);
+        chart.data.datasets[0].data.push(parseFloat(weight));
+        chart.data.datasets[0].pointRadius.push(3);
+        chart.data.datasets[0].pointBackgroundColor.push('blue');
+
+        // 重新排序日期和數據
+        let combined = chart.data.labels.map((label, i) => ({ label, data: chart.data.datasets[0].data[i] }))
+          .sort((a, b) => new Date(a.label) - new Date(b.label));
+
+        chart.data.labels = combined.map(item => item.label);
+        chart.data.datasets[0].data = combined.map(item => item.data);
+
+        // 更新圖表
+        chart.update();
+        
+        document.getElementById('weight').close();
+
+        document.getElementById('inputDate').value = "";
+        document.getElementById('inputWeight').value = "";
+      }
+    
+      if (formattedDateStr == todayStr){
+        document.getElementById('weightInput').style.backgroundColor = "#CCC5B9";
+        document.getElementById('weightInput').value = weight;
+        document.getElementById('weightInput').disabled = true;
+        document.getElementById('submitButton').innerHTML = '<i class="fa-solid fa-check"></i>';
+        document.getElementById('submitButton').disabled = true;
+      }
+    });
+
+    // contrast dialog
+    document.getElementById('closebeforedelete').addEventListener('click', function() {
+        document.getElementById('beforedelete').close();
+    });
+
+    document.getElementById('closeafterdelete').addEventListener('click', function() {
+        document.getElementById('afterdelete').close();
+    });
+
+    document.getElementById('savebeforedelete').addEventListener('click', function() {
+        clearImage_confirm('before');
+        document.getElementById('beforedelete').close();
+    });
+
+    document.getElementById('saveafterdelete').addEventListener('click', function() {
+        clearImage_confirm('after');
+        document.getElementById('afterdelete').close();
+    });
+      
+  </script>
+</body>
+</html>

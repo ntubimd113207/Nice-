@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="/static/css/robott/generateRecipes.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+  <title>生成食譜</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <div class="switch">
+      <a class="active generate-recipes" href="/robott/generateRecipes">生成食譜</a>
+      <a class="recipe-world" href="/robott/recipeWorld">食譜天地</a>
+    </div>
+
+    <section class="{% if data|length == 2 or data|length == 0 %}fewcontent{% else %}content{% endif %}">
+      <div id="generate-btn" class="AI">
+        <div class="add">
+          <img src="/static/images/addcricle.png" class="addcricle" alt="addcricle">
+        </div>
+        <div class="forrwd">
+          <div class="title">
+            <img src="/static/images/ai_banana.png" class="aibanana" alt="ai_banana">
+            <h3>Banana營養師</h3>
+          </div>
+          <p>一位極富專業知識的營養專家，他能夠深入理解食材的營養價值和相互作用，為人們提供豐富、均衡且美味的飲食建議。</p>
+        </div>
+      </div>
+
+      <dialog id="howToGenerate">
+        <h1>選擇食譜的生成方式</h1>
+        <div class="plot">
+          <a class="selectbtn" href="/question/question_n1">
+            <i class="fa-solid fa-hand-pointer"></i>
+            <h3>手動</h3>
+          </a>
+          <a class="selectbtn" id="randomRecipe">
+            <i class="fa-solid fa-shuffle"></i>
+            <h3>隨機</h3>
+          </a>      
+        </div>
+        <div class="save">
+          <button id="closehowToGenerate" class="closebtn">close</button>
+        </div>
+      </dialog>
+
+      {% for d in data %}
+      <div class="ai-recipe-share">
+        <img class="recipe-img" src="{{ Recipes_image_path }}/{{ d[3] }}" alt="recipeImg">
+        <div class="title">
+          {% if d[7] == '2' %}
+          <div class="recipe-avatarFrame have">
+            <img class="recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
+          </div>
+          {% else %}
+          <div class="recipe-avatarFrame">
+            <img class="noAvatarFrame recipe-profile" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="ProfilePicture">
+          </div>
+          {% endif %}
+
+          <h3>{{d[0]}}</h3>
+        </div>
+        <p>{{d[1]}}</p>
+        {% if d[2]|length > 50 %}
+        <p>{{d[2][:50]}}...</p>
+        {% else %}
+        <p>{{d[2]}}</p>
+        {% endif %}
+        <div class="diet">
+          {% if d[5] is not none %}
+            {% if '1' in d[5] %}
+              <span class="dietname mediterranean">地中海</span>
+            {% endif %}
+            {% if '2' in d[5] %}
+              <span class="dietname deshu">得舒</span>
+            {% endif %}
+            {% if '3' in d[5] %}
+              <span class="dietname vegetarian">彈性素食</span>
+            {% endif %}
+            {% if '4' in d[5] %}
+              <span class="dietname numdiet">234</span>
+            {% endif %}
+          {% else %}
+            <span class="dietname none">無</span>
+          {% endif %}
+        </div>
+        <div class="more">
+          <form action="/robott/detailedRecipe" method="get">
+            <input type="hidden" name="recipe_id" value="{{ d[6] }}">
+            <button type="submit">了解更多</button>
+          </form>
+          {% if d[4] == '0' %}
+          <a class="unpublished">發佈食譜</a>
+          {% else %}
+          <a class="published">已發佈</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
+  </article>
+
+  <div id="loading" style="display: none;">
+    <div id="animation-container"></div>
+    <div class="loading-text">正在為您解鎖美味秘方…</div>
+  </div>
+
+  <footer id="footer-container"></footer>
+
+  <script>
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
+
+    // Lottie
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('animation-container'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/static/json/fruitJump.json' // 請替換為你的 JSON 動畫檔案路徑
+    });
+
+    window.onload = function() {
+      const continueBtn = document.getElementById('generate-btn');
+
+      // continueBtn.addEventListener('click', function () {
+      //   sessionStorage.removeItem('tagInputValue');
+        
+      // });
+
+      renderNav();
+      renderFooter();
+    };
+
+    document.getElementById("generate-btn").onclick = function() {
+      if (messageText === '0') {
+        event.preventDefault();
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }else{
+        document.getElementById('howToGenerate').showModal();
+        document.getElementById('howToGenerate').scrollTop = 0;
+      }
+    };
+
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
+
+    // 彈跳視窗 選擇食譜的生成方式
+    let openhowToGenerate=document.getElementById('generate-btn');
+    let howToGenerate=document.getElementById('howToGenerate');
+    let closehowToGenerate=document.getElementById('closehowToGenerate');
+    closehowToGenerate.addEventListener("click", function(){
+      howToGenerate.close();
+    })
+
+    // 隨機生成食譜
+    document.getElementById('randomRecipe').addEventListener('click', function() {
+      howToGenerate.close();
+      
+      $.ajax({
+        url: '/robott/randomRecipe',
+        type: 'POST',
+        beforeSend: function() {
+          document.getElementById("loading").style.display = "flex";
+        },
+        success: function(data) {
+          const recipe_id = data.recipe_id;
+          window.location.href = `/robott/detailedRecipe?recipe_id=${recipe_id}`;
+        },
+        error: function() {
+          alert('發生錯誤，請稍後再試');
+        }
+      });
+    });
+
+    // 任務
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const showDialog = urlParams.get("showDialog");
+
+      if (showDialog === "true") {
+        const dialog = document.getElementById("howToGenerate");
+        if (dialog) {
+          dialog.showModal();
+          dialog.scrollTop = 0;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

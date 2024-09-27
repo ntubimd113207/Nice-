@@ -1,0 +1,161 @@
+#app {
+  --hue: 190deg;
+  --sat: 50%;
+  --blur: 0px;
+}
+
+.nocancel  {
+  --sat2: calc(var(--sat) + 10%);
+  --clr: hsl(165.65deg 50% 90%);
+  --clr2: hsl(var(--hue2) var(--sat2) 85%);
+  --text: hsla(var(--hue), 70%, 10%, .9);
+  --gradoffset: 45%;
+  --gradgap: 30%;
+}
+
+.cancel{
+  --clr:  hsl(0deg 0% 90.99% / 67%);
+}
+
+.static button {
+  color: var(--text);
+  letter-spacing: -0.025em;
+  background-color: var(--clr);
+  background-image: linear-gradient(180deg, var(--clr2) var(--gradgap), transparent calc(100% - var(--gradgap)));
+  background-repeat: no-repeat;
+  background-position: center var(--gradoffset);
+  background-size: 100% 200%;
+  padding: 0.8em 1em;
+  border-radius: 2em;
+  border: none;
+  box-shadow: 0 -0.5em 0.5em transparent, 0 0.5em 0.5em transparent, 0 0.25em 0.3em -0.2em hsla(var(--hue), var(--sat), 50%, 0.46), 0 0.25em 0.75em hsla(var(--hue), calc(var(--sat) - 10%), 40%, 0.3);
+  position: relative;
+  transition: all 0.5s ease;
+  outline: none;
+}
+
+.static button::before,
+.static button::after {
+  content: "";
+  inset: 0;
+  position: absolute;
+  border-radius: 5em;
+}
+
+.static button::before {
+  background-image: radial-gradient(ellipse, hsla(var(--hue), 100%, 90%, 0.8) 20%, transparent 50%, transparent 200%), linear-gradient(90deg, #404040 -10%, transparent 30%, transparent 70%, #404040 110%);
+  box-shadow: inset 0 0.25em 0.75em rgba(0, 0, 0, 0.8), inset 0 -0.05em 0.2em rgba(255, 255, 255, 0.4), inset 0 -1px 3px hsla(var(--hue), 80%, 50%, 0.75);
+  background-blend-mode: overlay;
+  background-repeat: no-repeat;
+  background-size: 200% 80%, cover;
+  background-position: center 220%;
+  mix-blend-mode: overlay;
+  filter: blur(calc(var(--blur) * 0.5));
+}
+
+.static button::after {
+  background: linear-gradient(180deg, hsla(var(--hue2), 100%, 90%, 0.9), hsla(var(--hue2), calc(var(--sat2)*0.7), 50%, 0.75) 40%, transparent 80%);
+  top: 0.075em;
+  left: 0.75em;
+  right: 0.75em;
+  bottom: 1.4em;
+  filter: blur(var(--blur));
+  mix-blend-mode: screen;
+}
+
+.static button:hover,
+.static button:active,
+.static button:focus {
+  outline: none;
+  box-shadow: 0 -0.2em 1em hsla(var(--hue2), 70%, 80%, 0.3), 0 0.5em 1.5em hsla(var(--hue), 70%, 80%, 0.5), 0 0.25em 0.3em -0.2em hsl(var(--hue), 90%, 70%), 0 0.25em 0.5em hsla(var(--hue), 20%, 30%, 0.2), inset 0 -2px 2px rgba(255, 255, 255, 0.2);
+  background-position: center calc( var(--gradoffset) - 0.75em );
+}
+
+.static button .spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(0.75em) translateX(-50%);
+  opacity: 0;
+  margin: 0;
+  font-size: 2em;
+  mix-blend-mode: overlay;
+}
+
+.static button span,
+.static button svg,
+.static button .spinner {
+  transition: all 0.33s ease;
+}
+
+.static button:active span,
+.static button:active svg:not(.spinner),
+.static button:focus span,
+.static button:focus svg:not(.spinner) {
+  transform: translateY(-1em);
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.static button:active .spinner,
+.static button:focus .spinner {
+  transform: translateY(-0.5em) translateX(-50%);
+  opacity: 1;
+}
+
+.static svg {
+  height: 1em;
+  width: auto;
+  margin-left: 0.33em;
+}
+
+.static button svg,
+.static button span {
+  display: inline-flex;
+  align-content: center;
+  align-self: center;
+  filter: drop-shadow(0 1px 0 hsla(var(--hue), 90%, 88%, 1));
+}
+
+.spinner path {
+  transform-origin: center;
+  -webkit-animation: spin 0.75s infinite linear;
+  animation: spin 0.75s infinite linear;
+}
+
+.static button.disabled {
+  background-color: var(--clr);
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.static button.disabled span,
+.static button.disabled svg {
+  filter: none;
+  opacity: 0.6;
+}
+
+@-webkit-keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  .static button {
+    padding: 5px 10px;
+  }
+
+  .static button span {
+    font-size: 12px;
+  }
+}

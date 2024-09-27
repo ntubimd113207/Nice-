@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <link rel="stylesheet" href="/static/css/community/communityMain.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Q&A</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <div class="filter">
+      <div class="select">
+        <span class="filter-option" data-filter="my">My</span>
+        <div class="line"></div>
+        <span class="filter-option" data-filter="all">All</span>
+      </div>
+      <label class="keyword-query">
+        <input type="text" id="keywordQuery" placeholder="關鍵字查詢">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </label>
+    </div>
+
+    <a class="po" href="/community/airecipePost">
+      <img class="photostickers" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
+      <div class="say">我有疑問...</div>
+    </a>
+
+    {% for question in question %}
+    <form id="QnADetailForm" action="/community/detailedPost" method="get">
+    <section class="question-item" data-uid="{{ question[0] }}" data-uid2="{{ question[1] }}">
+      <div class="eachpo">
+        <img class="photostickers" src="/static/images/userImage/{{question[1]}}/{{question[8]}}" alt="">
+        <div class="pocontent">
+          <div class="top">
+            <div class="left">
+              <h1>{{ question[9] }}</h1>
+              <span>{{ question[6].strftime('%Y/%m/%d %H:%M') }}</span>
+            </div>
+            <div class="right">
+              {% if question[1] == uid %}
+                <i class="fa-regular fa-trash-can" id="opendelete"></i>
+                <a>
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+              {% else %}
+                {% if question[0]|string in keepCombined %}
+                <i class="fa-solid fa-bookmark" id="opencollect"></i>
+                {% else %}
+                <i class="fa-regular fa-bookmark" id="opencollect"></i>
+                {% endif %}
+
+                <i class="fa-solid fa-triangle-exclamation" id="openreport"></i>
+              {% endif %}
+            </div>
+          </div>
+          <a class="middle">
+            <h1 class="detailQnA">{{ question[2] }}</h1>
+            <div class="textcontent detailQnA">
+              <p>{{ question[3] }}</p>
+            </div>
+            {% if question[4] %}
+            <div class="carousel" data-flickity='{ "cellAlign": "left" }'>
+              {% for image in question[14] %}
+              <div class="carousel-cell">
+                <img src="/static/images/community/{{question[1]}}/{{question[4]}}/{{image}}" alt="">
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </a>
+          {% if question[1] != uid and is_nutritionist == '2' or question[5] %}<div class="line"></div>{% endif %}
+          {% if question[5] %}
+          <div class="each">
+            <div class="top">
+              <div class="optimal">
+                <i class="fa-solid fa-crown"></i>
+                <p>最佳解</p>
+              </div>
+              <div class="right">
+                <p>{{ question[11].strftime('%Y/%m/%d') }}</p>
+                <img class="photostickers" src="/static/images/userImage/{{question[12]}}/{{question[13]}}" alt="">
+              </div>
+            </div>
+            <div class="bottom">
+              {{ question[10] }}
+            </div>
+          </div>
+          {% endif %}
+          {% if question[1] != uid and is_nutritionist == '2' %}
+          <div class="bottom">
+            <input type="text" placeholder="我來解說吧!">
+            <button type="button"><i class="fa-regular fa-paper-plane"></i></button>
+          </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" hidden>提交</button>
+        <input type="hidden" name="question_id" value="{{ question[0] }}">
+      </div>
+    </section>
+    </form>
+    {% endfor %}
+  </article>
+
+  <form id="updatePostForm" action="/community/updatePost" method="get">
+    <input type="hidden" name="question_id" value="{{ question[0] }}">
+    <button type="submit" hidden></button>
+  </form>
+
+  <a class="circlepo" href="/community/airecipePost">
+    <i class="fa-solid fa-feather"></i>
+  </a>
+
+  <dialog id="delete">
+    <h1>確定刪除貼文?</h1>
+    <div class="contentsave">
+      <button id="closedelete" class="closebtn">cancel</button>
+      <button id="savedelete" class="savebtn">confirm</button>
+    </div>
+  </dialog>
+
+  <dialog id="collect">
+    <h1>編輯分類</h1>
+    <div class="content">
+      {% for d in keep %}
+      <div class="eachclass">
+        <div class="left">
+          <input type="checkbox" id="scales" name="scales" data-id="2"/>
+          <label for="scales" data-id="{{ d[0] }}" data-keepid="{{ d[2] }}">{{ d[1] }}</label>
+        </div>
+        <div class="num">({{ d[3] }}篇)</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="save">
+      <button id="closecollect" class="closebtn closecollect">close</button>
+      <button id="savecollect" class="savebtn savecollect">save</button>
+    </div>
+  </dialog>
+
+  <dialog id="report">
+    <h1>檢舉</h1>
+    <div class="content">
+      <h2>檢舉原因</h2>
+      <div class="reasons">
+        <div class="eachreason">
+          <input type="checkbox" id="scales" name="1" checked />
+          <label for="scales">不實資訊</label>
+        </div>
+        <div class="eachreason">
+          <input type="checkbox" id="scales" name="2" />
+          <label for="scales">違反公共秩序善良風俗</label>
+        </div>
+        <div class="eachreason">
+          <input type="checkbox" id="scales" name="3" />
+          <label for="scales">違反法律</label>
+        </div>
+        <div class="eachreason">
+          <input type="checkbox" id="scales" name="4" />
+          <label for="scales">垃圾信息或廣告</label>
+        </div>
+        <div class="eachreason">
+          <input type="checkbox" id="scales" name="otherScales" />
+          <label for="scales">其他(請填在下方空格)</label>
+        </div>
+      </div>
+      <textarea rows="5"></textarea>
+    </div>
+    <div class="save">
+      <button id="closereport" class="closebtn">cancel</button>
+      <button id="savereport" class="savebtn">confirm</button>
+    </div>
+  </dialog>
+
+  <dialog id="loginDialog">
+    <h1>請先登入</h1>
+    <div class="contentsave">
+      <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+    </div>
+  </dialog>
+
+  <footer id="footer-container"></footer>
+
+  <script>
+		let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById('loginDialog').scrollTop = 0;
+      }
+    };
+
+    function showModal() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
+
+    // detail頁面
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 點擊事件處理
+      function handleClick(event) {
+        const questionId = event.target.closest('.question-item').getAttribute('data-uid');
+        const action = event.target.classList[1].replace('fa-', '');
+
+        switch (action) {
+          case 'trash-can':
+            document.getElementById('delete').showModal();
+            document.getElementById('delete').scrollTop = 0;
+            document.getElementById('delete').setAttribute('data-uid', questionId);
+            break;
+          case 'pen-to-square':
+            document.getElementById('updatePostForm').submit();
+            break;
+          case 'bookmark':
+            document.getElementById('collect').showModal();
+            document.getElementById('collect').scrollTop = 0;
+            document.getElementById('collect').setAttribute('data-uid', questionId);
+            break;
+          case 'triangle-exclamation':
+            document.getElementById('report').showModal();
+            document.getElementById('report').scrollTop = 0;
+            document.getElementById('report').setAttribute('data-uid', questionId);
+            break;
+          default:
+            break;
+        }
+      }
+
+      // 對指定的圖示添加點擊事件處理
+      const icons = document.querySelectorAll('.fa-trash-can, .fa-pen-to-square, .fa-bookmark, .fa-triangle-exclamation');
+      icons.forEach(icon => icon.addEventListener('click', handleClick));
+
+      // 對 Flickity 按鈕和 dot 添加點擊事件處理
+      const flickityButtons = document.querySelectorAll('.flickity-button');
+      const dots = document.querySelectorAll('.dot');
+      [...flickityButtons, ...dots].forEach(element => element.addEventListener('click', handleClick));
+
+      // 點擊內容時提交表單
+      document.querySelectorAll('.detailQnA').forEach(po => {
+          po.addEventListener('click', (event) => {
+            //尋找最近的form，id為QnADetailForm，並提交
+            event.target.closest('form').submit();
+          });
+      });
+    });
+
+    // 當點選fa-pen-to-square後，將該篇文章的data-uid放入upddatePostForm的input裡面，並提交
+    document.addEventListener('DOMContentLoaded', () => {
+      const updatePostButtons = document.querySelectorAll('.fa-regular.fa-pen-to-square');
+      const updatePostForm = document.getElementById('updatePostForm');
+
+      updatePostButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+          updatePostForm.querySelector('input[name="question_id"]').value = questionId;
+          updatePostForm.submit();
+        });
+      });
+    });
+
+    // filter按鈕變化
+    document.addEventListener("DOMContentLoaded", () => {
+      const spans = document.querySelectorAll(".filter .select span");
+
+      spans.forEach(span => {
+        span.addEventListener("click", () => {
+          spans.forEach(s => s.style.color = "#6E3D0D");
+          span.style.color = "#FFCF56";
+        });
+      });
+    });
+
+    // 發文小圓出場
+    window.addEventListener('scroll', () => {
+      const circlePo = document.querySelector('.circlepo');
+      const triggerHeight = 200;
+      if (window.scrollY > triggerHeight) {
+        circlePo.classList.add('show');
+      } else {
+        circlePo.classList.remove('show');
+      }
+    });
+
+    // 關鍵字查詢
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterOptions = document.querySelectorAll('.filter-option');
+      const questionItems = document.querySelectorAll('.question-item');
+      const keywordQuery = document.getElementById('keywordQuery');
+      
+      let filter = 'all'; // 初始篩選狀態為 'all'
+
+      // Flickity 變數
+      let flickityInstances = [];
+
+      // 初始化 Flickity
+      function initializeFlickity() {
+        // 停止所有 Flickity 實例
+        flickityInstances.forEach(instance => instance.destroy());
+        flickityInstances = [];
+        
+        // 尋找每個輪播並初始化 Flickity
+        document.querySelectorAll('.carousel').forEach(carousel => {
+          const flickity = new Flickity(carousel, {
+            cellAlign: 'left',
+            contain: true
+          });
+          flickityInstances.push(flickity);
+        });
+      }
+
+      // 更新 Flickity 位置
+      function updateFlickity() {
+        flickityInstances.forEach(instance => {
+          instance.resize(); // 確保 Flickity 重新計算其顯示內容
+          instance.reposition(); // 更新 Flickity 顯示位置
+        });
+      }
+
+      // 點擊篩選選項
+      filterOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          filter = option.getAttribute('data-filter');
+          updateQuestions();
+        });
+      });
+
+      // 關鍵字查詢
+      keywordQuery.addEventListener('input', () => {
+        updateQuestions();
+      });
+
+      // 更新問題顯示
+      function updateQuestions() {
+        const query = keywordQuery.value.toLowerCase();
+
+        questionItems.forEach(item => {
+          const uidMatch = filter === 'all' || item.getAttribute('data-uid2') === uid;
+          const textMatch = [
+              item.querySelector('.middle h1').textContent, 
+              item.querySelector('.textcontent p').textContent, 
+              item.querySelector('.bottom') ? item.querySelector('.bottom').textContent : ''
+          ].some(text => text.toLowerCase().includes(query));
+
+          if (uidMatch && textMatch) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // 更新 Flickity
+        initializeFlickity();
+        updateFlickity();
+      }
+
+      // 初始載入時顯示所有問題並初始化 Flickity
+      updateQuestions();
+    });
+
+    // 檢舉
+    document.addEventListener('DOMContentLoaded', () => {
+      const openReportButtons = document.querySelectorAll('.fa-solid.fa-triangle-exclamation');
+      const reportDialog = document.getElementById('report');
+      const closeReportButton = document.getElementById('closereport');
+      const saveReportButton = document.getElementById('savereport');
+
+      openReportButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          reportDialog.showModal();
+          reportDialog.scrollTop = 0;
+
+          // 將檢舉原因清空
+          reportDialog.querySelectorAll('.reasons input').forEach(input => input.checked = false);
+          reportDialog.querySelector('textarea').value = '';
+
+          // 當檢舉原因textarea輸入文字時，即時的將"otherScale"的checkbox打勾
+          reportDialog.querySelector('textarea').addEventListener('input', () => {
+            reportDialog.querySelector('.eachreason input[name="otherScales"]').checked = true;
+
+            // 如果textarea為空，則取消勾選
+            if (reportDialog.querySelector('textarea').value === '') {
+              reportDialog.querySelector('.eachreason input[name="otherScales"]').checked = false;
+            }
+          });
+
+          // 檢舉data-uid
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+
+          // 將檢舉的data-uid放入dialog的data-uid
+          reportDialog.setAttribute('data-uid', questionId);
+        });
+      });
+
+      closeReportButton.addEventListener('click', () => {
+        reportDialog.close();
+      });
+
+      saveReportButton.addEventListener('click', () => {
+        // 提醒未勾選檢舉原因
+        if (!reportDialog.querySelector('.reasons input:checked')) {
+          alert('請選擇檢舉原因');
+          return;
+        }
+
+        // 如果勾選其他原因，但未填寫原因
+        if (reportDialog.querySelector('.eachreason input[name="otherScales"]:checked') && reportDialog.querySelector('textarea').value === '') {
+          alert('請填寫其他原因');
+          return;
+        }
+
+        // 取得檢舉原因的name
+        const reasons = [];
+        reportDialog.querySelectorAll('.reasons input').forEach(input => {
+          // 排除其他原因的checkbox
+          if (input.name !== 'otherScales' && input.checked) {
+            reasons.push(input.name);
+          }
+        });
+
+        // 取得其他原因，去除前後空白
+        const otherReason = reportDialog.querySelector('textarea').value.trim();
+
+        // 取得檢舉的data-uid
+        const questionId = reportDialog.getAttribute('data-uid');
+        
+        // jquery ajax
+        $.ajax({
+          type: 'POST',
+          url: '/community/report',
+          data: {
+            question_id: questionId,
+            reasons: reasons.join(','),
+            otherReason: otherReason
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+
+
+        reportDialog.close();
+      });
+    });
+
+    // 收藏
+    document.addEventListener('DOMContentLoaded', () => {
+      const openCollectButtons = document.querySelectorAll('.fa-regular.fa-bookmark, .fa-solid.fa-bookmark');
+      const collectDialog = document.getElementById('collect');
+      const closeCollectButton = document.getElementById('closecollect');
+      const saveCollectButton = document.getElementById('savecollect');
+      
+      let oldSelect = [];
+      let newSelect = [];
+
+      openCollectButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          collectDialog.showModal();
+          collectDialog.scrollTop = 0;
+
+          // 將打勾的checkbox清空
+          collectDialog.querySelectorAll('.eachclass input').forEach(input => input.checked = false);
+
+          // 打開的section data-uid 出現在 data-keepid 裡面的話，就打勾
+          const keepIds = collectDialog.querySelectorAll('.eachclass label').forEach(label => {
+            if (label.getAttribute('data-keepid').split(',').includes(button.closest('.question-item').getAttribute('data-uid'))) {
+              label.previousElementSibling.checked = true;
+            }
+          });
+
+          collectDialog.setAttribute('data-uid', button.closest('.question-item').getAttribute('data-uid'));
+
+          // 清空oldSelect
+          oldSelect = [];
+
+          // 記錄當前的勾選狀態的data-id
+          collectDialog.querySelectorAll('.eachclass input').forEach(input => {
+            if (input.checked) {
+              oldSelect.push(input.nextElementSibling.getAttribute('data-id'));
+            }
+          });
+        });
+      });
+
+      closeCollectButton.addEventListener('click', () => {
+        collectDialog.close();
+      });
+
+      saveCollectButton.addEventListener('click', () => {
+        newSelect = [];
+        const itemsToUpdate = {};
+        
+        document.querySelectorAll('#collect .eachclass input[type="checkbox"]').forEach(checkbox => {
+          const label = checkbox.parentElement.querySelector('label').getAttribute('data-id');
+          if (checkbox.checked) {
+            newSelect.push(label);
+            // 記錄需要增加計數的項目
+            itemsToUpdate[label] = (itemsToUpdate[label] || 0) + 1;
+          }
+        });
+
+        const addedItems = newSelect.filter(item => !oldSelect.includes(item));
+        const removedItems = oldSelect.filter(item => !newSelect.includes(item));
+
+        console.log('Added items:', addedItems);
+        console.log('Removed items:', removedItems);
+
+        if (addedItems.length === 0 && removedItems.length === 0) {
+          collectDialog.close();
+          return;
+        }
+
+        if (addedItems.length !== 0) {
+          addedItems.forEach(item => {
+          $.ajax({
+            type: 'POST',
+            url: '/community/addCollect',
+            data: {
+              category_id: item,
+              question_id: collectDialog.getAttribute('data-uid')
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+        });
+        }
+
+        if (removedItems.length !== 0) {
+          removedItems.forEach(item => {
+          $.ajax({
+            type: 'POST',
+            url: '/community/subCollect',
+            data: {
+              category_id: item,
+              question_id: collectDialog.getAttribute('data-uid')
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+        });
+        }
+
+        // 如果對應的newSelect長度為0，則將該篇文章的icon改為空心
+        if (newSelect.length === 0) {
+          document.querySelector(`.question-item[data-uid="${collectDialog.getAttribute('data-uid')}"] .fa-solid.fa-bookmark`)?.classList.replace('fa-solid', 'fa-regular');
+        }
+
+        // 如果對應的newSelect長度不為0，則將該篇文章的icon改為實心，但是如果原本是空心的話，就不改變
+        if (newSelect.length !== 0) {
+          document.querySelector(`.question-item[data-uid="${collectDialog.getAttribute('data-uid')}"] .fa-regular.fa-bookmark`)?.classList.replace('fa-regular', 'fa-solid');
+        }
+
+        // 更新加減num的數量，透過整數不是+1就是-1
+        document.querySelectorAll('.eachclass').forEach(eachclass => {
+          const label = eachclass.querySelector('label').getAttribute('data-id');
+          const num = eachclass.querySelector('.num');
+          const currentNum = parseInt(num.textContent.slice(1, -2));
+
+          if (addedItems.includes(label)) {
+            num.textContent = `(${currentNum + 1}篇)`;
+          } else if (removedItems.includes(label)) {
+            num.textContent = `(${currentNum - 1}篇)`;
+          }
+
+          // 如果removeitems裡面有的話，就將data-id從data-keepid裡面移除
+          if (removedItems.includes(label)) {
+            const keepId = eachclass.querySelector('label').getAttribute('data-keepid').split(',');
+            const newKeepId = keepId.filter(id => id !== collectDialog.getAttribute('data-uid'));
+            eachclass.querySelector('label').setAttribute('data-keepid', newKeepId.join(','));
+          }
+
+          // 如果addedItems裡面有的話，就將data-id加入data-keepid裡面
+          if (addedItems.includes(label)) {
+            const keepId = eachclass.querySelector('label').getAttribute('data-keepid').split(',');
+            keepId.push(collectDialog.getAttribute('data-uid'));
+            eachclass.querySelector('label').setAttribute('data-keepid', keepId.join(','));
+          }
+
+        });
+
+        collectDialog.close();
+      });
+    });
+	
+    // 刪除
+    document.addEventListener('DOMContentLoaded', () => {
+      const openDeleteButtons = document.querySelectorAll('.fa-regular.fa-trash-can');
+      const deleteDialog = document.getElementById('delete');
+      const closeDeleteButton = document.getElementById('closedelete');
+      const saveDeleteButton = document.getElementById('savedelete');
+
+      openDeleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          deleteDialog.showModal();
+          deleteDialog.scrollTop = 0;
+
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+
+          deleteDialog.setAttribute('data-uid', questionId);
+        });
+      });
+
+      closeDeleteButton.addEventListener('click', () => {
+        deleteDialog.close();
+      });
+
+      saveDeleteButton.addEventListener('click', () => {
+        // 取得檢舉的data-uid
+        const questionId = deleteDialog.getAttribute('data-uid');
+        
+        // jquery ajax
+        $.ajax({
+          type: 'POST',
+          url: '/community/deleteQuestion',
+          data: {
+            question_id: questionId
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+
+        deleteDialog.close();
+
+        // 刪除該篇文章
+        const questionItem = document.querySelector(`.question-item[data-uid="${questionId}"]`);
+        questionItem.remove();
+
+      });
+    });
+  
+    // 我來解說吧!
+    document.addEventListener('DOMContentLoaded', () => {
+      const explainButtons = document.querySelectorAll('.bottom button');
+      const explainInputs = document.querySelectorAll('.bottom input[type="text"]');
+
+      explainButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          const questionId = button.closest('.question-item').getAttribute('data-uid');
+          const input = explainInputs[index];
+
+          if (input.value.trim() === '') {
+            alert('請輸入解說內容');
+            return;
+          }
+
+          // jquery ajax
+          $.ajax({
+            type: 'POST',
+            url: '/community/addAnswer',
+            data: {
+              question_id: questionId,
+              message: input.value
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+
+          // 新增解說內容，不是最佳解
+          const bottom = button.closest('.bottom');
+          const newExplanation = document.createElement('div');
+          newExplanation.classList.add('each');
+          newExplanation.innerHTML = `
+            <div class="top">
+              <div class="right">
+                <img class="photostickers" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="">
+                <p>2021/08/01</p>
+              </div>
+            </div>
+            <div class="bottom">
+              ${input.value}
+            </div>
+          `;
+          bottom.insertAdjacentElement('beforebegin', newExplanation);
+
+          input.value = '';
+          
+        });
+      });
+    });
+  </script>
+</body>
+</html>

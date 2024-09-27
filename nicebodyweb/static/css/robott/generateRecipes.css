@@ -1,0 +1,298 @@
+/* article */
+
+article {
+  padding: 10% 15% 5%;
+}
+
+/* switch */
+
+.switch {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.250em;
+  font-weight: bold;
+  margin-bottom: 5%;
+}
+
+.switch a {
+  flex: 5;
+  text-decoration: none;
+  color: #be9871B3;
+  border-bottom: #be9871B3 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
+}
+
+.switch .active {
+  color: #6E3D0D;
+  border-bottom: #6E3D0D 3px solid;
+}
+
+/* content */
+
+.content {
+  display: grid;
+  grid-gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.fewcontent {
+  display: grid;
+  grid-gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+}
+
+/* AI */
+
+.AI {
+  border: #D4A373 1px solid;
+  border-radius: 10px;
+  padding: 10% 5%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.AI .title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 15% 0;
+  gap: 15px;
+}
+
+.AI p {
+  color: #495057;
+  line-height: 25px;
+}
+
+/* ai-recipe-share */
+
+.ai-recipe-share {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5%;
+}
+
+.addcricle,
+.ai-recipe-share > .recipe-img {
+  max-width: 100%;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* title */
+
+.ai-recipe-share .title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5% 0;
+  gap: 10px;
+}
+
+.recipe-avatarFrame {
+  background-image: url(/static/images/nutritionistFrame.png);
+  width: 60px;
+  aspect-ratio: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.have {
+  background-image: url(/static/images/nutritionistFrame.png);
+}
+
+.recipe-profile {
+  border-radius: 50%;
+  width: 35px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.aibanana,
+.noAvatarFrame {
+  max-width: 100%;
+  max-height: 100%;
+  width: 45px;
+}
+
+.title h3 {
+  font-size: 25px;
+  font-weight: bold;
+  color: #0B1A2F;
+}
+
+.ai-recipe-share p {
+  color: #495057;
+}
+
+.ai-recipe-share p:nth-of-type(1) {
+  margin-bottom: 5%;
+}
+
+.ai-recipe-share p:nth-of-type(2) {
+  margin-bottom: 10%;
+  line-height: 25px;
+}
+
+/* diet */
+
+.diet {
+  font-size: 0.5em;
+  margin-bottom: 7%;
+  display: flex;
+  gap: 3%;
+  align-items: center;
+}
+
+.diet .dietname {
+  padding: 2.5%;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5e6472;
+}
+
+/* more */
+
+.more {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.more button {
+  color: #0B1A2F;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+}
+
+.more a.unpublished,
+.more a.published {
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 2% 4%;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+}
+
+.more .published {
+  background-color: #86BAA1;
+}
+
+.more .unpublished {
+  background-color: #D4A373;
+}
+
+/* X-Large 1440px */
+
+@media screen and (max-width:1440px) {
+  article {
+    padding: 12% 15% 5%;
+  }
+}
+
+/* Large 1200px */
+
+@media screen and (max-width:1200px) {
+  article {
+    padding: 13% 15% 5%;
+    min-height: 75vh;
+  }
+}
+
+/* Medium 1024px */
+
+@media screen and (max-width:1024px) {
+  article {
+    padding: 15% 15% 5%;
+    min-height: 80vh;
+  }
+
+  .switch {
+    margin-bottom: 8%;
+  }
+}
+
+/* Small 768px */
+
+@media screen and (max-width:768px) {
+  article {
+    padding: 20% 15% 5%;
+    min-height: 85vh;
+  }
+
+  .switch {
+    margin-bottom: 10%;
+  }
+
+  .content {
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .fewcontent {
+    display: flex;
+  }
+}
+
+/* X-Small 480px */
+
+@media screen and (max-width:480px) {
+  article {
+    padding: 30% 10% 10%;
+    min-height: 100vh;
+  }
+
+  .AI .title {
+    margin: 5% 0;
+    gap: 10px; 
+  }
+
+  .ai-recipe-share .title {
+    gap: 5px;
+  }
+
+  .title h3 {
+    font-size: 20px;
+  }
+
+  .AI p,
+  .ai-recipe-share p {
+    font-size: 15px;
+  }
+
+  .ai-recipe-share p:nth-of-type(2) {
+    margin-bottom: 5%;
+  }
+
+  .more button {
+    padding: 0;
+    font-size: 15px;
+  }
+
+  .diet {
+    font-size: 12px;
+  }
+}

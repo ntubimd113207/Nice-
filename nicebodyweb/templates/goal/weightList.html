@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/goal/goalList.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>體重紀錄列表</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <main>
+      <h1>體重紀錄列表</h1>
+      <div class="weightsearch">
+        <div class="left">
+          <span>日期 : </span>
+          <input type="date" id="date-search">
+        </div>
+        <input type="text" id="keyword-search" placeholder="關鍵字查詢">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+      <div class="rwdsearch">
+        <div class="left">
+          <div class="top">
+            日期 : <input type="date" id="date-search">
+          </div>
+          <input type="text" id="keyword-search" placeholder="關鍵字查詢">
+        </div>
+        <div class="right">
+          <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+      </div>
+      <div class="tablewrap">
+        <table class="weighttable">
+          <tr>
+            <th>日期</th>
+            <th>體重(kg)</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </table>
+        <div class="line"></div>
+        <table class="weighttable">
+          {% for d in data %}
+          <tr>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[1] }}</td>
+            <td><i class="fa-solid fa-pen openweight" data-id="{{ d[0] }}" data-date="{{ d[2] }}" data-kg="{{ d[1] }}"></i></td>
+            <td><i class="fa-regular fa-trash-can opendelete" data-id="{{ d[0] }}"></i></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <dialog id="weight">
+        <h1>修改體重紀錄</h1>
+        <div class="content">
+          <h2>日期</h2>
+          <input type="date" class="input" id="weight-date" readonly>
+          <h2>體重(kg)</h2>
+          <input type="text" class="input" id="weight-kg">
+        </div>
+        <div class="save">
+          <button id="closeweight" class="closebtn">close</button>
+          <button id="saveweight" class="savebtn">save</button>
+        </div>
+      </dialog>
+
+      <dialog id="delete">
+        <h1>確定刪除體重紀錄?</h1>
+        <div class="contentsave">
+          <button id="closedelete" class="closebtn">cancel</button>
+          <button id="savedelete" class="savebtn">confirm</button>
+        </div>
+    </dialog>
+
+    <dialog id="loginDialog">
+      <h1>請先登入</h1>
+      <div class="contentsave">
+        <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+      </div>
+    </dialog>
+    </main>
+  </article>
+
+  <script>
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}";
+
+    window.onload = function() {
+      renderNav();
+      
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }
+    };
+
+    document.querySelectorAll('.openweight').forEach(button => {
+      button.addEventListener('click', function() {
+        let id = this.getAttribute('data-id');
+        let date = this.getAttribute('data-date');
+        kg = this.getAttribute('data-kg');
+
+        let formattedDate = date.replace(/\//g, '-');
+        
+        document.getElementById('weight-date').value = formattedDate;
+        document.getElementById('weight-kg').value = kg;
+        
+        document.getElementById('saveweight').setAttribute('data-id', id);
+        
+        document.getElementById('weight').showModal();
+        document.getElementById("weight").scrollTop = 0;
+
+        document.getElementById('weight-kg').focus();
+      });
+    });
+
+    document.getElementById('closeweight').addEventListener('click', function() {
+      document.getElementById('weight').close();
+    });
+
+    document.getElementById('saveweight').addEventListener('click', function() {
+      let id = this.getAttribute('data-id');
+      let kgNew = document.getElementById('weight-kg').value;
+      
+      console.log(kgNew, kg);
+
+      if (kgNew === '') {
+        alert('請輸入體重');
+        return;
+      }
+
+      if (isNaN(kgNew)) {
+        alert('請輸入數字');
+        return;
+      }
+
+      if (kgNew <= 0) {
+        alert('請輸入正確的體重');
+        return;
+      }
+
+      if (kgNew !== kg) {
+        $.ajax({
+          type: 'POST',
+          url: '/goal/updateWeight',
+          data: {
+            id: id,
+            kg: kgNew,
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(response) {
+            console.log(response);
+            alert('修改失敗');
+          }
+        });
+
+        kg = kgNew;
+        
+        document.getElementById('weight-kg').value = kg;
+      }
+
+      document.getElementById('weight').close();
+
+      let row = document.querySelector(`i[data-id='${id}']`).closest('tr');
+      row.querySelector('td:nth-child(2)').innerText = kgNew;
+    });
+
+    document.querySelectorAll('.opendelete').forEach(button => {
+      button.addEventListener('click', function() {
+        let id = this.getAttribute('data-id');
+        
+        document.getElementById('savedelete').setAttribute('data-id', id);
+        
+        document.getElementById('delete').showModal();
+        document.getElementById('delete').scrollTop = 0;
+      });
+    });
+
+    document.getElementById('closedelete').addEventListener('click', function() {
+      document.getElementById('delete').close();
+    });
+
+    document.getElementById('savedelete').addEventListener('click', function() {
+      let id = this.getAttribute('data-id');
+      
+      $.ajax({
+        type: 'POST', 
+        url: '/goal/deleteWeight',
+        data: {
+          id: id
+        },
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(response) {
+          console.log(response);
+          alert('刪除失敗');
+        }
+      });
+
+      let row = document.querySelector(`i[data-id='${id}']`).closest('tr');
+      row.remove();
+
+      document.getElementById('delete').close();
+    });
+
+    // 關鍵字查詢
+    document.getElementById('date-search').addEventListener('input', function() {
+      filterTable();
+    });
+
+    document.getElementById('keyword-search').addEventListener('input', function() {
+      filterTable();
+    });
+
+    function filterTable() {
+      let date = document.getElementById('date-search').value;
+      let keyword = document.getElementById('keyword-search').value.toLowerCase();
+      let rows = document.querySelectorAll('table tr:not(:first-child)');
+      
+      rows.forEach(row => {
+        let rowDate = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+        let weight = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
+        
+        let matchDate = !date || rowDate.includes(date.split('-').join('/'));
+        let matchKeyword = !keyword || weight.includes(keyword);
+        
+        let match = matchDate && matchKeyword;
+        row.style.display = match ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

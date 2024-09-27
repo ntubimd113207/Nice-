@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+	<link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="/static/css/profile/profilepage.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+	<script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="/static/js/proflie/profliePage.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>個人檔案</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <section class="sectionwrap">
+      <section class="profile">
+        <div class="{{ 'avatarFrame' if profile_data[5] == '2' else 'noAvatarFrame' }}">
+          <img class="profile-picture" id="profilePicture" src="/static/images/userImage/{{uid}}/{{userImage}}" alt="Profile Picture">
+          <div class="editAvatar" id="editAvatar">
+            <i class="fa-solid fa-pen"></i> Edit
+          </div>
+        </div>
+        
+        <input type="file" id="upload-picture" accept="image/*" style="display: none;">
+        <div class="title">
+          <input type="text" id="name" placeholder="輸入暱稱" value="{{ name }}">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+      </section>
+  
+      <section class="settings">
+        <div class="progress-bar">
+          <div class="level">
+            <span>LV.</span>{{profile_data[0]}}
+          </div>
+          <form action="test.aspx" method="get">
+            <progress value="{{profile_data[1] / profile_data[2]}}"></progress>
+          </form>
+          <div class="numerical">
+            <div class="molecular">{{profile_data[1]}}</div>/
+            <div class="denominator">{{profile_data[2]}}</div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="out1">
+            <div class="out2">
+              <div class="gender">
+                <div class="title">
+                  <p>性別</p>
+                  <i class="fa-solid fa-lock"></i>
+                </div>    
+                <div class="gbt">
+                  <button type="button" id="maleButton" {% if profile_data[3] == 'M' %}style="border: 2px solid rgb(41, 123, 205);" class="selected" {% endif %}>男性</button>
+                  <button type="button" id="femaleButton" {% if profile_data[3] == 'F' %}style="border: 2px solid rgb(194, 37, 116);" class="selected"{% endif %}>女性</button>
+                </div>
+              </div>
+              <div class="birthday">
+                <div class="title">
+                  <p>生日</p>
+                  <i class="fa-solid fa-lock"></i>
+                </div>   
+                <input type="date" id="birthday" value="{{ profile_data[4] }}">
+              </div>
+            </div>
+
+            <div class="lists">
+              <a href="/profile/collectionList">食譜收藏</a>
+              <a href="/profile/QAcollection">Q&A收藏</a>
+            </div>
+          </div>
+
+          <div class="closesetting">
+            {% if profile_data[5] == '0' %}
+                <button id="openapplynutritionist">申請營養師身分</button>
+            {% elif profile_data[5] == '1' %}
+                <button>申請審核中</button>
+            {% elif profile_data[5] == '2' %}
+                <button>申請營養師成功</button>
+            {% elif profile_data[5] == '3' %}
+                <button>申請營養師失敗</button>
+            {% endif %}
+
+            <button id="changeButton">變更個資</button>
+          </div>
+
+          <dialog id="applynutritionist">
+            <h1>申請營養師身分</h1>
+            <div class="content">
+              <h2>所屬工會</h2>
+              <select name="union" id="unionSelect">
+                <option value="1">中華民國營養師公會全國聯合會 - 臺北市</option>
+                <option value="2">中華民國營養師公會全國聯合會 - 新北市</option>
+                <option value="3">中華民國營養師公會全國聯合會 - 桃園市</option>
+                <option value="4">中華民國營養師公會全國聯合會 - 新竹市</option>
+                <option value="5">中華民國營養師公會全國聯合會 - 臺中市</option>
+                <option value="6">中華民國營養師公會全國聯合會 - 彰化縣</option>
+                <option value="7">中華民國營養師公會全國聯合會 - 南投縣</option>
+                <option value="8">中華民國營養師公會全國聯合會 - 雲林縣</option>
+                <option value="9">中華民國營養師公會全國聯合會 - 嘉義市</option>
+                <option value="10">中華民國營養師公會全國聯合會 - 臺南市</option>
+                <option value="11">中華民國營養師公會全國聯合會 - 高雄市</option>
+                <option value="12">中華民國營養師公會全國聯合會 - 屏東縣</option>
+                <option value="13">中華民國營養師公會全國聯合會 - 基隆市</option>
+                <option value="14">中華民國營養師公會全國聯合會 - 宜蘭縣</option>
+                <option value="15">中華民國營養師公會全國聯合會 - 花蓮縣</option>
+              </select>
+              <h2>上傳證照</h2>
+              <div class="a-upload" id="fileNames">
+                <input type="file" name="file" id="fileInput" multiple style="display: none;">
+                <i class="fa-solid fa-folder"></i>
+                <div id="fileList"></div>
+              </div>
+              
+            </div>
+            <div class="save">
+              <button id="closeapplynutritionist" class="closebtn">cancel</button>
+              <button id="saveapplynutritionist" class="savebtn">confirm</button>
+            </div>
+          </dialog>
+
+          <dialog id="loginDialog">
+            <h1>請先登入</h1>
+            <div class="contentsave">
+              <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+            </div>
+          </dialog>
+
+          <div id="loading" style="display: none;">
+            <div class="loader2"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </article>
+
+  <footer id="footer-container"></footer>
+
+  <script>
+		let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}"
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }
+    };
+
+    // 修改頭像
+    document.addEventListener('DOMContentLoaded', function() {
+        const editAvatar = document.getElementById('editAvatar');
+        const uploadPicture = document.getElementById('upload-picture');
+        const profilePicture = document.getElementById('profilePicture');
+
+        // 當點選「Edit」按鈕時，觸發檔案選擇對話框
+        editAvatar.addEventListener('click', function() {
+            uploadPicture.click();
+        });
+
+        // 當選擇檔案後，顯示新圖片
+        uploadPicture.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePicture.src = e.target.result;
+                    document.getElementById('userImage').src = e.target.result;
+                    
+                    // 上傳圖片
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    $.ajax({
+                        url: '/profile/uploadImage',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    // 申請營養師身分
+    document.addEventListener("DOMContentLoaded", function () {
+      const fileInput = document.getElementById("fileInput");
+      const fileList = document.getElementById("fileList");
+      const fileNamesDiv = document.getElementById("fileNames");
+      const loadingDiv = document.getElementById("loading");
+
+      document.getElementById("openapplynutritionist").addEventListener("click", function () {
+        document.getElementById("applynutritionist").showModal();
+        document.getElementById("applynutritionist").scrollTop = 0;
+
+        // 清空檔案列表
+        fileList.innerHTML = "";
+      });
+
+      document.getElementById("closeapplynutritionist").addEventListener("click", function () {
+        document.getElementById("applynutritionist").close();
+      });
+
+      document.getElementById("saveapplynutritionist").addEventListener("click", function () {
+        const selectElement = document.querySelector("#unionSelect");
+        const selectedUnion = selectElement.value;
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+          alert("請上傳證照");
+          return;
+        }
+
+        // 顯示 Loading 畫面
+        loadingDiv.style.display = "flex";
+
+        // 準備 FormData 物件
+        const formData = new FormData();
+        formData.append("union", selectedUnion);
+        Array.from(files).forEach(file => formData.append("files[]", file));
+
+        // 發送 AJAX 請求
+        $.ajax({
+          url: '/profile/applynutritionist', 
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            console.log(response);
+          },
+          error: function (xhr, status, error) {
+            alert("上傳失敗: " + error);
+          },
+          complete: function () {
+            loadingDiv.style.display = "none";
+          }
+        });
+        
+        applybutton = document.getElementById("openapplynutritionist")
+        applybutton.textContent = "申請審核中";
+        applybutton.disabled = true;
+        
+        document.getElementById("applynutritionist").close();
+      });
+
+      // 上傳證照
+      fileNamesDiv.addEventListener("click", function () {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", function (event) {
+        const files = event.target.files;
+        const fileNames = Array.from(files).map(file => file.name);
+
+        // 檢查檔案數量，超過五個則限制
+        if (fileList.children.length + fileNames.length > 5) {
+          alert("最多只能上傳五個檔案");
+          return;
+        }
+
+        // 顯示檔名
+        fileNames.forEach(name => {
+          if (fileList.children.length < 5) { // 限制最多顯示五個檔案
+            const div = document.createElement("div");
+            div.textContent = name;
+            fileList.appendChild(div);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

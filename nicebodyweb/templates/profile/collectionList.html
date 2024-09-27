@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/base/reset.css">
+  <link rel="stylesheet" href="/static/css/base/global.css">
+  <link rel="stylesheet" href="/static/css/components/mousemove.css">
+  <link rel="stylesheet" href="/static/css/components/dialog.css">
+  <link rel="stylesheet" href="/static/css/layout/navbar.css">
+  <link rel="stylesheet" href="/static/css/layout/footer.css">
+  <link rel="stylesheet" href="/static/css/profile/collectionList.css">
+  <link rel="stylesheet" href="/static/css/components/loading.css">
+  <script src="https://kit.fontawesome.com/d9f27795c1.js" crossorigin="anonymous"></script>
+  <script src="/static/components/mousemove.js" defer></script>
+  <script src="/static/components/layout/navbar.js" defer></script>
+  <script src="/static/components/layout/footer.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>食譜收藏列表</title>
+</head>
+<body>
+  <div id="myCursor"></div>
+  <div id="circle"></div>
+
+  <nav id="nav-container"></nav>
+
+  <article>
+    <div class="title">
+      <i class="fa-solid fa-bookmark"></i>
+      <h1>食譜收藏列表</h1>
+    </div>
+
+    <div class="select">
+      <select id="collectionSelect">
+        <option value="">全部</option>
+        {% for collection in collection_list %}
+        <option value="{{ collection[1] }}">{{ collection[1] }}</option>
+        {% endfor %}
+      </select>
+      <div class="add openaddcollect" id="addList">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+    </div>
+
+    {% for collection in collection_list %}
+    <section data-collection-id="{{ collection[1] }}">
+      <div class="collecttitle">
+        <div class="left">
+          <i class="fa-regular fa-folder"></i>
+          <h2>{{ collection[1] }}</h2>
+        </div>
+        <div class="right">
+          <i class="fa-solid fa-pen opencollecttitle" data-name="{{ collection[1] }}"></i>
+          <i class="fa-regular fa-trash-can opencollectdelete" data-name="{{ collection[1] }}"></i>
+        </div>
+      </div>
+      <div class="collectcontent">
+        {% for item in collection_details[collection[0]] %}
+        <div class="eachcollect">
+          <a class="wrap" href="/robott/shareResults?recipe_id={{ item[1] }}">
+            <p>{{ item[4] }}</p>
+            <img src="/static/images/userImage/{{ item[6] }}/{{ item[5] }}" alt="">
+          </a>
+          <i class="fa-solid fa-pen opencollect" data-list="{{ collection[1] }}" data-detailId="{{ item[1] }}"></i>
+          <i class="fa-regular fa-trash-can opendelete"  data-list="{{ collection[1] }}" data-detailId="{{ item[1] }}"></i>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  </article>
+
+  <dialog id="deleteListDialog">
+    <h1>確定刪除列表?</h1>
+    <div class="contentsave">
+      <button id="closedeleteList" class="closebtn">cancel</button>
+      <button id="savedeleteList" class="savebtn">confirm</button>
+    </div>
+  </dialog>
+
+  <dialog id="deleteDetailDialog">
+    <h1>確定刪除收藏?</h1>
+    <div class="contentsave">
+      <button id="closedeleteDetail" class="closebtn">cancel</button>
+      <button id="savedeleteDetail" class="savebtn">confirm</button>
+    </div>
+  </dialog>
+
+  <dialog id="addcollect">
+    <h1>新增分類</h1>
+    <div class="content">
+      <p>列表名稱</p>
+      <input type="text" class="input" id="insertName">
+    </div>
+    <div class="save">
+      <button id="closeaddcollect" class="closebtn">close</button>
+      <button id="saveaddcollect" class="savebtn">save</button>
+    </div>
+  </dialog>
+
+  <dialog id="collecttitle">
+    <h1>更改列表名稱</h1>
+    <div class="content">
+      <p>列表名稱</p>
+      <input type="text" class="input" id="updateName">
+    </div>
+    <div class="save">
+      <button id="closecollecttitle" class="closebtn">close</button>
+      <button id="savecollecttitle" class="savebtn">save</button>
+    </div>
+  </dialog>
+
+  <dialog id="collect">
+    <h1>編輯分類</h1>
+    <div class="content">
+      <!-- Collect categories dynamically generated -->
+    </div>
+    <div class="save">
+      <button id="closecollect" class="closebtn closecollect">close</button>
+      <button id="savecollect" class="savebtn savecollect">save</button>
+    </div>
+  </dialog>
+
+  <dialog id="loginDialog">
+    <h1>請先登入</h1>
+    <div class="contentsave">
+      <button class="savebtn" onclick="window.location.href='/login/loginPage'">login</button>
+    </div>
+  </dialog>
+
+  <div id="loading" style="display: none;">
+    <div class="loader2"></div>
+  </div>
+
+  <footer id="footer-container"></footer>
+
+  <script>
+    let messageText = "{{name}}";
+    let userImage = "{{userImage}}"
+    let uid = "{{uid}}";
+
+    window.onload = function() {
+      renderNav();
+      renderFooter();
+
+      if (messageText == "0") {
+        document.getElementById("loginDialog").showModal();
+        document.getElementById("loginDialog").scrollTop = 0;
+      }
+    };
+
+    // 查詢分類
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectElement = document.getElementById('collectionSelect');
+      
+      selectElement.addEventListener('change', (event) => {
+        const selectedName = event.target.value;
+        const sections = document.querySelectorAll('article > section');
+        
+        sections.forEach(section => {
+          const collectionTitle = section.querySelector('.collecttitle h2').textContent;
+          const details = section.querySelector('.collectcontent');
+
+          if (selectedName === '' || collectionTitle === selectedName) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+      });
+
+      // Initialize the display based on the current select value
+      const initialId = selectElement.value;
+      if (initialId) {
+        selectElement.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // 新增分類
+    document.getElementById('addList').addEventListener('click', function() {
+      document.getElementById('addcollect').showModal();
+      document.getElementById("addcollect").scrollTop = 0;
+      document.getElementById('insertName').value = '';
+    });
+
+    // close dialog
+    document.getElementById('closeaddcollect').addEventListener('click', function() {
+      document.getElementById('addcollect').close();
+    });
+
+    // save dialog
+    document.getElementById('saveaddcollect').addEventListener('click', function() {
+      let input = document.querySelector('.input').value;
+      let options = document.querySelectorAll('#collectionSelect option');
+
+      if (input === '') {
+        alert('請輸入列表名稱');
+        return;
+      }
+
+      if (input.length > 10) {
+        alert('列表名稱不得超過10個字');
+        return;
+      }
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].textContent === input) {
+          alert('列表名稱已存在');
+          return;
+        }
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/profile/addCollection',
+        data: {
+          collectionName: input
+        },
+        success: function(response) {
+          console.log(response);
+        },  
+        error: function(xhr, status, error) {
+          console.error(error);
+          // alert('出現錯誤，請稍後再試！');
+        }
+      });
+
+      
+
+      // 更新 select 元素
+      let select = document.getElementById('collectionSelect');
+      let option = document.createElement('option');
+      option.textContent = input;  // 從伺服器回應中獲取新分類的名稱
+      select.appendChild(option);
+
+      // 更新 section
+      let article = document.querySelector('article');
+      let section = document.createElement('section');
+      section.setAttribute('data-collection-id', input);
+      section.innerHTML = `
+      <div class="collecttitle">
+          <div class="left">
+              <i class="fa-regular fa-folder"></i>
+              <h2>${input}</h2>
+          </div>
+          <div class="right">
+              <i class="fa-solid fa-pen opencollecttitle" data-name=${input}></i>
+              <i class="fa-regular fa-trash-can opencollectdelete" data-name=${input}></i>
+          </div>
+      </div>
+      <div class="collectcontent"></div>`;
+      article.appendChild(section);
+
+      document.getElementById('addcollect').close();
+    });
+
+    // 更改分類名稱
+    document.addEventListener('click', function(event) {
+      if (event.target && event.target.matches('.opencollecttitle')) {
+        document.getElementById('collecttitle').showModal();
+        document.getElementById('collecttitle').scrollTop = 0;
+        oldName = event.target.getAttribute('data-name');
+        document.getElementById('updateName').value = oldName;
+
+        document.getElementById('savecollecttitle').setAttribute('data-name', oldName);
+      }
+    });
+
+    // close dialog
+    document.getElementById('closecollecttitle').addEventListener('click', function() {
+      document.getElementById('collecttitle').close();
+    });
+
+    // save dialog
+    document.getElementById('savecollecttitle').addEventListener('click', function() {
+      let input = document.getElementById('updateName').value;
+      let options = document.querySelectorAll('#collectionSelect option');
+      let collectionTitle = this.getAttribute('data-name');
+      
+      console.log(input);
+      console.log(collectionTitle);
+
+      if (input === '') {
+        alert('請輸入列表名稱');
+        return;
+      }
+
+      if (input.length > 10) {
+        alert('列表名稱不得超過10個字');
+        return;
+      }
+
+      if (oldName === input) {
+        document.getElementById('collecttitle').close();
+        return;
+      }
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].textContent === input) {
+          alert('列表名稱已存在');
+          return;
+        }
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/profile/updateCollection',
+        data: {
+          collectionName: input,
+          oldcollectionName: oldName
+        },
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          // alert('出現錯誤，請稍後再試！');
+        }
+      });
+
+      options.forEach(option => {
+      if (option.textContent === oldName) {
+          option.textContent = input;
+          option.value = input; // Update the value if needed
+        }
+      });
+
+      oldName = input;
+
+      let sections = document.querySelectorAll('article > section');
+      sections.forEach(section => {
+        let h2 = section.querySelector('.collecttitle h2');
+        if (h2.textContent === collectionTitle) {
+          h2.textContent = input;
+          return; // Exit the loop once the matching section is found
+        }
+      });
+
+      document.getElementById('collecttitle').close();
+    });
+
+    // 刪除分類
+    document.addEventListener('click', function(event) {
+      if (event.target && event.target.matches('.opencollectdelete')) {
+        document.getElementById('deleteListDialog').showModal();
+        document.getElementById('deleteListDialog').scrollTop = 0;
+        document.getElementById('savedeleteList').setAttribute('data-name', event.target.getAttribute('data-name'));
+      }
+    });
+
+    // close dialog
+    document.getElementById('closedeleteList').addEventListener('click', function() {
+      document.getElementById('deleteListDialog').close();
+    });
+
+    // save dialog
+    document.getElementById('savedeleteList').addEventListener('click', function() {
+      let collectionName = this.getAttribute('data-name');
+
+      $.ajax({
+        type: 'POST',
+        url: '/profile/deleteCollection',
+        data: {
+          collectionName: collectionName
+        },
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          // alert('出現錯誤，請稍後再試！');
+        }
+      });
+
+      let select = document.getElementById('collectionSelect');
+      let options = document.querySelectorAll('#collectionSelect option');
+      let sections = document.querySelectorAll('article > section');
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].textContent === collectionName) {
+          select.removeChild(options[i]);
+          break;
+        }
+      }
+
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].querySelector('.collecttitle h2').textContent === collectionName) {
+          sections[i].remove();
+          break;
+        }
+      }
+
+      document.getElementById('deleteListDialog').close();
+    });
+
+    // 編輯收藏detail
+    document.addEventListener('click', function(event) {
+      if (event.target && event.target.matches('.opencollect')) {
+        document.getElementById('collect').showModal();
+        document.getElementById('collect').scrollTop = 0;
+        const collectionName = event.target.getAttribute('data-list');
+        const detailId = event.target.getAttribute('data-detailId');
+        document.getElementById('savecollect').setAttribute('data-detailId', detailId);
+        oldSelect = [];
+
+        // 清除 collect 對話框中的舊內容
+        const collectContentDiv = document.querySelector('#collect .content');
+        collectContentDiv.innerHTML = '';
+
+        // 存儲所有 section 中的 detailId
+        const sectionDetailIds = new Map();
+
+        // 遍歷所有 section 元素
+        document.querySelectorAll('section').forEach(section => {
+          const sectionCollectionName = section.querySelector('.collecttitle h2').textContent.trim();
+          const collectItems = section.querySelectorAll('.eachcollect');
+          const div = document.createElement('div');
+          div.className = 'eachclass';
+
+          // 確定當前 section 是否有任何項目擁有 detailId
+          const hasDetailId = Array.from(collectItems).some(item => 
+            item.querySelector('.fa-pen').getAttribute('data-detailId') === detailId
+          );
+
+          // 更新 section 中的 detailId
+          sectionDetailIds.set(sectionCollectionName, Array.from(collectItems).map(item => 
+            item.querySelector('.fa-pen').getAttribute('data-detailId')
+          ));
+
+          // 添加 checkbox 到 section
+          div.innerHTML = `
+            <div class="left">
+              <input type="checkbox" id="checkbox-${sectionCollectionName}" ${hasDetailId ? 'checked' : ''}/>
+              <label for="checkbox-${sectionCollectionName}">${sectionCollectionName}</label>
+            </div>
+            <div class="num">(${collectItems.length}篇)</div>
+          `;
+          collectContentDiv.appendChild(div);
+
+          // 如果 section 中有 detailId，則將其添加到 oldSelect 中
+          if (hasDetailId) {
+            oldSelect.push(sectionCollectionName);
+          }
+        });
+
+        // 根據 sectionDetailIds 更新每個 section 中的 checkbox
+        document.querySelectorAll('.eachclass').forEach(checkboxContainer => {
+          const sectionName = checkboxContainer.querySelector('label').textContent.trim();
+          const checkBox = checkboxContainer.querySelector('input[type="checkbox"]');
+          if (sectionDetailIds.has(sectionName)) {
+            const sectionDetailIdsSet = new Set(sectionDetailIds.get(sectionName));
+            if (sectionDetailIdsSet.has(detailId)) {
+              checkBox.checked = true;
+            }
+          }
+        });
+      }
+    });
+
+    // close dialog
+    document.getElementById('closecollect').addEventListener('click', function() {
+      document.getElementById('collect').close();
+    });
+
+    // save dialog
+    document.getElementById('savecollect').addEventListener('click', function() {
+      let collectionName = '';
+      let newCollectionName = '';
+      let sections = document.querySelectorAll('article > section');
+      let detailId = this.getAttribute('data-detailId');
+      newSelect = [];
+
+      console.log(detailId);
+
+      document.querySelectorAll('#collect .eachclass').forEach(div => {
+          const checkbox = div.querySelector('input[type="checkbox"]');
+          const label = div.querySelector('label');
+
+          if (checkbox.checked) {
+              collectionName = label.textContent.trim();
+              newSelect.push(collectionName);
+          }
+      });
+
+      if (newSelect.length === 0) {
+          alert('請選擇分類');
+          return;
+      }
+
+      // Calculate added and removed items
+      const addedItems = newSelect.filter(item => !oldSelect.includes(item));
+      const removedItems = oldSelect.filter(item => !newSelect.includes(item));
+
+      if (addedItems.length === 0 && removedItems.length === 0) {
+          document.getElementById('collect').close();
+          return;
+      }
+
+      // 記錄當前滾動位置到 localStorage
+      localStorage.setItem('scrollPosition', window.scrollY);
+
+      document.getElementById('loading').style.display = 'flex';
+
+      function sendRequest(url, item) {
+          // 禁用滾動並固定位置
+          document.body.style.overflow = 'hidden';
+          return new Promise((resolve, reject) => {
+              $.ajax({
+                  type: 'POST',
+                  url: url,
+                  data: {
+                      detailId: detailId,
+                      item: item.item
+                  },
+                  success: function(response) {
+                      resolve();
+                  },
+                  error: function(xhr, status, error) {
+                      console.error(error);
+                      // alert('出現錯誤，請稍後再試！');
+                      reject(error);
+                  }
+              });
+          });
+      }
+
+      let requests = [];
+
+      addedItems.forEach(item => {
+          requests.push(sendRequest('/profile/addCollectionDetail', { item: item }));
+          console.log(item);
+      });
+
+      removedItems.forEach(item => {
+          requests.push(sendRequest('/profile/deleteCollectionDetail', { item: item }));
+      });
+
+      Promise.all(requests)
+      .then(() => {
+          // 重新載入頁面
+          window.location.reload();
+      })
+      .catch(() => {
+          // 如果有任何請求失敗，仍然隱藏 loading 指示器
+          document.getElementById('loading').style.display = 'none';
+          // alert('出現錯誤，請稍後再試！');
+      });
+
+      document.getElementById('collect').close();
+  });
+
+    // 在頁面加載時恢復滾動位置
+    window.addEventListener('load', function() {
+      const scrollPosition = localStorage.getItem('scrollPosition');
+      if (scrollPosition) {
+          window.scrollTo(0, parseInt(scrollPosition));
+          localStorage.removeItem('scrollPosition'); // 恢復位置後清除
+      }
+      document.getElementById('loading').style.display = 'none';
+      document.body.style.overflow = 'auto';
+  });
+
+    // 刪除收藏
+    document.addEventListener('click', function(event) {
+      if (event.target && event.target.matches('.opendelete')) {
+        document.getElementById('deleteDetailDialog').showModal();
+        document.getElementById('deleteDetailDialog').scrollTop = 0;
+        document.getElementById('savedeleteDetail').setAttribute('data-detailId', event.target.getAttribute('data-detailId'));
+        document.getElementById('savedeleteDetail').setAttribute('data-list', event.target.getAttribute('data-list'));
+
+        let currentSectionName = event.target.closest('section').querySelector('h2').textContent;
+        document.getElementById('deleteDetailDialog').setAttribute('data-currentSection', currentSectionName);
+      }
+    });
+
+    // close dialog
+    document.getElementById('closedeleteDetail').addEventListener('click', function() {
+      document.getElementById('deleteDetailDialog').close();
+    });
+
+    // save dialog
+    document.getElementById('savedeleteDetail').addEventListener('click', function() {
+      let detailId = this.getAttribute('data-detailId');
+      let item = this.getAttribute('data-list');
+      let currentSectionName = document.getElementById('deleteDetailDialog').getAttribute('data-currentSection');
+
+      $.ajax({
+        type: 'POST',
+        url: '/profile/deleteCollectionDetail',
+        data: {
+          detailId: detailId,
+          item: item
+        },
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          // alert('出現錯誤，請稍後再試！');
+        }
+      });
+
+      let sections = document.querySelectorAll('article > section');
+      sections.forEach(section => {
+        let sectionTitle = section.querySelector('h2').textContent;
+        if (sectionTitle === currentSectionName) {
+          let details = section.querySelectorAll('.eachcollect');
+          details.forEach(detail => {
+            if (detail.querySelector('.fa-pen').getAttribute('data-detailId') === detailId) {
+              detail.remove();
+            }
+          });
+        }
+      });
+      document.getElementById('deleteDetailDialog').close();
+
+    });
+
+ </script>
+</body>
+</html>
