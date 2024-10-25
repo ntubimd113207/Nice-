@@ -279,7 +279,7 @@ def resultRecipe_selfList():
                     model="dall-e-3",
                     prompt="食物在畫面的正中心，不能出現未說明的食材" + imagedescribe,
                     n=1,
-                    quality="standard",
+                    quality="hd",
                     size="1024x1024",
                 )
                 image_url = response.data[0].url
@@ -344,6 +344,8 @@ def resultRecipe_selfList():
                 diet = recipe_data["recipe"]["diet"]
                 imagedescribe = recipe_data["imagedescribe"]
 
+                cookStep = [step.replace("瀝乾", "瀝掉").replace("盛盤", "裝盤") for step in cookStep]
+                
                 prepare_str = ', '.join(prepare)
                 cookStep_str = ', '.join(cookStep)
                 nutrition_str = ', '.join(nutrition)
